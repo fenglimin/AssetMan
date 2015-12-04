@@ -1,0 +1,235 @@
+﻿body 
+{
+   width:auto;
+   margin:0 auto;
+}
+
+#div0
+{
+   width:1000px;
+   margin:0 auto;
+   height: 900px;
+}
+
+#DivTop
+{
+    width:976px;
+	margin: 0px;
+	padding: 12px 12px 12px 16px;
+	border-bottom: solid 4px #86BE36;
+	background-color: #3E2E2E;
+	color: #F5F5F5;
+    height: 20px;
+}
+
+#DivLeft
+{
+   display:block;
+   float:left;
+   width:120px;
+   margin:0 auto;
+   height: 850px;
+}
+
+#DivCenter
+{
+   display:block;
+   float:left;
+   width:880px;
+   margin:0 auto;
+   height: 850px;
+}
+
+#DivRight
+{
+   display:block;
+   float: right;
+   width:0px;
+   margin:0 auto;
+   height: 850px;
+}
+
+#DivRightBottom 
+{
+    display: block;
+}
+
+#DivTextBackground 
+{
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+#DivTodayNavigate 
+{
+    text-align: center;
+} 
+
+#DivNavigate
+{
+   background-color:#09F;
+   border-bottom:1px #0CF dashed;
+}
+
+#DivTitle 
+{
+    padding: 8px 6px 8px 6px;
+    background-color: #F4FFD6;
+    font-size: medium;
+    font-weight: bold;
+    border-bottom: solid 1px #DDDDDD;
+}
+
+#DivResult 
+{
+    padding: 8px 6px 8px 6px;
+    font-size: medium;
+}
+
+#DivCommandButton 
+{
+    padding: 8px 8px 8px 42px;
+    font-size: 13px
+}
+
+#DivCenterHalf 
+{
+    width: 325px;
+    font-size: 13px;
+    display:block;
+    float:left;
+}
+
+.DivInput
+{
+	padding: 7px 2px 7px 2px;
+	font-size: 13px;
+	background-color: #F4FFFF;
+	border-bottom: dashed 1px #DDDDDD;
+    border-top: dashed 1px #DDDDDD;
+}
+
+.DivResult
+{
+	padding: 2px 2px 2px 2px;
+	font-size: 13px;
+	background-color: #FAFFFF;
+}
+
+.DivSeperate 
+{
+    height: 18px;    
+}
+
+.DivIndexTitle 
+{
+	padding: 4px 4px 4px 4px;
+	font-size: 15px;
+    font-weight: bold;
+	background-color: #1C5E55;
+    color: #F5F5F5;
+}
+
+.DivIndexItem
+{
+	padding: 4px 4px 4px 4px;
+	font-size: 14px;
+    font-weight: bold;
+    /*background-color: #E3EAEB;*/
+}
+
+.DataInput_DDL 
+{
+    width: 230px;
+    height: 22px;    
+}
+
+.DataInput_TB
+{
+    width: 226px;
+    height: 17px;    
+}
+
+.DataSelect_LB
+{
+    width: 230px;
+    height: 200px;    
+}
+
+.SubTitle 
+{
+    font-size: 16px;
+    font-weight: bold;
+    padding-left: 10px;
+}
+
+.Button 
+{
+    text-align: center;
+    cursor: pointer;
+    width: 230px;
+    font-size: 15px;
+    height: 30px;
+    font-weight: bold;
+    background-color: #1c5e55;
+    color: #fff;
+    text-shadow: 1px 1px 0 rgba(0,0,0,.2);
+    /*background: -webkit-gradient(linear,left top,left bottom,from(#ffa800),to(#e66e1e));
+    background: -moz-linear-gradient(top,#ffa800,#e66e1e);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffa800', endColorstr='#e66e1e');
+    background: -o-linear-gradient(top,#FFA600,#FE9200);
+    background: -ms-linear-gradient(top,#ffa800 0,#e66e1e 100%);
+    background: linear-gradient(top,#ffa800,#e66e1e);
+    border: 0;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;*/
+}
+
+.SmallButton 
+{
+    text-align: center;
+    cursor: pointer;
+    font-weight: bold;
+    background-color: #1c5e55;
+    color: #fff;
+    text-shadow: 1px 1px 0 rgba(0,0,0,.2);
+    /*background: -webkit-gradient(linear,left top,left bottom,from(#ffa800),to(#e66e1e));
+    background: -moz-linear-gradient(top,#ffa800,#e66e1e);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffa800', endColorstr='#e66e1e');
+    background: -o-linear-gradient(top,#FFA600,#FE9200);
+    background: -ms-linear-gradient(top,#ffa800 0,#e66e1e 100%);
+    background: linear-gradient(top,#ffa800,#e66e1e);
+    border: 0;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;*/
+}
+
+/*.Button 
+{
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    width: 219px;
+    font-size: 16px;
+    line-height: 40px;
+    height: 35px;
+    color: #fff;
+    text-shadow: 1px 1px 0 rgba(0,0,0,.2);
+    font-weight: 400;
+    font-weight: bold\0;
+    _font-weight: 700;
+    background-color: #1c5e55;
+    /*background: -webkit-gradient(linear,left top,left bottom,from(#ffa800),to(#e66e1e));
+    background: -moz-linear-gradient(top,#ffa800,#e66e1e);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffa800', endColorstr='#e66e1e');
+    background: -o-linear-gradient(top,#FFA600,#FE9200);
+    background: -ms-linear-gradient(top,#ffa800 0,#e66e1e 100%);
+    background: linear-gradient(top,#ffa800,#e66e1e);
+    border: 0;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;*/
+}*/

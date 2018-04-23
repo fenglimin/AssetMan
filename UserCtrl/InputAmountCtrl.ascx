@@ -17,7 +17,7 @@
         </tr>
         <tr>
             <td></td>
-            <td><asp:RangeValidator ID="rvAmount" runat="server" ForeColor="Red" Type="Double" ControlToValidate="tbAmount" MinimumValue="0" MaximumValue="10000000" SetFocusOnError="True" Display="Dynamic"></asp:RangeValidator></td>   
+            <td><asp:RangeValidator ID="rvAmount" runat="server" ForeColor="Red" Type="Double" ControlToValidate="tbAmount" MinimumValue="0" MaximumValue="100000000" SetFocusOnError="True" Display="Dynamic"></asp:RangeValidator></td>   
         </tr>
 
     </table>

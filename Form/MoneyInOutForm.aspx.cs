@@ -21,7 +21,7 @@ namespace Form
 
 				ucAmount.Title = "金额";
 				ucAmount.MinimumValue = "0";
-				ucAmount.MaximunValue = "1000000";
+				ucAmount.MaximunValue = "10000000";
 
 				ucDesc.Type = lbTitle.Text;
 				ucDesc.Title = "描述";

@@ -22,13 +22,13 @@
                   monthNamesShort: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
                   changeMonth: true,              // 下拉框选择月份  
                   changeYear: true,               // 下拉框选择年份  
-                  yearRange: "1950:2020",     // 下拉列表中年份范围  
+                  yearRange: "1950:2050",     // 下拉列表中年份范围  
                   showOtherMonths: true,          // 显示其他月份的日期  
-                  selectOtherMonths: false,       // 允许选择其他月份的日期  
+                  selectOtherMonths: true,       // 允许选择其他月份的日期  
                   showAnim: 'drop',               // 动画效果风格  
 
                   minDate: new Date(1950, 1 - 1, 1),    // 本控件可以选的最小日期  
-                  maxDate: new Date(2020, 12 - 1, 31),  // 本控件可以选的最大日期  
+                  maxDate: new Date(2050, 12 - 1, 31),  // 本控件可以选的最大日期  
 
                   showMonthAfterYear: true,       // 是否在面板的头部年份后面显示月份  
                   nextText: '下个月',                // 更改按钮提示文本  

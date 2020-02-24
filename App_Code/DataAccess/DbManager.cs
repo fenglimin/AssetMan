@@ -19,7 +19,7 @@ namespace DataAccess
 		/// <summary>
 		/// Database connection
 		/// </summary>
-		private static OleDbConnection oleDbConn;
+		private static OleDbConnection _oleDbConn;
 
 		/// <summary>
 		/// 
@@ -33,20 +33,20 @@ namespace DataAccess
 		{
 			get
 			{
-				if (oleDbConn == null)
+				if (_oleDbConn == null)
 				{
 					lock (SyncRoot)
 					{
-						if (oleDbConn == null)
+						if (_oleDbConn == null)
 						{
 							var connStringSetting = ConfigurationManager.ConnectionStrings[1];
-							oleDbConn = new OleDbConnection(connStringSetting.ConnectionString);
-							oleDbConn.Open();
+							_oleDbConn = new OleDbConnection(connStringSetting.ConnectionString);
+							_oleDbConn.Open();
 						}
 					}
 				}
 
-				return oleDbConn;
+				return _oleDbConn;
 			}
 		}
 

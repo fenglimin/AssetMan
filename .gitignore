@@ -36,6 +36,7 @@ obj/
 [Rr]elease*/*
 *.sdf
 /src/.vs/**
+/.vs/**
 
 # Ignore Local ReSharper Files
 _ReSharper*/
@@ -65,3 +66,7 @@ MultiExplorer/RunCmd.exe
 # For TinyDB
 TinyDB/RunCmd.exe
 
+*.mdb
+*.mdb
+*.ldb
+*.mdb

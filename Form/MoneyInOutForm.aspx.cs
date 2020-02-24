@@ -46,7 +46,7 @@ namespace Form
 
 			AssetDetailManager.AddDayDetail(ucBankCard.CardId, dayDetail);
 			ucDesc.AddToSetting();
-			lbReslt.Text = lbTitle.Text + " 已录入！";
+			lbReslt.Text = lbTitle.Text + "【" + ucDesc.Text + "】 已录入！";
 
 			var funCall = string.Format("MoneyInOut_OnOk('ucDesc', '{0} {1}， {2}_{3}');", lbTitle.Text, ucAmount.Amount, dayDetail.BankName, dayDetail.CardName);
 			Page.ClientScript.RegisterStartupScript(this.GetType(), "click", funCall, true);

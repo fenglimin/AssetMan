@@ -20,9 +20,9 @@
         <div id="DivTodayNavigate">
             <table style="margin: auto">
                 <tr >
-                    <td><asp:Button ID="btPrevDay" runat="server" Text="前一天" CssClass="Button" Width="100px" OnClick="btPrevDay_Click" /></td>
+                    <td><asp:Button ID="btPrevDay" runat="server" Text="前一操作日" CssClass="Button" Width="100px" OnClick="btPrevDay_Click" /></td>
                     <td><uc1:SelectDateCtrl runat="server" ID="ucDate" /></td>
-                    <td><asp:Button ID="btNextDay" runat="server" Text="后一天" CssClass="Button" Width="100px"  OnClick="btNextDay_Click" /></td>
+                    <td><asp:Button ID="btNextDay" runat="server" Text="后一操作日" CssClass="Button" Width="100px"  OnClick="btNextDay_Click" /></td>
                 </tr>
             </table>
             

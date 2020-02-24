@@ -24,23 +24,31 @@ namespace Form
 		}
 
 		protected void btPrevDay_Click(object sender, EventArgs e)
-		{
-			currentDay = currentDay.AddDays(-1);
-			OnCurrentDayChanged();
-		}
+        {
+            bool hasData;
+            do
+            {
+                currentDay = currentDay.AddDays(-1);
+                hasData = OnCurrentDayChanged() > 0;
+            } while (!hasData);
+        }
 
 		protected void btNextDay_Click(object sender, EventArgs e)
 		{
-			currentDay = currentDay.AddDays(1);
-			OnCurrentDayChanged();
-		}
+            bool hasData;
+            do
+            {
+                currentDay = currentDay.AddDays(1);
+                hasData = OnCurrentDayChanged() > 0;
+            } while (!hasData);
+        }
 
-		private void OnCurrentDayChanged()
+		private int OnCurrentDayChanged()
 		{
 			ViewState["CurrentDay"] = currentDay;
 			var loadDay = currentDay.ToString("yyyy-MM-dd");
 			ucDate.Date = loadDay;
-			ucDayOperations.QueryDayDetail(loadDay, loadDay, string.Empty);
+			return ucDayOperations.QueryDayDetail(loadDay, loadDay, string.Empty);
 		}
 	}
 }

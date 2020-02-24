@@ -25,7 +25,7 @@ namespace UserCtrl
 			}
 		}
 
-		public void QueryDayDetail(string startDate, string endDate, string condition)
+		public int QueryDayDetail(string startDate, string endDate, string condition)
 		{
 			var newCondition = string.Format("OperationDate >= DATEVALUE('{0}') AND OperationDate <= DATEVALUE('{1}')",
 					startDate, endDate);
@@ -33,10 +33,15 @@ namespace UserCtrl
 				newCondition += " AND " + condition;
 
 			var data = AccountManager.CreateDateTableForDayOperations(newCondition);
-			gvDayDetail.DataSource = data;
-			ViewState["Data"] = data;
-			gvDayDetail.DataBind();
-		}
+            if (data.Rows.Count > 0)
+            {
+                gvDayDetail.DataSource = data;
+                ViewState["Data"] = data;
+                gvDayDetail.DataBind();
+            }
+
+            return data.Rows.Count;
+        }
 
 		private void CreateGridViewColumn()
 		{

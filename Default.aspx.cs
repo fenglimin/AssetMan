@@ -13,9 +13,10 @@ using UI;
 public partial class _Default : System.Web.UI.Page
 {
 	protected void Page_Load(object sender, EventArgs e)
-	{
-
-	}
+    {
+        // Access the connect to trigger db connect. (Fix connect issue when to page access db at the same time)
+        var aa = DbManager.OleDbConn;
+    }
 
 
 	protected void LinkButton1_Command(object sender, CommandEventArgs e)

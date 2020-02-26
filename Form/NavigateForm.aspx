@@ -19,7 +19,8 @@
         <div class="DivIndexTitle">录入</div>
         <div class="DivIndexItem"><a href="#" onclick="go('Form/MoneyInOutForm.aspx?MoneyIn=1')">收入</a></div>
         <div class="DivIndexItem"><a href="#" onclick="go('Form/MoneyInOutForm.aspx?MoneyIn=0')">支出</a></div>
-        <div class="DivIndexItem"><asp:LinkButton ID="lbInvest" runat="server" OnClick="lbInvest_Click">投资</asp:LinkButton></div>
+        <div class="DivIndexItem"><asp:LinkButton ID="lbInvest" runat="server" OnClick="lbInvest_Click">投资（类固）</asp:LinkButton></div>
+        <div class="DivIndexItem"><a href="#" onclick="go('Form/PurchaseFundForm.aspx')">投资（基金）</a></div>
         <div class="DivIndexItem"><a href="#" onclick="go('Form/TransferForm.aspx')">转账</a></div>
         <div class="DivIndexItem"><a href="#" onclick="go('Form/AddOilForm.aspx')">加油</a></div>
 

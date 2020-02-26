@@ -110,10 +110,17 @@ namespace DataAccess
 			if (defaultInvestBankCard == null)
 				return 0;
 
-			return defaultInvestBankCard.Account - used;
+			return defaultInvestBankCard.Account - used - GetFundTotalAmount();
 		}
 
-        public static void PurchaseFund(string fundName, int amount, double netWorth, string operationDate)
+        public static int GetFundTotalAmount()
+        {
+            var fundList = LoadFundList("");
+            var totalAmount = fundList.Sum(fund => fund.TotalAmount);
+            return (int)Math.Round(totalAmount);
+        }
+
+        public static void PurchaseFund(string fundName, double amount, double netWorth, string operationDate)
         {
             var fundList = LoadFundList("where FundName ='" + fundName + "'");
             if (fundList.Count == 0)
@@ -122,7 +129,7 @@ namespace DataAccess
                 fundList = LoadFundList("where FundName ='" + fundName + "'");
             }
 
-            var share = Math.Round(amount / netWorth, 2);
+            var share = amount / netWorth;
             var fundDetail = new FundDetail
             {
                 FundId = fundList[0].FundId,
@@ -130,32 +137,105 @@ namespace DataAccess
                 NetWorth = netWorth,
                 OperationDate = operationDate,
                 TotalShare = share,
-                AvailableShare = share
+                AvailableShare = share,
+                Type = "申购"
             };
 
             InsertFundDetail(fundDetail);
             CalculateFund(fundList[0].FundId, netWorth);
         }
 
+        public static bool RedemptionFund(string fundName, double share, double netWorth, string operationDate, out double totalAmount, out double totalBenefit)
+        {
+            // 赎回份额对应的本金
+            totalAmount = 0.00;
+            // 赎回份额产生的收益
+            totalBenefit = 0.00;
+
+            var totalShare = share;
+
+            var fundList = LoadFundList("where FundName ='" + fundName + "'");
+            if (fundList.Count != 1)
+            {
+                return false;
+            }
+
+            var strWhere = string.Format("WHERE FundID = {0} AND Type = '申购' AND AvailableShare <> 0", fundList[0].FundId);
+            var fundDetailList = LoadFundDetailList(strWhere);
+
+            for (var i = 0; i < fundDetailList.Count; i++)
+            {
+                var detail = fundDetailList[i];
+                if (detail.AvailableShare > share)
+                {
+                    detail.AvailableShare -= share;
+                    if (detail.AvailableShare < 0.001)
+                    {
+                        detail.AvailableShare = 0;
+                    }
+                    totalAmount += share * detail.NetWorth;
+                    totalBenefit += share * (netWorth - detail.NetWorth);
+                    UpdateFundDetailAvailableShare(detail.Id, detail.AvailableShare, detail.AvailableShare * detail.NetWorth);
+                    break;
+                }
+
+                totalAmount += (int)(detail.AvailableShare * detail.NetWorth);
+                totalBenefit += detail.AvailableShare * (netWorth - detail.NetWorth);
+
+                share -= detail.AvailableShare;
+                detail.AvailableShare = 0;
+                UpdateFundDetailAvailableShare(detail.Id, 0, 0);
+            }
+
+            var fundDetailRedemption = new FundDetail
+            {
+                FundId = fundList[0].FundId,
+                OperationDate = operationDate,
+                Type = "赎回",
+                Amount = (int) (totalAmount + totalBenefit),
+                NetWorth = netWorth,
+                TotalShare = totalShare,
+                AvailableShare = totalShare
+            };
+
+            InsertFundDetail(fundDetailRedemption);
+            CalculateFund(fundList[0].FundId, netWorth);
+
+            return true;
+        }
+
+        private static void UpdateFundDetailAvailableShare(int id, double availableShare, double amount)
+        {
+            var strSql = string.Format("UPDATE FundDetail SET Amount = {0}, AvailableShare ={1} WHERE Id = {2}",Math.Round(amount, 3), Math.Round(availableShare,3), id);
+            var comm = new OleDbCommand(strSql, DbManager.OleDbConn);
+            comm.ExecuteNonQuery();
+        }
+
+        public static int GetInvestAmountOfRedemptionShare(string fundName, int share)
+        {
+            return 0;
+        }
+
+
         private static void CalculateFund(int fundId, double netWorth)
         {
             var strWhere = string.Format("WHERE FundID = {0} AND Type = '申购'", fundId);
             var fundDetailList = LoadFundDetailList(strWhere);
 
-            var totalAmount = 0;
+            var totalAmount = 0.00;
             var totalShare = 0.00;
             var totalBenefit = 0.00;
 
             for (var i = 0; i < fundDetailList.Count; i++)
             {
                 var detail = fundDetailList[i];
-                totalAmount += detail.Amount;
+                totalAmount += detail.AvailableShare * detail.NetWorth;
                 totalShare += detail.AvailableShare;
                 totalBenefit += (netWorth - detail.NetWorth) * detail.AvailableShare;
             }
 
             var strSql = string.Format( "UPDATE Fund SET TotalAmount ={0}, TotalShare = {1}, CurrentNetWorth = {2}, TotalBenefit = {3} WHERE FundID = {4}",
-                totalAmount, totalShare, netWorth, totalBenefit, fundId);
+                Math.Round(totalAmount), Math.Round(totalShare,2), netWorth, Math.Round(totalBenefit,2), fundId);
             var comm = new OleDbCommand(strSql, DbManager.OleDbConn);
             comm.ExecuteNonQuery();
         }
@@ -180,7 +260,7 @@ namespace DataAccess
 
         public static IList<FundDetail> LoadFundDetailList(string condition)
         {
-            var strSql = string.Format("SELECT * from FundDetail {0} order by OperationDate", condition);
+            var strSql = string.Format("SELECT * from FundDetail {0} order by Id", condition);
             var comm = new OleDbCommand(strSql, DbManager.OleDbConn);
             var reader = comm.ExecuteReader();
             if (reader == null)
@@ -202,10 +282,10 @@ namespace DataAccess
             {
                 FundId = reader.GetInt32(0),
                 FundName = Common.GetSafeString(reader, 1),
-                TotalAmount = reader.GetInt32(2),
+                TotalAmount = reader.GetDouble(2),
                 TotalShare = reader.GetDouble(3),
                 CurrentNetWorth = reader.GetDouble(4),
-                TotalBenefit= reader.GetInt32(5),
+                TotalBenefit= reader.GetDouble(5),
                 WeightedBenefitRate = Common.GetSafeString(reader, 6)
             };
 
@@ -216,19 +296,20 @@ namespace DataAccess
         {
             var fundDetail = new FundDetail
             {
-                FundId = reader.GetInt32(0),
-                OperationDate = Common.GetSafeDateTime(reader, 1),
-                Type = Common.GetSafeString(reader, 2),
-                Amount = reader.GetInt32(3),
-                NetWorth = reader.GetDouble(4),
-                TotalShare = reader.GetDouble(5),
-                AvailableShare = reader.GetDouble(6)
+                Id = reader.GetInt32(0),
+                FundId = reader.GetInt32(1),
+                OperationDate = Common.GetSafeDateTime(reader, 2),
+                Type = Common.GetSafeString(reader, 3),
+                Amount = reader.GetDouble(4),
+                NetWorth = reader.GetDouble(5),
+                TotalShare = reader.GetDouble(6),
+                AvailableShare = reader.GetDouble(7)
             };
 
             return fundDetail;
         }
 
-        public static void InsertFund(string fundName, int amount, double netWorth)
+        public static void InsertFund(string fundName, double amount, double netWorth)
         {
             var strSql = "INSERT INTO Fund ( FundName, TotalAmount, TotalShare, CurrentNetWorth, TotalBenefit, WeightedBenefitRate ) VALUES ( " +
                          "'" + fundName + "', " +
@@ -243,11 +324,12 @@ namespace DataAccess
         {
             var strSql = "INSERT INTO FundDetail ( FundID, OperationDate, Type, Amount, TotalShare, NetWorth, AvailableShare ) VALUES ( " +
                          fundDetail.FundId + ", " +
-                         "DATEVALUE('" + fundDetail.OperationDate+ "'), '申购', " +
-                         fundDetail.Amount + ", " +
-                         fundDetail.TotalShare + ", " +
+                         "DATEVALUE('" + fundDetail.OperationDate+ "'), " +
+                         "'" + fundDetail.Type + "', " +
+                         Math.Round(fundDetail.Amount, 3) + ", " +
+                         Math.Round(fundDetail.TotalShare, 3) + ", " +
                          fundDetail.NetWorth + ", " +
-                         fundDetail.AvailableShare + " )";
+                         Math.Round(fundDetail.AvailableShare, 3) + " )";
             var comm = new OleDbCommand(strSql, DbManager.OleDbConn);
             comm.ExecuteNonQuery();
         }

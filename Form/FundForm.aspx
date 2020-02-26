@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="PurchaseFundForm.aspx.cs" Inherits="Form_PurchaseFundForm" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="FundForm.aspx.cs" Inherits="Form_FundForm" %>
 <%@ Register TagPrefix="uc1" TagName="InputAmountCtrl" Src="~/UserCtrl/InputAmountCtrl.ascx" %>
 <%@ Register TagPrefix="uc1" TagName="SelectDateCtrl" Src="~/UserCtrl/SelectDateCtrl.ascx" %>
 <%@ Register TagPrefix="uc1" TagName="SelectBankCardCtrl" Src="~/UserCtrl/SelectBankCardCtrl.ascx" %>

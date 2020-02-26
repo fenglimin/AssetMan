@@ -12,14 +12,14 @@
     public class FundInfo
     {
         public string FundName, WeightedBenefitRate;
-        public int FundId, TotalAmount;
-        public double TotalShare, CurrentNetWorth, TotalBenefit;
+        public int FundId;
+        public double TotalAmount, TotalShare, CurrentNetWorth, TotalBenefit;
     }
 
     public class FundDetail
     {
         public string Type, OperationDate;
-        public int FundId, Amount;
-        public double TotalShare, NetWorth, AvailableShare;
+        public int Id, FundId;
+        public double Amount, TotalShare, NetWorth, AvailableShare;
     }
 }

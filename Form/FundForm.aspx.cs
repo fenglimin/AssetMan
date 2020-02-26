@@ -15,14 +15,13 @@ public partial class Form_PurchaseFundForm : System.Web.UI.Page
     {
         if (!Page.IsPostBack)
         {
-            var purchase = Request.QueryString["Purchase"];
-            lbTitle.Text = (purchase == "1") ? "基金申购" : "基金赎回";
+            lbTitle.Text = "基金申购";
 
-            ucBankCard.CardUsage = (purchase == "1") ? "转出" : "转入";
-            ucBankCard.InitCardId = SettingDal.GetIntValues("默认" + ucBankCard.CardUsage + "卡")[0];
+            ucBankCard.CardUsage = "转出";
+            ucBankCard.InitCardId = SettingDal.GetIntValues("默认转出卡")[0];
             ucBankCard.HideTitle = true;
 
-            ucAmount.Title = (purchase == "1") ? "金额" : "份额";
+            ucAmount.Title = "金额";
             ucAmount.MinimumValue = "0";
             ucAmount.MaximunValue = "10000000";
 

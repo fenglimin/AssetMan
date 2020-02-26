@@ -30,9 +30,9 @@ namespace DataAccess
             {
                 ret = Convert.ToInt32(data);
             }
-            catch(Exception ex)
+            catch (Exception)
             {
-
+                // ignored
             }
 
             return ret;
@@ -46,7 +46,7 @@ namespace DataAccess
 				var dt = reader.GetDateTime(order);
 				rt = dt.ToString("yyyy-MM-dd");
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 				rt = "";
 			}

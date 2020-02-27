@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -12,29 +13,53 @@ using UserCtrl;
 
 public partial class Form_FundForm : System.Web.UI.Page
 {
+    public string FundId { get; set; }
+
     protected void Page_Load(object sender, EventArgs e)
     {
         if (!Page.IsPostBack)
         {
-            var purchase = Request.QueryString["Purchase"];
-            lbTitle.Text = (purchase == "1") ? "基金申购" : "基金赎回";
+            var opType = Request.QueryString["OpType"];
+            FundId = Request.QueryString["fundId"];
+            ViewState["FundIdChangeNetWorth"] = FundId;
 
-            ucBankCard.CardUsage = (purchase == "1") ? "转出" : "转入";
-            ucBankCard.InitCardId = SettingDal.GetIntValues("默认" + ucBankCard.CardUsage + "卡")[0];
+            var fundInfo = string.IsNullOrEmpty(FundId)? new FundInfo() : InvestDal.LoadFundList(string.Format("WHERE FundId = {0}", FundId))[0];
+
+            if (opType == "ChangeNetWorth")
+            {
+                lbTitle.Text = "更改基金净值";
+                ucAmount.Title = "份额";
+                ucAmount.InitAmount = fundInfo.TotalAmount.ToString(CultureInfo.InvariantCulture);
+            }
+            else if (opType == "Purchase")
+            {
+                lbTitle.Text = "基金申购";
+                ucAmount.Title = "金额";
+            }
+            else if (opType == "Redemption")
+            {
+                lbTitle.Text = "基金赎回";
+                ucAmount.Title = "份额";
+                ucAmount.InitAmount = fundInfo.TotalShare.ToString(CultureInfo.InvariantCulture);
+            }
+
+            ucBankCard.CardUsage = "收入";
+            ucBankCard.InitCardId = SettingDal.GetIntValues("默认基金卡")[0];
             ucBankCard.HideTitle = true;
 
-            ucAmount.Title = (purchase == "1") ? "金额" : "份额";
             ucAmount.MinimumValue = "0";
             ucAmount.MaximunValue = "10000000";
 
             ucNetWorth.Title = "净值";
             ucNetWorth.MinimumValue = "0";
             ucNetWorth.MaximunValue = "10000000";
+            ucNetWorth.InitAmount = fundInfo.CurrentNetWorth.ToString(CultureInfo.InvariantCulture);
 
             ucDesc.Type = "基金";
             ucDesc.Title = ucDesc.Type;
             ucDesc.Height = 300;
             ucDesc.InstanceName = "ucDesc";
+            ucDesc.Text = fundInfo.FundName;
         }
     }
 
@@ -77,7 +102,7 @@ public partial class Form_FundForm : System.Web.UI.Page
 
             InvestDal.PurchaseFund(ucDesc.Text, Convert.ToDouble(ucAmount.Amount), Convert.ToDouble(ucNetWorth.Amount), ucDate.Date);
         }
-        else
+        else if (lbTitle.Text == "基金赎回")
         {
             double totalAmount;// 赎回份额对应的本金
             double totalBenefit;// 赎回份额产生的收益
@@ -115,8 +140,12 @@ public partial class Form_FundForm : System.Web.UI.Page
             dayDetail1.Desc = "理财：" + desc + " - 收益";
             AssetDetailManager.AddDayDetail(ucBankCard.CardId, dayDetail1);
         }
+        else if (lbTitle.Text == "更改基金净值")
+        {
+            InvestDal.CalculateFund(Convert.ToInt32(ViewState["FundIdChangeNetWorth"]), Convert.ToDouble(ucNetWorth.Amount));
+        }
 
-        ucDesc.AddToSetting();
+            ucDesc.AddToSetting();
         lbReslt.Text = lbTitle.Text + "【" + ucDesc.Text + "】 已录入！";
 
         var funCall = string.Format("MoneyInOut_OnOk('ucDesc', '{0} {1}， {2}_{3}');", lbTitle.Text, ucAmount.Amount, ucBankCard.BankName, ucBankCard.CardName);

@@ -11,9 +11,9 @@
 
     public class FundInfo
     {
-        public string FundName, WeightedBenefitRate;
+        public string FundName;
         public int FundId;
-        public double TotalAmount, TotalShare, CurrentNetWorth, TotalBenefit;
+        public double TotalAmount, TotalShare, CurrentNetWorth, TotalBenefit, WeightedBenefitRate;
     }
 
     public class FundDetail

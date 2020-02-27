@@ -102,7 +102,7 @@ namespace Business
             rowData[TableFieldName.FundTotalShare] = fundInfo.TotalShare.ToString(CultureInfo.InvariantCulture);
             rowData[TableFieldName.FundNetWorth] = fundInfo.CurrentNetWorth.ToString("f4");
             rowData[TableFieldName.FundTotalBenefit] = fundInfo.TotalBenefit.ToString(CultureInfo.InvariantCulture);
-            rowData[TableFieldName.WeightedBenefitRate] = fundInfo.WeightedBenefitRate.ToString(CultureInfo.InvariantCulture);
+            rowData[TableFieldName.WeightedBenefitRate] = fundInfo.WeightedBenefitRate.ToString("f3");
 
             return rowData;
         }

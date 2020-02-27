@@ -168,7 +168,7 @@ namespace DataAccess
                 var detail = fundDetailList[i];
                 if (detail.AvailableShare > share)
                 {
-                    detail.AvailableShare -= share;
+                    detail.AvailableShare -= share; // 赎回后，本次申购的剩余份额
                     if (detail.AvailableShare < 0.001)
                     {
                         detail.AvailableShare = 0;
@@ -184,7 +184,7 @@ namespace DataAccess
 
                 share -= detail.AvailableShare;
                 detail.AvailableShare = 0;
-                UpdateFundDetailAvailableShare(detail.Id, 0, 0);
+                UpdateFundDetailAvailableShare(detail.Id, 0, 0);//本次申购的份额已全部赎回
             }
 
             var fundDetailRedemption = new FundDetail
@@ -195,7 +195,7 @@ namespace DataAccess
                 Amount = (int) (totalAmount + totalBenefit),
                 NetWorth = netWorth,
                 TotalShare = totalShare,
-                AvailableShare = totalShare
+                AvailableShare = fundList[0].TotalShare - totalShare //本次赎回后，剩余的总份额
             };
 
             InsertFundDetail(fundDetailRedemption);
@@ -211,13 +211,7 @@ namespace DataAccess
             comm.ExecuteNonQuery();
         }
 
-        public static int GetInvestAmountOfRedemptionShare(string fundName, int share)
-        {
-            return 0;
-        }
-
-
-        private static void CalculateFund(int fundId, double netWorth)
+        public static void CalculateFund(int fundId, double netWorth)
         {
             var strWhere = string.Format("WHERE FundID = {0} AND Type = '申购'", fundId);
             var fundDetailList = LoadFundDetailList(strWhere);
@@ -226,16 +220,38 @@ namespace DataAccess
             var totalShare = 0.00;
             var totalBenefit = 0.00;
 
+            var now = DateTime.Now;
+            var weightedBase = 0.00;
+            var weightedBenefitRate = 0.00;
+
             for (var i = 0; i < fundDetailList.Count; i++)
             {
                 var detail = fundDetailList[i];
-                totalAmount += detail.AvailableShare * detail.NetWorth;
+                totalAmount += detail.Amount;
                 totalShare += detail.AvailableShare;
                 totalBenefit += (netWorth - detail.NetWorth) * detail.AvailableShare;
+                DateTime dtPurchase;
+                DateTime.TryParse(detail.OperationDate, out dtPurchase);
+                var days = (now - dtPurchase).Days;
+                weightedBase += days * detail.Amount;
             }
 
-            var strSql = string.Format( "UPDATE Fund SET TotalAmount ={0}, TotalShare = {1}, CurrentNetWorth = {2}, TotalBenefit = {3} WHERE FundID = {4}",
-                Math.Round(totalAmount), Math.Round(totalShare,2), netWorth, Math.Round(totalBenefit,2), fundId);
+            for (var i = 0; i < fundDetailList.Count; i++)
+            {
+                var detail = fundDetailList[i];
+
+                DateTime dtPurchase;
+                DateTime.TryParse(detail.OperationDate, out dtPurchase);
+                var days = (now - dtPurchase).Days;
+                if (days != 0 && detail.Amount > 0.01)
+                {
+                    var benefitRate = (netWorth - detail.NetWorth) * detail.AvailableShare * 365 / days / detail.Amount;
+                    weightedBenefitRate += benefitRate * days * detail.Amount / weightedBase;
+                }
+            }
+
+            var strSql = string.Format("UPDATE Fund SET TotalAmount ={0}, TotalShare = {1}, CurrentNetWorth = {2}, TotalBenefit = {3}, WeightedBenefitRate = {4} WHERE FundID = {5}",
+                Math.Round(totalAmount), Math.Round(totalShare,2), netWorth, Math.Round(totalBenefit,2), Math.Round(weightedBenefitRate, 5) * 100, fundId);
             var comm = new OleDbCommand(strSql, DbManager.OleDbConn);
             comm.ExecuteNonQuery();
         }
@@ -286,7 +302,7 @@ namespace DataAccess
                 TotalShare = reader.GetDouble(3),
                 CurrentNetWorth = reader.GetDouble(4),
                 TotalBenefit= reader.GetDouble(5),
-                WeightedBenefitRate = Common.GetSafeString(reader, 6)
+                WeightedBenefitRate = reader.GetDouble( 6)
             };
 
             return fundInfo;

@@ -87,16 +87,20 @@ namespace UserCtrl
         {
             if (e.Row.RowIndex >= 0)
             {
+                var dataTable = gvAllFunds.DataSource as DataTable;
+                var fundId = dataTable.Rows[e.Row.RowIndex][TableFieldName.FundID].ToString();
+                var fundName = dataTable.Rows[e.Row.RowIndex][TableFieldName.FundName].ToString();
+
                 var hyperLink = e.Row.Cells[0].Controls[0] as HyperLink;
                 if (ForTodoList)
                 {
                     hyperLink.Text = "更改净值";
-                    hyperLink.NavigateUrl = "~/Form/FundForm.aspx?Purchase=0')";
+                    hyperLink.NavigateUrl = "~/Form/FundForm.aspx?OpType=ChangeNetWorth&FundId=" + fundId;
                 }
                 else
                 {
                     hyperLink.Text = "申购";
-                    hyperLink.NavigateUrl = "~/Form/FundForm.aspx?Purchase=1')";
+                    hyperLink.NavigateUrl = "~/Form/FundForm.aspx?OpType=Purchase&FundId=" + fundId;
                 }
                 GridViewManager.SetRowStyle(e.Row, Color.Black, true);
 
@@ -104,11 +108,7 @@ namespace UserCtrl
                 {
                     hyperLink = e.Row.Cells[1].Controls[0] as HyperLink;
                     hyperLink.Text = "赎回";
-                    hyperLink.NavigateUrl = "~/Form/FundForm.aspx?Purchase=0')";
-
-                    var dataTable = gvAllFunds.DataSource as DataTable;
-                    var fundId = dataTable.Rows[e.Row.RowIndex][TableFieldName.FundID].ToString();
-                    var fundName = dataTable.Rows[e.Row.RowIndex][TableFieldName.FundName].ToString();
+                    hyperLink.NavigateUrl = "~/Form/FundForm.aspx?OpType=Redemption&FundId=" + fundId;
 
                     hyperLink = e.Row.Cells[2].Controls[0] as HyperLink;
                     hyperLink.NavigateUrl = string.Format("~/Form/AllInvestmentsForm.aspx?FundId={0}&FundName={1}", fundId, fundName);

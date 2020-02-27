@@ -16,7 +16,8 @@ namespace UserCtrl
 		public string Text
 		{
 			get { return tbEdit.Text; }
-		}
+            set { tbEdit.Text = value; }
+        }
 		public string InitText { get; set; }
 
 		public UserCtrl_SelectEditCtrl()

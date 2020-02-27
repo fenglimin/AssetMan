@@ -25,7 +25,9 @@ namespace Form
 				ucInvestment.EndDayPeriod = endInvestDayPeriod;
 				ucInvestment.HideEndedInvest = true;
 				ucInvestment.Title = string.Format("{0}天内到期的投资产品", endInvestDayPeriod);
-			}
+
+                ucFund.Title = "今日基金净值";
+            }
 		}
 	}
 }

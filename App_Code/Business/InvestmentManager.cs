@@ -47,17 +47,49 @@ namespace Business
 			rowData[TableFieldName.InvestName] = investDetail.InvestName;
 			rowData[TableFieldName.InvestAmount] = investDetail.InvestAmount.ToString(CultureInfo.InvariantCulture);
 			rowData[TableFieldName.InvestStartDate] = investDetail.InvestStartDate;
-			rowData[TableFieldName.InvestPeriod] =
-				GetDaySpan(investDetail.InvestAvailDate, investDetail.InvestStartDate).ToString(CultureInfo.InvariantCulture);
+			rowData[TableFieldName.InvestPeriod] = GetDaySpan(investDetail.InvestAvailDate, investDetail.InvestStartDate).ToString(CultureInfo.InvariantCulture);
 			rowData[TableFieldName.InvestBenifit] = investDetail.InvestBenifit.ToString(CultureInfo.InvariantCulture);
 			rowData[TableFieldName.InvestBenifitRate] = investDetail.InvestBenifitRate;
 			rowData[TableFieldName.InvestAvailDate] = investDetail.InvestAvailDate;
 
-
 			return rowData;
 		}
 
-		public static int GetDaySpan(string startDate, string endDate)
+        public static DataTable CreateDateTableFromAllFunds()
+        {
+            var dt = new DataTable();
+            dt.Columns.Add(TableFieldName.FundID);
+            dt.Columns.Add(TableFieldName.FundName);
+            dt.Columns.Add(TableFieldName.FundTotalAmount);
+            dt.Columns.Add(TableFieldName.FundTotalShare);
+            dt.Columns.Add(TableFieldName.FundNetWorth);
+            dt.Columns.Add(TableFieldName.FundTotalBenefit);
+            dt.Columns.Add(TableFieldName.WeightedBenefitRate);
+
+            foreach (var fundInfo in InvestDal.LoadFundList(""))
+            {
+                GridViewManager.AddRow(dt, CreateRowDataForFund(fundInfo));
+            }
+
+            return dt;
+        }
+
+        private static Dictionary<string, string> CreateRowDataForFund(FundInfo fundInfo)
+        {
+            var rowData = new Dictionary<string, string>();
+
+            rowData[TableFieldName.FundID] = fundInfo.FundId.ToString(CultureInfo.InvariantCulture);
+            rowData[TableFieldName.FundName] = fundInfo.FundName;
+            rowData[TableFieldName.FundTotalAmount] = fundInfo.TotalAmount.ToString(CultureInfo.InvariantCulture);
+            rowData[TableFieldName.FundTotalShare] = fundInfo.TotalShare.ToString(CultureInfo.InvariantCulture);
+            rowData[TableFieldName.FundNetWorth] = fundInfo.CurrentNetWorth.ToString(CultureInfo.InvariantCulture);
+            rowData[TableFieldName.FundTotalBenefit] = fundInfo.TotalBenefit.ToString(CultureInfo.InvariantCulture);
+            rowData[TableFieldName.WeightedBenefitRate] = fundInfo.WeightedBenefitRate.ToString(CultureInfo.InvariantCulture);
+
+            return rowData;
+        }
+
+        public static int GetDaySpan(string startDate, string endDate)
 		{
 			DateTime dtStart, dtEnd;
 			DateTime.TryParse(startDate, out dtStart);

@@ -37,5 +37,13 @@
 		public const string DayDetailActionType = "DayDetailActionType";
 
 		public const string Surplus = "Surplus";
-	}
+
+        public const string FundID = "FundID";
+        public const string FundName = "FundName";
+        public const string FundTotalAmount = "FundTotalAmount";
+        public const string FundTotalShare = "FundTotalShare";
+        public const string FundNetWorth = "FundNetWorth";
+        public const string FundTotalBenefit = "FundTotalBenefit";
+        public const string WeightedBenefitRate = "WeightedBenefitRate";
+    }
 }

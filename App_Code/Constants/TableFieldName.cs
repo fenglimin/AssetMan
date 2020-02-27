@@ -45,5 +45,9 @@
         public const string FundNetWorth = "FundNetWorth";
         public const string FundTotalBenefit = "FundTotalBenefit";
         public const string WeightedBenefitRate = "WeightedBenefitRate";
+
+        public const string NetWorth = "NetWorth";
+        public const string Share = "Share";
+        public const string ShareAvailable = "ShareAvailable";
     }
 }

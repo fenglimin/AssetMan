@@ -74,6 +74,24 @@ namespace Business
             return dt;
         }
 
+        public static DataTable CreateDateTableFromFund(string condition)
+        {
+            var dt = new DataTable();
+            dt.Columns.Add(TableFieldName.Date);
+            dt.Columns.Add(TableFieldName.Type);
+            dt.Columns.Add(TableFieldName.Balance);
+            dt.Columns.Add(TableFieldName.NetWorth);
+            dt.Columns.Add(TableFieldName.Share);
+            dt.Columns.Add(TableFieldName.ShareAvailable);
+
+            foreach (var fundDetail in InvestDal.LoadFundDetailList(condition))
+            {
+                GridViewManager.AddRow(dt, CreateRowDataForFundDetail(fundDetail));
+            }
+
+            return dt;
+        }
+
         private static Dictionary<string, string> CreateRowDataForFund(FundInfo fundInfo)
         {
             var rowData = new Dictionary<string, string>();
@@ -82,9 +100,23 @@ namespace Business
             rowData[TableFieldName.FundName] = fundInfo.FundName;
             rowData[TableFieldName.FundTotalAmount] = fundInfo.TotalAmount.ToString(CultureInfo.InvariantCulture);
             rowData[TableFieldName.FundTotalShare] = fundInfo.TotalShare.ToString(CultureInfo.InvariantCulture);
-            rowData[TableFieldName.FundNetWorth] = fundInfo.CurrentNetWorth.ToString(CultureInfo.InvariantCulture);
+            rowData[TableFieldName.FundNetWorth] = fundInfo.CurrentNetWorth.ToString("f4");
             rowData[TableFieldName.FundTotalBenefit] = fundInfo.TotalBenefit.ToString(CultureInfo.InvariantCulture);
             rowData[TableFieldName.WeightedBenefitRate] = fundInfo.WeightedBenefitRate.ToString(CultureInfo.InvariantCulture);
+
+            return rowData;
+        }
+
+        private static Dictionary<string, string> CreateRowDataForFundDetail(FundDetail fundDetail)
+        {
+            var rowData = new Dictionary<string, string>();
+
+            rowData[TableFieldName.Date] = fundDetail.OperationDate;
+            rowData[TableFieldName.Type] = fundDetail.Type;
+            rowData[TableFieldName.Balance] = fundDetail.Amount.ToString(CultureInfo.InvariantCulture);
+            rowData[TableFieldName.NetWorth] = fundDetail.NetWorth.ToString("f4");
+            rowData[TableFieldName.Share] = fundDetail.TotalShare.ToString(CultureInfo.InvariantCulture);
+            rowData[TableFieldName.ShareAvailable] = fundDetail.AvailableShare.ToString(CultureInfo.InvariantCulture);
 
             return rowData;
         }

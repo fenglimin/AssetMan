@@ -16,6 +16,8 @@ namespace Form
             {
                 ucFund.Title = "基金";
                 ucFund.ForTodoList = false;
+                ucFund.FundId = Request.QueryString["FundId"];
+                ucFund.FundName = Request.QueryString["FundName"];
 
                 ucInvestment.Title = "固定收益";
                 ucInvestment.HideEndedInvest = true;

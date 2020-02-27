@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Web.UI.WebControls;
 using Business;
 using Constants;
+using DataAccess;
 using UI;
 
 namespace UserCtrl
@@ -14,6 +15,10 @@ namespace UserCtrl
 
         public bool ForTodoList { get; set; }
 
+        public string FundId { get; set; }
+
+        public string FundName { get; set; }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!Page.IsPostBack)
@@ -21,9 +26,30 @@ namespace UserCtrl
                 lbTitle.Text = Title;
                 CreateGridViewColumn();
 
+                lbFundDetail.Visible = !ForTodoList;
+                gvFundDetail.Visible = !ForTodoList;
+
                 var dtFund = InvestmentManager.CreateDateTableFromAllFunds();
                 gvAllFunds.DataSource = dtFund;
                 gvAllFunds.DataBind();
+
+                if (!ForTodoList)
+                {
+                    CreateDetailGridViewColumn();
+
+                    if (string.IsNullOrEmpty(FundId))
+                    {
+                        FundId = dtFund.Rows[0][TableFieldName.FundID].ToString();
+                        FundName = dtFund.Rows[0][TableFieldName.FundName].ToString();
+                    }
+
+                    lbFundDetail.Text = string.Format("【{0}】交易明细", FundName);
+                    var condition = string.Format("WHERE FundID = {0}", FundId);
+                    var dtFundDetail = InvestmentManager.CreateDateTableFromFund(condition);
+                    gvFundDetail.DataSource = dtFundDetail;
+                    gvFundDetail.DataBind();
+                }
+                
             }
         }
 
@@ -33,13 +59,28 @@ namespace UserCtrl
             if (!ForTodoList)
             {
                 GridViewManager.AddHyperLinkFieldColumn(gvAllFunds, string.Empty, HorizontalAlign.Left);
+                GridViewManager.AddHyperLinkFieldColumn(gvAllFunds, TableFieldName.FundName, HorizontalAlign.Left);
             }
-            GridViewManager.AddBoundFieldColumn(gvAllFunds, TableFieldName.FundName, HorizontalAlign.Left);
+            else
+            {
+                GridViewManager.AddBoundFieldColumn(gvAllFunds, TableFieldName.FundName, HorizontalAlign.Left);
+            }
+            
             GridViewManager.AddBoundFieldColumn(gvAllFunds, TableFieldName.FundTotalAmount, HorizontalAlign.Right);
             GridViewManager.AddBoundFieldColumn(gvAllFunds, TableFieldName.FundTotalShare, HorizontalAlign.Right);
             GridViewManager.AddBoundFieldColumn(gvAllFunds, TableFieldName.FundNetWorth, HorizontalAlign.Right);
             GridViewManager.AddBoundFieldColumn(gvAllFunds, TableFieldName.FundTotalBenefit, HorizontalAlign.Right);
             GridViewManager.AddBoundFieldColumn(gvAllFunds, TableFieldName.WeightedBenefitRate, HorizontalAlign.Right);
+        }
+
+        private void CreateDetailGridViewColumn()
+        {
+            GridViewManager.AddBoundFieldColumn(gvFundDetail, TableFieldName.Date, HorizontalAlign.Left);
+            GridViewManager.AddBoundFieldColumn(gvFundDetail, TableFieldName.Type, HorizontalAlign.Left);
+            GridViewManager.AddBoundFieldColumn(gvFundDetail, TableFieldName.Balance, HorizontalAlign.Right);
+            GridViewManager.AddBoundFieldColumn(gvFundDetail, TableFieldName.NetWorth, HorizontalAlign.Right);
+            GridViewManager.AddBoundFieldColumn(gvFundDetail, TableFieldName.Share, HorizontalAlign.Right);
+            GridViewManager.AddBoundFieldColumn(gvFundDetail, TableFieldName.ShareAvailable, HorizontalAlign.Right);
         }
 
         protected void gvAllFunds_RowDataBound(object sender, GridViewRowEventArgs e)
@@ -64,6 +105,13 @@ namespace UserCtrl
                     hyperLink = e.Row.Cells[1].Controls[0] as HyperLink;
                     hyperLink.Text = "赎回";
                     hyperLink.NavigateUrl = "~/Form/FundForm.aspx?Purchase=0')";
+
+                    var dataTable = gvAllFunds.DataSource as DataTable;
+                    var fundId = dataTable.Rows[e.Row.RowIndex][TableFieldName.FundID].ToString();
+                    var fundName = dataTable.Rows[e.Row.RowIndex][TableFieldName.FundName].ToString();
+
+                    hyperLink = e.Row.Cells[2].Controls[0] as HyperLink;
+                    hyperLink.NavigateUrl = string.Format("~/Form/AllInvestmentsForm.aspx?FundId={0}&FundName={1}", fundId, fundName);
                 }
             }
         }

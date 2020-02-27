@@ -11,8 +11,8 @@ namespace UserCtrl
     public partial class UserCtrl_FundCtrl : System.Web.UI.UserControl
     {
         public string Title { get; set; }
-        public int EndDayPeriod { get; set; }
-        public bool HideEndedInvest { get; set; }
+
+        public bool ForTodoList { get; set; }
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -30,6 +30,10 @@ namespace UserCtrl
         private void CreateGridViewColumn()
         {
             GridViewManager.AddHyperLinkFieldColumn(gvAllFunds, string.Empty, HorizontalAlign.Left);
+            if (!ForTodoList)
+            {
+                GridViewManager.AddHyperLinkFieldColumn(gvAllFunds, string.Empty, HorizontalAlign.Left);
+            }
             GridViewManager.AddBoundFieldColumn(gvAllFunds, TableFieldName.FundName, HorizontalAlign.Left);
             GridViewManager.AddBoundFieldColumn(gvAllFunds, TableFieldName.FundTotalAmount, HorizontalAlign.Right);
             GridViewManager.AddBoundFieldColumn(gvAllFunds, TableFieldName.FundTotalShare, HorizontalAlign.Right);
@@ -43,9 +47,24 @@ namespace UserCtrl
             if (e.Row.RowIndex >= 0)
             {
                 var hyperLink = e.Row.Cells[0].Controls[0] as HyperLink;
-                hyperLink.Text = "更改净值";
-                hyperLink.NavigateUrl = "~/Form/FundForm.aspx?Purchase=0')";
+                if (ForTodoList)
+                {
+                    hyperLink.Text = "更改净值";
+                    hyperLink.NavigateUrl = "~/Form/FundForm.aspx?Purchase=0')";
+                }
+                else
+                {
+                    hyperLink.Text = "申购";
+                    hyperLink.NavigateUrl = "~/Form/FundForm.aspx?Purchase=1')";
+                }
                 GridViewManager.SetRowStyle(e.Row, Color.Black, true);
+
+                if (!ForTodoList)
+                {
+                    hyperLink = e.Row.Cells[1].Controls[0] as HyperLink;
+                    hyperLink.Text = "赎回";
+                    hyperLink.NavigateUrl = "~/Form/FundForm.aspx?Purchase=0')";
+                }
             }
         }
     }

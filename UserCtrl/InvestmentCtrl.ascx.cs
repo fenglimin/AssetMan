@@ -21,6 +21,11 @@ namespace UserCtrl
 				lbTitle.Text = Title;
 				CreateGridViewColumn();
 
+                if (EndDayPeriod != 0)
+                {
+                    cbShowHistory.Visible = false;
+                }
+
 				var dtInvest = InvestmentManager.CreateDateTableFromAllInvestments();
 				gvAllInvestment.DataSource = AdjustInvestment(dtInvest, HideEndedInvest, EndDayPeriod);
 				gvAllInvestment.DataBind();
@@ -101,5 +106,13 @@ namespace UserCtrl
 				}
 			}
 		}
-	}
+
+        protected void cbShowHistory_CheckedChanged(object sender, EventArgs e)
+        {
+            HideEndedInvest = !cbShowHistory.Checked;
+            var dtInvest = InvestmentManager.CreateDateTableFromAllInvestments();
+            gvAllInvestment.DataSource = AdjustInvestment(dtInvest, HideEndedInvest, EndDayPeriod);
+            gvAllInvestment.DataBind();
+        }
+    }
 }

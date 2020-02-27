@@ -27,6 +27,7 @@ namespace Form
 				ucInvestment.Title = string.Format("{0}天内到期的投资产品", endInvestDayPeriod);
 
                 ucFund.Title = "今日基金净值";
+                ucFund.ForTodoList = true;
             }
 		}
 	}

@@ -83,6 +83,7 @@ namespace Business
             dt.Columns.Add(TableFieldName.NetWorth);
             dt.Columns.Add(TableFieldName.Share);
             dt.Columns.Add(TableFieldName.ShareAvailable);
+            dt.Columns.Add(TableFieldName.InvestBenifitRate);
 
             foreach (var fundDetail in InvestDal.LoadFundDetailList(condition))
             {
@@ -117,6 +118,7 @@ namespace Business
             rowData[TableFieldName.NetWorth] = fundDetail.NetWorth.ToString("f4");
             rowData[TableFieldName.Share] = fundDetail.TotalShare.ToString(CultureInfo.InvariantCulture);
             rowData[TableFieldName.ShareAvailable] = fundDetail.AvailableShare.ToString(CultureInfo.InvariantCulture);
+            rowData[TableFieldName.InvestBenifitRate] = fundDetail.BenefitRate.ToString("f3");
 
             return rowData;
         }

@@ -229,11 +229,15 @@ namespace DataAccess
                 var detail = fundDetailList[i];
                 totalAmount += detail.Amount;
                 totalShare += detail.AvailableShare;
-                totalBenefit += (netWorth - detail.NetWorth) * detail.AvailableShare;
+                var benefit = (netWorth - detail.NetWorth) * detail.AvailableShare;
+                totalBenefit += benefit;
                 DateTime dtPurchase;
                 DateTime.TryParse(detail.OperationDate, out dtPurchase);
                 var days = (now - dtPurchase).Days;
                 weightedBase += days * detail.Amount;
+
+                var benefitRate = benefit * 365 / days / detail.Amount;
+                UpdateFundDetail(detail.Id, benefitRate);
             }
 
             for (var i = 0; i < fundDetailList.Count; i++)
@@ -252,6 +256,13 @@ namespace DataAccess
 
             var strSql = string.Format("UPDATE Fund SET TotalAmount ={0}, TotalShare = {1}, CurrentNetWorth = {2}, TotalBenefit = {3}, WeightedBenefitRate = {4} WHERE FundID = {5}",
                 Math.Round(totalAmount), Math.Round(totalShare,2), netWorth, Math.Round(totalBenefit,2), Math.Round(weightedBenefitRate, 5) * 100, fundId);
+            var comm = new OleDbCommand(strSql, DbManager.OleDbConn);
+            comm.ExecuteNonQuery();
+        }
+
+        private static void UpdateFundDetail(int detailId, double benefitRate)
+        {
+            var strSql = string.Format("UPDATE FundDetail SET BenefitRate ={0} WHERE Id = {1}", Math.Round(benefitRate, 5) * 100, detailId);
             var comm = new OleDbCommand(strSql, DbManager.OleDbConn);
             comm.ExecuteNonQuery();
         }
@@ -319,7 +330,9 @@ namespace DataAccess
                 Amount = reader.GetDouble(4),
                 NetWorth = reader.GetDouble(5),
                 TotalShare = reader.GetDouble(6),
-                AvailableShare = reader.GetDouble(7)
+                AvailableShare = reader.GetDouble(7),
+                BenefitRate = reader.GetDouble(8)
+
             };
 
             return fundDetail;
@@ -338,14 +351,15 @@ namespace DataAccess
 
         public static void InsertFundDetail(FundDetail fundDetail)
         {
-            var strSql = "INSERT INTO FundDetail ( FundID, OperationDate, Type, Amount, TotalShare, NetWorth, AvailableShare ) VALUES ( " +
+            var strSql = "INSERT INTO FundDetail ( FundID, OperationDate, Type, Amount, TotalShare, NetWorth, AvailableShare, BenefitRate ) VALUES ( " +
                          fundDetail.FundId + ", " +
                          "DATEVALUE('" + fundDetail.OperationDate+ "'), " +
                          "'" + fundDetail.Type + "', " +
                          Math.Round(fundDetail.Amount, 3) + ", " +
                          Math.Round(fundDetail.TotalShare, 3) + ", " +
                          fundDetail.NetWorth + ", " +
-                         Math.Round(fundDetail.AvailableShare, 3) + " )";
+                         Math.Round(fundDetail.AvailableShare, 3) + ", " +
+                         Math.Round(fundDetail.BenefitRate, 3) + " )";
             var comm = new OleDbCommand(strSql, DbManager.OleDbConn);
             comm.ExecuteNonQuery();
         }

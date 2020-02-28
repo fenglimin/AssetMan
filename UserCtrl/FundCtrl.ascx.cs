@@ -81,6 +81,7 @@ namespace UserCtrl
             GridViewManager.AddBoundFieldColumn(gvFundDetail, TableFieldName.NetWorth, HorizontalAlign.Right);
             GridViewManager.AddBoundFieldColumn(gvFundDetail, TableFieldName.Share, HorizontalAlign.Right);
             GridViewManager.AddBoundFieldColumn(gvFundDetail, TableFieldName.ShareAvailable, HorizontalAlign.Right);
+            GridViewManager.AddBoundFieldColumn(gvFundDetail, TableFieldName.InvestBenifitRate, HorizontalAlign.Right);
         }
 
         protected void gvAllFunds_RowDataBound(object sender, GridViewRowEventArgs e)

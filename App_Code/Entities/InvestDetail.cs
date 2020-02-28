@@ -20,6 +20,6 @@
     {
         public string Type, OperationDate;
         public int Id, FundId;
-        public double Amount, TotalShare, NetWorth, AvailableShare;
+        public double Amount, TotalShare, NetWorth, AvailableShare, BenefitRate;
     }
 }

@@ -42,8 +42,26 @@ namespace DataAccess
 			return setting;
 		}
 
-		public static bool AddSetting(string itemType, string itemValue)
-		{
+        public static bool ExistValue(string itemType, string itemValue)
+        {
+            var strSql = string.Format("SELECT ItemValue FROM Setting WHERE ItemType = '{0}' AND ItemValue = '{1}'", itemType, itemValue);
+            var comm = new OleDbCommand(strSql, DbManager.OleDbConn);
+            var reader = comm.ExecuteReader();
+            if (reader == null) return false;
+
+            var ret = reader.Read();
+            reader.Close();
+            return ret;
+        }
+
+        public static bool AddSetting(string itemType, string itemValue)
+        {
+            if (ExistValue(itemType, itemValue))
+            {
+                return true;
+
+            }
+
 			var strSql = string.Format("INSERT INTO Setting ( ItemType, ItemValue ) VALUES ( '{0}', '{1}' )", itemType, itemValue);
 			var comm = new OleDbCommand(strSql, DbManager.OleDbConn);
 			return comm.ExecuteNonQuery() == 1;

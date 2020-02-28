@@ -152,10 +152,10 @@ public partial class Form_FundForm : System.Web.UI.Page
             InvestDal.CalculateFund(Convert.ToInt32(ViewState["FundIdChangeNetWorth"]), Convert.ToDouble(ucNetWorth.Amount));
         }
 
-            ucDesc.AddToSetting();
+        ucDesc.AddToSetting();
         lbReslt.Text = lbTitle.Text + "【" + ucDesc.Text + "】 已录入！";
 
-        var funCall = string.Format("MoneyInOut_OnOk('ucDesc', '{0} {1}， {2}_{3}');", lbTitle.Text, ucAmount.Amount, ucBankCard.BankName, ucBankCard.CardName);
+        var funCall = string.Format("MoneyInOut_OnOk('ucDesc', '{0} {1}， {2}_{3}');", lbTitle.Text, ucDesc.Text, ucBankCard.BankName, ucBankCard.CardName);
         Page.ClientScript.RegisterStartupScript(this.GetType(), "click", funCall, true);
     }
 }

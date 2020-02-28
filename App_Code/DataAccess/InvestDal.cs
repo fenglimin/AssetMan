@@ -301,8 +301,8 @@ namespace DataAccess
                 TotalAmount = reader.GetDouble(2),
                 TotalShare = reader.GetDouble(3),
                 CurrentNetWorth = reader.GetDouble(4),
-                TotalBenefit= reader.GetDouble(5),
-                WeightedBenefitRate = reader.GetDouble( 6)
+                TotalBenefit = reader.GetDouble(5),
+                WeightedBenefitRate = reader.GetDouble(6)
             };
 
             return fundInfo;

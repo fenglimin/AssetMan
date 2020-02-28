@@ -67,6 +67,8 @@ public partial class Form_FundForm : System.Web.UI.Page
             ucDesc.Height = 300;
             ucDesc.InstanceName = "ucDesc";
             ucDesc.Text = fundInfo.FundName;
+
+            ucDate.Date = DateTime.Now.AddDays(-2).ToString("yyyy-MM-dd");
         }
     }
 
@@ -114,6 +116,9 @@ public partial class Form_FundForm : System.Web.UI.Page
             double totalAmount;// 赎回份额对应的本金
             double totalBenefit;// 赎回份额产生的收益
             double weightedBenefitRate; // 所有赎回本金产生的加权收益率
+
+            // 在赎回前，先更细赎回日的净值
+            InvestDal.CalculateFund(Convert.ToInt32(ViewState["FundIdChangeNetWorth"]), Convert.ToDouble(ucNetWorth.Amount), ucDate.Date);
             InvestDal.RedemptionFund(ucDesc.Text, Convert.ToDouble(ucAmount.Amount), Convert.ToDouble(ucNetWorth.Amount), ucDate.Date, out totalAmount, out totalBenefit, out weightedBenefitRate);
 
             var strAmount = Math.Round(totalAmount / 10) + "0";
@@ -150,7 +155,7 @@ public partial class Form_FundForm : System.Web.UI.Page
         }
         else if (lbTitle.Text == "更改基金净值")
         {
-            InvestDal.CalculateFund(Convert.ToInt32(ViewState["FundIdChangeNetWorth"]), Convert.ToDouble(ucNetWorth.Amount));
+            InvestDal.CalculateFund(Convert.ToInt32(ViewState["FundIdChangeNetWorth"]), Convert.ToDouble(ucNetWorth.Amount), ucDate.Date);
         }
 
         ucDesc.AddToSetting();

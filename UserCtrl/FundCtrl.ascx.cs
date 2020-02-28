@@ -65,7 +65,8 @@ namespace UserCtrl
             {
                 GridViewManager.AddBoundFieldColumn(gvAllFunds, TableFieldName.FundName, HorizontalAlign.Left);
             }
-            
+
+            GridViewManager.AddBoundFieldColumn(gvAllFunds, TableFieldName.Date, HorizontalAlign.Left);
             GridViewManager.AddBoundFieldColumn(gvAllFunds, TableFieldName.FundTotalAmount, HorizontalAlign.Right);
             GridViewManager.AddBoundFieldColumn(gvAllFunds, TableFieldName.FundTotalShare, HorizontalAlign.Right);
             GridViewManager.AddBoundFieldColumn(gvAllFunds, TableFieldName.FundNetWorth, HorizontalAlign.Right);

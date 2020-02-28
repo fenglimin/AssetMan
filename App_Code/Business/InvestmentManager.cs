@@ -114,10 +114,10 @@ namespace Business
 
             rowData[TableFieldName.Date] = fundDetail.OperationDate;
             rowData[TableFieldName.Type] = fundDetail.Type;
-            rowData[TableFieldName.Balance] = fundDetail.Amount.ToString(CultureInfo.InvariantCulture);
+            rowData[TableFieldName.Balance] = fundDetail.Amount.ToString("f0");
             rowData[TableFieldName.NetWorth] = fundDetail.NetWorth.ToString("f4");
-            rowData[TableFieldName.Share] = fundDetail.TotalShare.ToString(CultureInfo.InvariantCulture);
-            rowData[TableFieldName.ShareAvailable] = fundDetail.AvailableShare.ToString(CultureInfo.InvariantCulture);
+            rowData[TableFieldName.Share] = fundDetail.TotalShare.ToString("f3");
+            rowData[TableFieldName.ShareAvailable] = fundDetail.AvailableShare.ToString("f3");
             rowData[TableFieldName.InvestBenifitRate] = fundDetail.BenefitRate.ToString("f3");
 
             return rowData;

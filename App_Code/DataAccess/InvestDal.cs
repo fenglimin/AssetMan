@@ -163,9 +163,18 @@ namespace DataAccess
             var strWhere = string.Format("WHERE FundID = {0} AND Type = '申购' AND AvailableShare <> 0", fundList[0].FundId);
             var fundDetailList = LoadFundDetailList(strWhere);
 
+            var weightedBenefitData = new Dictionary<double, double>();
+            var now = DateTime.Now;
+
             for (var i = 0; i < fundDetailList.Count; i++)
             {
                 var detail = fundDetailList[i];
+
+                DateTime dtPurchase;
+                DateTime.TryParse(detail.OperationDate, out dtPurchase);
+                var days = (now - dtPurchase).Days;
+                
+
                 if (detail.AvailableShare > share)
                 {
                     detail.AvailableShare -= share; // 赎回后，本次申购的剩余份额
@@ -176,6 +185,7 @@ namespace DataAccess
                     totalAmount += share * detail.NetWorth;
                     totalBenefit += share * (netWorth - detail.NetWorth);
                     UpdateFundDetailAvailableShare(detail.Id, detail.AvailableShare, detail.AvailableShare * detail.NetWorth);
+                    weightedBenefitData[days * share * detail.NetWorth] = detail.BenefitRate;
                     break;
                 }
 
@@ -185,6 +195,14 @@ namespace DataAccess
                 share -= detail.AvailableShare;
                 detail.AvailableShare = 0;
                 UpdateFundDetailAvailableShare(detail.Id, 0, 0);//本次申购的份额已全部赎回
+                weightedBenefitData[days * detail.Amount] = detail.BenefitRate;
+            }
+
+            var weightedBase = weightedBenefitData.Sum(data => data.Key);
+            var weightedBenefitRate = 0.00;
+            foreach (var data in weightedBenefitData)
+            {
+                weightedBenefitRate += data.Value * data.Key / weightedBase;
             }
 
             var fundDetailRedemption = new FundDetail
@@ -195,7 +213,8 @@ namespace DataAccess
                 Amount = (int) (totalAmount + totalBenefit),
                 NetWorth = netWorth,
                 TotalShare = totalShare,
-                AvailableShare = fundList[0].TotalShare - totalShare //本次赎回后，剩余的总份额
+                AvailableShare = fundList[0].TotalShare - totalShare, //本次赎回后，剩余的总份额
+                BenefitRate = weightedBenefitRate
             };
 
             InsertFundDetail(fundDetailRedemption);
@@ -213,7 +232,7 @@ namespace DataAccess
 
         public static void CalculateFund(int fundId, double netWorth)
         {
-            var strWhere = string.Format("WHERE FundID = {0} AND Type = '申购'", fundId);
+            var strWhere = string.Format("WHERE FundID = {0} AND Type = '申购' AND Amount <> 0", fundId);
             var fundDetailList = LoadFundDetailList(strWhere);
 
             var totalAmount = 0.00;

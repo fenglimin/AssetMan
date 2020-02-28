@@ -12,8 +12,9 @@ namespace UserCtrl
 		public int Height { get; set; }
 		public string InstanceName { get; set; }
 		public bool EnableValidate { get; set; }
+        public bool EnableInput { get; set; }
 
-		public string Text
+        public string Text
 		{
 			get { return tbEdit.Text; }
             set { tbEdit.Text = value; }
@@ -23,7 +24,8 @@ namespace UserCtrl
 		public UserCtrl_SelectEditCtrl()
 		{
 			EnableValidate = true;
-		}
+            EnableInput = true;
+        }
 
 		protected void Page_Load(object sender, EventArgs e)
 		{
@@ -40,7 +42,11 @@ namespace UserCtrl
 
 				tbEdit.Attributes.Add("oninput", "OnInput('" + InstanceName + "', this.value)");
 				LoadSetting(Type);
-			}
+
+                tbEdit.Enabled = EnableInput;
+                lbSelect.Enabled = EnableInput;
+                cbSave.Enabled = EnableInput;
+            }
 			else
 			{
 				if (!string.IsNullOrEmpty(Type) && Type != (string) ViewState["SelectEditType"])

@@ -12,6 +12,7 @@ namespace UserCtrl
 		public string CardUsage { get; set; }
 		public int InitCardId { get; set; }
 		public bool HideTitle { get; set; }
+        public bool EnableInput { get; set; }
 
 		public int CardId
 		{
@@ -28,7 +29,12 @@ namespace UserCtrl
 			get { return ddlCardName.SelectedItem.Text; }
 		}
 
-		protected void Page_Load(object sender, EventArgs e)
+        public UserCtrl_SelectBankCardCtrl()
+        {
+            EnableInput = true;
+        }
+
+        protected void Page_Load(object sender, EventArgs e)
 		{
 			if (!Page.IsPostBack)
 			{
@@ -38,7 +44,9 @@ namespace UserCtrl
 				lbTitle.Visible = !HideTitle;
 				ViewState["CardUsage"] = CardUsage;
 				LoadCardName(CardUsage, ddlBankName.Text, defaultBankCard.CardName);
-			}
+                ddlBankName.Enabled = EnableInput;
+                ddlCardName.Enabled = EnableInput;
+            }
 			else
 			{
 				CardUsage = ViewState["CardUsage"].ToString();

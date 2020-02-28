@@ -30,17 +30,24 @@ public partial class Form_FundForm : System.Web.UI.Page
                 lbTitle.Text = "更改基金净值";
                 ucAmount.Title = "份额";
                 ucAmount.InitAmount = fundInfo.TotalAmount.ToString(CultureInfo.InvariantCulture);
+                ucBankCard.EnableInput = false;
+                ucAmount.EnableInput = false;
+                ucDesc.EnableInput = false;
             }
             else if (opType == "Purchase")
             {
                 lbTitle.Text = "基金申购";
                 ucAmount.Title = "金额";
+                ucBankCard.EnableInput = string.IsNullOrEmpty(FundId);
+                ucDesc.EnableInput = string.IsNullOrEmpty(FundId);
             }
             else if (opType == "Redemption")
             {
                 lbTitle.Text = "基金赎回";
                 ucAmount.Title = "份额";
                 ucAmount.InitAmount = fundInfo.TotalShare.ToString(CultureInfo.InvariantCulture);
+                ucBankCard.EnableInput = false;
+                ucDesc.EnableInput = false;
             }
 
             ucBankCard.CardUsage = "收入";

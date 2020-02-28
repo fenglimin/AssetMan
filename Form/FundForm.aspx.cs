@@ -113,7 +113,8 @@ public partial class Form_FundForm : System.Web.UI.Page
         {
             double totalAmount;// 赎回份额对应的本金
             double totalBenefit;// 赎回份额产生的收益
-            InvestDal.RedemptionFund(ucDesc.Text, Convert.ToDouble(ucAmount.Amount), Convert.ToDouble(ucNetWorth.Amount), ucDate.Date, out totalAmount, out totalBenefit);
+            double weightedBenefitRate; // 所有赎回本金产生的加权收益率
+            InvestDal.RedemptionFund(ucDesc.Text, Convert.ToDouble(ucAmount.Amount), Convert.ToDouble(ucNetWorth.Amount), ucDate.Date, out totalAmount, out totalBenefit, out weightedBenefitRate);
 
             var strAmount = Math.Round(totalAmount / 10) + "0";
             var dayDetail1 = new DayDetail()
@@ -144,7 +145,7 @@ public partial class Form_FundForm : System.Web.UI.Page
 
             dayDetail1.Account = Math.Round(totalBenefit / 10) + "0";
             dayDetail1.ActionType = "收入";
-            dayDetail1.Desc = "理财：" + desc + " - 收益";
+            dayDetail1.Desc = string.Format("理财：{0} {1}份，收益率{2}%", desc, ucAmount.Amount,weightedBenefitRate.ToString("f2"));
             AssetDetailManager.AddDayDetail(ucBankCard.CardId, dayDetail1);
         }
         else if (lbTitle.Text == "更改基金净值")

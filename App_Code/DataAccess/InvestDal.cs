@@ -145,12 +145,14 @@ namespace DataAccess
             CalculateFund(fundList[0].FundId, netWorth);
         }
 
-        public static bool RedemptionFund(string fundName, double share, double netWorth, string operationDate, out double totalAmount, out double totalBenefit)
+        public static bool RedemptionFund(string fundName, double share, double netWorth, string operationDate, out double totalAmount, out double totalBenefit, out double weightedBenefitRate)
         {
             // 赎回份额对应的本金
             totalAmount = 0.00;
             // 赎回份额产生的收益
             totalBenefit = 0.00;
+            // 所有赎回本金产生的加权收益率
+            weightedBenefitRate = 0.000;
 
             var totalShare = share;
 
@@ -199,7 +201,6 @@ namespace DataAccess
             }
 
             var weightedBase = weightedBenefitData.Sum(data => data.Key);
-            var weightedBenefitRate = 0.00;
             foreach (var data in weightedBenefitData)
             {
                 weightedBenefitRate += data.Value * data.Key / weightedBase;

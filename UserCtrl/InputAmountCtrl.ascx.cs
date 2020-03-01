@@ -42,5 +42,15 @@ namespace UserCtrl
 				tbAmount.Enabled = EnableInput;
 			}
 		}
+
+        public void SetAmount(int amount)
+        {
+            tbAmount.Text = amount.ToString();
+        }
+
+        public void SetFocus()
+        {
+            tbAmount.Focus();
+        }
 	}
 }

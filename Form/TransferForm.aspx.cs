@@ -19,13 +19,25 @@ namespace Form
 				ucTransferInBankCard.InitCardId = Common.SafeConvertToInt(Request.QueryString["CardInId"]);
 
 				ucAmount.Title = "金额";
-				ucAmount.InitAmount = Request.QueryString["Amount"];
 				ucAmount.MinimumValue = "0";
 				ucAmount.MaximunValue = "1000000";
-			}
+                ucAmount.InitAmount = Request.QueryString["Amount"];
+            }
 		}
 
-		protected void btTransfer_Click(object sender, EventArgs e)
+        protected void Page_LoadComplete(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(ucAmount.InitAmount))
+            {
+                var allAvailableCards = BankCardDal.GetAllAvailableCards();
+                var bankCard = allAvailableCards[ucTransferOutBankCard.InitCardId] as BankCard;
+                ucAmount.SetAmount(bankCard != null? bankCard.Account : 0);
+            }
+
+            ucAmount.SetFocus();
+        }
+
+        protected void btTransfer_Click(object sender, EventArgs e)
 		{
 			ProcessTransfer(ucTransferOutBankCard, "-", "转至 " + ucTransferInBankCard.BankName + ":" + ucTransferInBankCard.CardName);
 			ProcessTransfer(ucTransferInBankCard, string.Empty, "转自 " + ucTransferOutBankCard.BankName + ":" + ucTransferOutBankCard.CardName);

@@ -6,6 +6,6 @@
 	public class BankCard
 	{
 		public int CardId, Account, Credit, MaxPerDay;
-		public string BankName, CardName, CardType, CardUsage, BillDay, PayDay;
+		public string BankName, CardName, CardType, CardUsage, BillDay, PayDay, Alias;
 	}
 }

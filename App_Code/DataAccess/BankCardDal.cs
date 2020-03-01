@@ -36,8 +36,9 @@ namespace DataAccess
 					Credit = reader.GetInt32(6),
 					MaxPerDay = reader.GetInt32(7),
 					BillDay = Common.GetSafeString(reader, 8),
-					PayDay = Common.GetSafeString(reader, 9)
-				};
+					PayDay = Common.GetSafeString(reader, 9),
+                    Alias = Common.GetSafeString(reader, 10)
+                };
 
 				allCards[bankCard.CardId] = bankCard;
 			}

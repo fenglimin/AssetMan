@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Web.UI.WebControls;
 using DataAccess;
@@ -50,7 +51,7 @@ namespace UserCtrl
 			else
 			{
 				CardUsage = ViewState["CardUsage"].ToString();
-			}
+            }
 		}
 
 		private void LoadBankName(string cardUsage, string defaultBankName)
@@ -92,17 +93,86 @@ namespace UserCtrl
 
 		private BankCard LoadDefaultBankCard(string cardUsage)
 		{
-			if (InitCardId == 0)
-			{
-				if (cardUsage == null)
-					return new BankCard();
+            var allAvailableCards = BankCardDal.GetAllAvailableCards();
+            var list = SettingDal.GetIntValues("默认" + cardUsage + "卡");
+            if (cardUsage == null || list.Count == 0)
+            {
+                return InitCardId == 0 ? new BankCard() : allAvailableCards[InitCardId] as BankCard;
+            }
 
-				var list = SettingDal.GetIntValues("默认" + cardUsage + "卡");
-				if (list.Count != 0)
-					InitCardId = list[0];
-			}
+            if (InitCardId == 0)
+            {
+                InitCardId = list[0];
+            }
 
-			return BankCardDal.GetAllAvailableCards()[InitCardId] as BankCard;
-		}
-	}
+            var autoSelect = false;
+            var disableEmptyCard = false;
+            if (CardUsage == "支出" || CardUsage == "转出" || CardUsage == "加油")
+            {
+                disableEmptyCard = true;
+                var bankCard = allAvailableCards[InitCardId] as BankCard;
+                autoSelect = bankCard.BankName != "其他" && bankCard.Account <= 0;
+            }
+
+            //if (list.Count > 1)
+            //{
+            //    var bankCard1 = allAvailableCards[list[0]] as BankCard;
+            //    rbCard1.Text = bankCard1.Alias;
+            //    rbCard1.Attributes.Add("value", bankCard1.BankName + "_" + bankCard1.CardName);
+
+            //    var bankCard2 = allAvailableCards[list[1]] as BankCard;
+            //    rbCard2.Text = bankCard2.Alias;
+            //    rbCard2.Attributes.Add("value", bankCard2.BankName + "_" + bankCard2.CardName);
+            //}
+
+            var listCard = new List<RadioButton> {rbCard1, rbCard2, rbCard3, rbCard4};
+
+            var noChecked = true;
+            for (var i = 1; i <= list.Count; i++)
+            {
+                var bankCard = allAvailableCards[list[i - 1]] as BankCard;
+                listCard[i - 1].Text = bankCard.Alias;
+                listCard[i - 1].Visible = true;
+                listCard[i - 1].Enabled = !(disableEmptyCard && bankCard.Account <= 0);
+
+                listCard[i - 1].Checked = listCard[i - 1].Enabled && noChecked && ( autoSelect || bankCard.CardId == InitCardId);
+                if (listCard[i - 1].Checked)
+                {
+                    noChecked = false;
+                    InitCardId = list[i - 1];
+                }
+                
+                ViewState["Bank" + i] = bankCard.BankName;
+                ViewState["Card" + i] = bankCard.CardName;
+            }
+
+            return allAvailableCards[InitCardId] as BankCard;
+        }
+
+        protected void rbCard1_CheckedChanged(object sender, EventArgs e)
+        {
+            LoadSelectBankCard(1);
+        }
+
+        protected void rbCard2_CheckedChanged(object sender, EventArgs e)
+        {
+            LoadSelectBankCard(2);
+        }
+
+        protected void rbCard3_CheckedChanged(object sender, EventArgs e)
+        {
+            LoadSelectBankCard(3);
+        }
+
+        protected void rbCard4_CheckedChanged(object sender, EventArgs e)
+        {
+            LoadSelectBankCard(4);
+        }
+
+        private void LoadSelectBankCard(int id)
+        {
+            LoadBankName(CardUsage, ViewState["Bank" + id].ToString());
+            LoadCardName(CardUsage, ViewState["Bank" + id].ToString(), ViewState["Card" + id].ToString());
+        }
+    }
 }

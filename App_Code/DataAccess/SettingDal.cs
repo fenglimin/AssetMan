@@ -27,7 +27,7 @@ namespace DataAccess
 
 		public static IList<int> GetIntValues(string itemType)
 		{
-			var strSql = string.Format("SELECT ItemValue FROM Setting WHERE ItemType = '{0}'", itemType);
+			var strSql = string.Format("SELECT ItemValue FROM Setting WHERE ItemType = '{0}' ORDER BY ID", itemType);
 			var comm = new OleDbCommand(strSql, DbManager.OleDbConn);
 			var reader = comm.ExecuteReader();
 			if (reader == null) return null;

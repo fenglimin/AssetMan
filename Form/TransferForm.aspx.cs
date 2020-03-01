@@ -30,7 +30,7 @@ namespace Form
             if (string.IsNullOrEmpty(ucAmount.InitAmount))
             {
                 var allAvailableCards = BankCardDal.GetAllAvailableCards();
-                var bankCard = allAvailableCards[ucTransferOutBankCard.InitCardId] as BankCard;
+                var bankCard = allAvailableCards[ucTransferOutBankCard.CardId] as BankCard;
                 ucAmount.SetAmount(bankCard != null? bankCard.Account : 0);
             }
 

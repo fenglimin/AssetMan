@@ -84,8 +84,8 @@ namespace UserCtrl
             GridViewManager.AddBoundFieldColumn(gvAllFunds, TableFieldName.FundTotalAmount, HorizontalAlign.Right);
             GridViewManager.AddBoundFieldColumn(gvAllFunds, TableFieldName.FundTotalShare, HorizontalAlign.Right);
             GridViewManager.AddBoundFieldColumn(gvAllFunds, TableFieldName.FundNetWorth, HorizontalAlign.Right);
-            GridViewManager.AddBoundFieldColumn(gvAllFunds, TableFieldName.FundTotalBenefit, HorizontalAlign.Right);
             GridViewManager.AddBoundFieldColumn(gvAllFunds, TableFieldName.WeightedBenefitRate, HorizontalAlign.Right);
+            GridViewManager.AddBoundFieldColumn(gvAllFunds, TableFieldName.FundTotalBenefit, HorizontalAlign.Right);
         }
 
         private void CreateDetailGridViewColumn()
@@ -101,7 +101,15 @@ namespace UserCtrl
 
         protected void gvAllFunds_RowDataBound(object sender, GridViewRowEventArgs e)
         {
-            if (e.Row.RowIndex >= 0)
+            if (e.Row.RowIndex == 0)
+            {
+                var hyperLink = e.Row.Cells[0].Controls[0] as HyperLink;
+                hyperLink.Text = "汇总";
+                GridViewManager.SetRowStyle(e.Row, Color.Red, true);
+                return;
+            }
+
+            if (e.Row.RowIndex > 0)
             {
                 var dataTable = gvAllFunds.DataSource as DataTable;
                 var fundId = dataTable.Rows[e.Row.RowIndex][TableFieldName.FundID].ToString();
@@ -148,8 +156,8 @@ namespace UserCtrl
         {
             if (string.IsNullOrEmpty(FundId))
             {
-                FundId = dtFund.Rows[0][TableFieldName.FundID].ToString();
-                FundName = dtFund.Rows[0][TableFieldName.FundName].ToString();
+                FundId = dtFund.Rows[1][TableFieldName.FundID].ToString();
+                FundName = dtFund.Rows[1][TableFieldName.FundName].ToString();
             }
 
             lbFundDetail.Text = string.Format("【{0}】交易明细", FundName);

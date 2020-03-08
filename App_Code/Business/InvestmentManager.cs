@@ -64,10 +64,21 @@ namespace Business
             dt.Columns.Add(TableFieldName.FundTotalShare);
             dt.Columns.Add(TableFieldName.Date);
             dt.Columns.Add(TableFieldName.FundNetWorth);
-            dt.Columns.Add(TableFieldName.FundTotalBenefit);
             dt.Columns.Add(TableFieldName.WeightedBenefitRate);
+            dt.Columns.Add(TableFieldName.FundTotalBenefit);
 
-            foreach (var fundInfo in InvestDal.LoadFundList(""))
+            double totalAmount = 0;
+            double totalBenefit = 0;
+            var fundList = InvestDal.LoadFundList("");
+            foreach (var fundInfo in fundList)
+            {
+                totalAmount += fundInfo.TotalAmount;
+                totalBenefit += fundInfo.TotalBenefit;
+            }
+
+            GridViewManager.AddRow(dt, CreateStatisticRowDataFoFund(totalAmount, totalBenefit));
+
+            foreach (var fundInfo in fundList)
             {
                 GridViewManager.AddRow(dt, CreateRowDataForFund(fundInfo));
             }
@@ -168,5 +179,15 @@ namespace Business
 			var benifitRate = investDetail.InvestBenifit*365000/daySpan/investDetail.InvestAmount;
 			return string.Format("{0}.{1}", benifitRate/10, benifitRate%10);
 		}
-	}
+
+        private static Dictionary<string, string> CreateStatisticRowDataFoFund(double totalAmount, double totalBenefit)
+        {
+            var rowData = new Dictionary<string, string>();
+
+            rowData[TableFieldName.FundTotalAmount] = totalAmount.ToString("f0");
+            rowData[TableFieldName.FundTotalBenefit] = totalBenefit.ToString("f0");
+
+            return rowData;
+        }
+    }
 }

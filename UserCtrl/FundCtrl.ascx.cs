@@ -19,10 +19,13 @@ namespace UserCtrl
 
         public string FundName { get; set; }
 
+        public bool HideEndedFund { get; set; }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!Page.IsPostBack)
             {
+                HideEndedFund = true;
                 lbTitle.Text = Title;
                 CreateGridViewColumn();
 
@@ -30,6 +33,8 @@ namespace UserCtrl
                 gvFundDetail.Visible = !ForTodoList;
 
                 var dtFund = InvestmentManager.CreateDateTableFromAllFunds();
+                dtFund = AdjustFund(dtFund, HideEndedFund);
+
                 gvAllFunds.DataSource = dtFund;
                 gvAllFunds.DataBind();
 
@@ -37,20 +42,29 @@ namespace UserCtrl
                 {
                     CreateDetailGridViewColumn();
 
-                    if (string.IsNullOrEmpty(FundId))
-                    {
-                        FundId = dtFund.Rows[0][TableFieldName.FundID].ToString();
-                        FundName = dtFund.Rows[0][TableFieldName.FundName].ToString();
-                    }
-
-                    lbFundDetail.Text = string.Format("【{0}】交易明细", FundName);
-                    var condition = string.Format("WHERE FundID = {0}", FundId);
-                    var dtFundDetail = InvestmentManager.CreateDateTableFromFund(condition);
-                    gvFundDetail.DataSource = dtFundDetail;
-                    gvFundDetail.DataBind();
+                    RefreshFundDetail(dtFund);
                 }
                 
             }
+        }
+
+        private DataTable AdjustFund(DataTable dtFund, bool hideEndedFund)
+        {
+            if (hideEndedFund)
+            {
+                var count = dtFund.Rows.Count;
+                for (var i = 0; i < count; i++)
+                {
+                    if (dtFund.Rows[i][TableFieldName.FundTotalAmount].ToString() == "0")
+                    {
+                        dtFund.Rows.RemoveAt(i);
+                        count = dtFund.Rows.Count;
+                        i--;
+                    }
+                }
+            }
+            
+            return dtFund;
         }
 
         private void CreateGridViewColumn()
@@ -116,6 +130,33 @@ namespace UserCtrl
                     hyperLink.NavigateUrl = string.Format("~/Form/AllInvestmentsForm.aspx?FundId={0}&FundName={1}", fundId, fundName);
                 }
             }
+        }
+
+        protected void cbShowHistory_CheckedChanged(object sender, EventArgs e)
+        {
+            HideEndedFund = !cbShowHistory.Checked;
+
+            var dtFund = InvestmentManager.CreateDateTableFromAllFunds();
+            dtFund = AdjustFund(dtFund, HideEndedFund);
+            gvAllFunds.DataSource = dtFund;
+            gvAllFunds.DataBind();
+
+            RefreshFundDetail(dtFund);
+        }
+
+        private void RefreshFundDetail(DataTable dtFund)
+        {
+            if (string.IsNullOrEmpty(FundId))
+            {
+                FundId = dtFund.Rows[0][TableFieldName.FundID].ToString();
+                FundName = dtFund.Rows[0][TableFieldName.FundName].ToString();
+            }
+
+            lbFundDetail.Text = string.Format("【{0}】交易明细", FundName);
+            var condition = string.Format("WHERE FundID = {0}", FundId);
+            var dtFundDetail = InvestmentManager.CreateDateTableFromFund(condition);
+            gvFundDetail.DataSource = dtFundDetail;
+            gvFundDetail.DataBind();
         }
     }
 }

@@ -292,7 +292,7 @@ namespace DataAccess
 
         public static IList<FundInfo> LoadFundList(string condition)
         {
-            var strSql = string.Format("SELECT * from Fund {0} order by FundId", condition);
+            var strSql = string.Format("SELECT * from Fund {0} order by TotalAmount DESC", condition);
             var comm = new OleDbCommand(strSql, DbManager.OleDbConn);
             var reader = comm.ExecuteReader();
             if (reader == null)

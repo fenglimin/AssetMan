@@ -8,7 +8,10 @@
 <div style="font-size: 13px">
     <div>
         <table>
-            <tr><asp:Label ID="lbTitle" runat="server" Text="基金" Font-Bold="True" CssClass="SubTitle"></asp:Label></tr>
+            <tr>
+                <td><asp:Label ID="lbTitle" runat="server" Text="基金" Font-Bold="True" CssClass="SubTitle"></asp:Label></td>
+                <td><asp:CheckBox ID="cbShowHistory" runat="server" Text="显示历史纪录" AutoPostBack="True" CssClass="SubTitle" OnCheckedChanged="cbShowHistory_CheckedChanged"/></td>
+            </tr>
             <tr>
                 <asp:GridView ID="gvAllFunds" runat="server" AutoGenerateColumns="False" HorizontalAlign = "Center" BorderStyle="Solid" BorderWidth="1px" CellPadding="3" ForeColor="#333333" GridLines="Vertical" ShowHeaderWhenEmpty="True" Font-Size="9pt" Width="98%" RowStyle-Wrap="False" OnRowDataBound="gvAllFunds_RowDataBound">
                     <AlternatingRowStyle BackColor="White" />

@@ -25,7 +25,7 @@
             <table>
                 <tr>
                     <td><uc1:SelectBankCardCtrl runat="server" ID="ucBankCard" /></td>
-                    <td><uc1:SelectTwoDatesWithFormatCtrl runat="server" ID="ucQueryPeriod" /></td>
+                    <td style="vertical-align: top"><uc1:SelectTwoDatesWithFormatCtrl runat="server" ID="ucQueryPeriod" /></td>
                 </tr>
                 <tr>
                     <td><uc1:CheckBoxListCtrl runat="server" ID="ucType" /></td>

@@ -31,6 +31,7 @@ namespace UserCtrl
 
                 lbFundDetail.Visible = !ForTodoList;
                 gvFundDetail.Visible = !ForTodoList;
+                cbShowHistory.Visible = !ForTodoList;
 
                 var dtFund = InvestmentManager.CreateDateTableFromAllFunds();
                 dtFund = AdjustFund(dtFund, HideEndedFund);

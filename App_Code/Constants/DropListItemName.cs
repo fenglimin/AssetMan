@@ -14,7 +14,9 @@
 		public const string ThisYear = "ThisYear";
 		public const string LastYear = "LastYear";
 		public const string PrevYear = "PrevYear";
-		public const string FromDay = "FromDay";
+        public const string PrevPrevYear = "PrevPrevYear";
+        public const string PrevPrevPrevYear = "PrevPrevPrevYear";
+        public const string FromDay = "FromDay";
 		public const string ToDay = "ToDay";
 		public const string FreeSet = "FreeSet";
 

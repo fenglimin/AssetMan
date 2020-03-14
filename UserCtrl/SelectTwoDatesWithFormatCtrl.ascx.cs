@@ -95,7 +95,17 @@ namespace UserCtrl
 				endQueryDate = dtDayOneCurrentYear.AddDays(-1);
 				startQueryDate = dtDayOneCurrentYear.AddYears(-1);
 			}
-			else if (queryPeriod == TranslationManager.Translate(DropListItemName.FromDay))
+            else if (queryPeriod == TranslationManager.Translate(DropListItemName.PrevPrevYear))
+            {
+                endQueryDate = dtDayOneCurrentYear.AddDays(-1).AddYears(-1);
+                startQueryDate = dtDayOneCurrentYear.AddYears(-2);
+            }
+            else if (queryPeriod == TranslationManager.Translate(DropListItemName.PrevPrevPrevYear))
+            {
+                endQueryDate = dtDayOneCurrentYear.AddDays(-1).AddYears(-2);
+                startQueryDate = dtDayOneCurrentYear.AddYears(-3);
+            }
+            else if (queryPeriod == TranslationManager.Translate(DropListItemName.FromDay))
 			{
 				endQueryDate = dtDayOneCurrentYear.AddYears(500);
 				endDate.Disabled = true;
@@ -123,7 +133,9 @@ namespace UserCtrl
 				TranslationManager.Translate(DropListItemName.ThisYear),
 				TranslationManager.Translate(DropListItemName.LastYear),
 				TranslationManager.Translate(DropListItemName.PrevYear),
-				TranslationManager.Translate(DropListItemName.FromDay),
+                TranslationManager.Translate(DropListItemName.PrevPrevYear),
+                TranslationManager.Translate(DropListItemName.PrevPrevPrevYear),
+                TranslationManager.Translate(DropListItemName.FromDay),
 				TranslationManager.Translate(DropListItemName.ToDay),
 				TranslationManager.Translate(DropListItemName.FreeSet),
 			};

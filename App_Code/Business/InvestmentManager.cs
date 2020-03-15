@@ -116,7 +116,7 @@ namespace Business
             rowData[TableFieldName.Date] = fundInfo.CurrentDate;
             rowData[TableFieldName.FundNetWorth] = fundInfo.CurrentNetWorth.ToString("f4");
             rowData[TableFieldName.FundTotalBenefit] = fundInfo.TotalBenefit.ToString("f0");
-            rowData[TableFieldName.WeightedBenefitRate] = fundInfo.WeightedBenefitRate.ToString("f3");
+            rowData[TableFieldName.WeightedBenefitRate] = fundInfo.WeightedBenefitRate.ToString("f3") + "%";
 
             return rowData;
         }
@@ -131,7 +131,7 @@ namespace Business
             rowData[TableFieldName.NetWorth] = fundDetail.NetWorth.ToString("f4");
             rowData[TableFieldName.Share] = fundDetail.TotalShare.ToString("f3");
             rowData[TableFieldName.ShareAvailable] = fundDetail.AvailableShare.ToString("f3");
-            rowData[TableFieldName.InvestBenifitRate] = fundDetail.BenefitRate.ToString("f3");
+            rowData[TableFieldName.InvestBenifitRate] = fundDetail.BenefitRate.ToString("f3") + "%";
 
             return rowData;
         }

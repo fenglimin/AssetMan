@@ -90,7 +90,7 @@ namespace DataAccess
 
 		public static AssetDetail CreateCurrentAssetDetail()
 		{
-			var assetDetail = new AssetDetail { date = DateTime.Today.ToString("yyyy-MM-dd") };
+			var assetDetail = new AssetDetail { date = DateTime.Today.ToString("yyyy-MM-dd"), bankCardDetail = string.Empty};
 
 			foreach (DictionaryEntry item in BankCardDal.GetAllAvailableCards())
 			{

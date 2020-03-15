@@ -155,10 +155,15 @@ namespace UserCtrl
 
         private void RefreshFundDetail(DataTable dtFund)
         {
-            if (string.IsNullOrEmpty(FundId))
+            if (string.IsNullOrEmpty(FundId) && dtFund.Rows.Count > 0)
             {
                 FundId = dtFund.Rows[1][TableFieldName.FundID].ToString();
                 FundName = dtFund.Rows[1][TableFieldName.FundName].ToString();
+            }
+
+            if (string.IsNullOrEmpty(FundId))
+            {
+                return;
             }
 
             lbFundDetail.Text = string.Format("【{0}】交易明细", FundName);

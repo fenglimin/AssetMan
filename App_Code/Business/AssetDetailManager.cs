@@ -18,17 +18,21 @@ namespace Business
 		public static int GetCardAccountByDate(int cardId, string date)
 		{
 			var assetDetail = AssetDetailDal.LoadAssetDetailByDate(date, true);
-			var cards = assetDetail.bankCardDetail.Split(';');
-			var allCards = BankCardDal.GetAllAvailableCards();
+            if (assetDetail.bankCardDetail != null)
+            {
+                var cards = assetDetail.bankCardDetail.Split(';');
+                var allCards = BankCardDal.GetAllAvailableCards();
 
-			foreach (var card in cards)
-			{
-				if (string.IsNullOrEmpty(card)) continue;
+                foreach (var card in cards)
+                {
+                    if (string.IsNullOrEmpty(card)) continue;
 
-				var items = card.Split(':');
-				if (Common.SafeConvertToInt(items[0]) == cardId)
-					return Common.SafeConvertToInt(items[1]);
-			}
+                    var items = card.Split(':');
+                    if (Common.SafeConvertToInt(items[0]) == cardId)
+                        return Common.SafeConvertToInt(items[1]);
+                }
+            }
+			
 
 			return 0;
 		}

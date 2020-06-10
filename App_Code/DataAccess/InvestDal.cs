@@ -368,7 +368,7 @@ namespace DataAccess
                          "'" + fundName + "', " +
                          amount + ", " +
                          Math.Round(amount/netWorth, 2) + ", " +
-                         netWorth + ", 0, '', DATEVALUE('" + date + "') )";
+                         netWorth + ", 0, 0, DATEVALUE('" + date + "') )";
             var comm = new OleDbCommand(strSql, DbManager.OleDbConn);
             comm.ExecuteNonQuery();
         }

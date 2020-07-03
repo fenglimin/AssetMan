@@ -27,6 +27,7 @@
                         <div><uc1:SelectDateCtrl runat="server" ID="ucDate" /></div>    
                         <div><uc1:InputAmountCtrl runat="server" ID="ucAmount" /></div>  
                         <div><uc1:InputAmountCtrl runat="server" ID="ucNetWorth" /></div>
+                        <div><uc1:InputAmountCtrl runat="server" ID="ucTradeFee" /></div>
                         <div id="DivCommandButton">
                             <table>
                                 <tr>

@@ -120,7 +120,7 @@ namespace DataAccess
             return (int)Math.Round(totalAmount);
         }
 
-        public static void PurchaseFund(string fundName, double amount, double netWorth, string operationDate)
+        public static void PurchaseFund(string fundName, double amount, double netWorth, double tradeFeeRate, string operationDate)
         {
             var fundList = LoadFundList("where FundName ='" + fundName + "'");
             if (fundList.Count == 0)
@@ -129,7 +129,9 @@ namespace DataAccess
                 fundList = LoadFundList("where FundName ='" + fundName + "'");
             }
 
-            var share = amount / netWorth;
+            var tradeFee = amount * tradeFeeRate / 100;
+            var share = (amount - tradeFee) / netWorth;
+
             var fundDetail = new FundDetail
             {
                 FundId = fundList[0].FundId,
@@ -138,6 +140,7 @@ namespace DataAccess
                 OperationDate = operationDate,
                 TotalShare = share,
                 AvailableShare = share,
+                TradeFee = tradeFee,
                 Type = "申购"
             };
 
@@ -240,6 +243,7 @@ namespace DataAccess
             var totalAmount = 0.00;
             var totalShare = 0.00;
             var totalBenefit = 0.00;
+            var totalTradeFee = 0.00;
 
             DateTime dtNetWorth;
             DateTime.TryParse(date, out dtNetWorth);
@@ -252,6 +256,7 @@ namespace DataAccess
                 var detail = fundDetailList[i];
                 totalAmount += detail.Amount;
                 totalShare += detail.AvailableShare;
+                totalTradeFee += detail.TradeFee;
                 var benefit = (netWorth - detail.NetWorth) * detail.AvailableShare;
                 totalBenefit += benefit;
                 DateTime dtPurchase;
@@ -277,8 +282,8 @@ namespace DataAccess
                 }
             }
 
-            var strSql = string.Format("UPDATE Fund SET TotalAmount ={0}, TotalShare = {1}, CurrentNetWorth = {2}, TotalBenefit = {3}, WeightedBenefitRate = {4}, CurrentDate = DATEVALUE('{5}') WHERE FundID = {6}",
-                Math.Round(totalAmount), Math.Round(totalShare,2), netWorth, Math.Round(totalBenefit,2), Math.Round(weightedBenefitRate, 5) * 100, date, fundId);
+            var strSql = string.Format("UPDATE Fund SET TotalAmount ={0}, TotalShare = {1}, CurrentNetWorth = {2}, TotalBenefit = {3}, TotalTradeFee = {4}, WeightedBenefitRate = {5}, CurrentDate = DATEVALUE('{6}') WHERE FundID = {7}",
+                Math.Round(totalAmount), Math.Round(totalShare,2), netWorth, Math.Round(totalBenefit, 2), Math.Round(totalTradeFee, 2), Math.Round(weightedBenefitRate, 5) * 100, date, fundId);
             var comm = new OleDbCommand(strSql, DbManager.OleDbConn);
             comm.ExecuteNonQuery();
         }
@@ -337,7 +342,8 @@ namespace DataAccess
                 CurrentNetWorth = reader.GetDouble(4),
                 TotalBenefit = reader.GetDouble(5),
                 WeightedBenefitRate = reader.GetDouble(6),
-                CurrentDate = Common.GetSafeDateTime(reader, 7)
+                CurrentDate = Common.GetSafeDateTime(reader, 7),
+                TotalTradeFee = reader.GetDouble(8)
             };
 
             return fundInfo;
@@ -355,8 +361,8 @@ namespace DataAccess
                 NetWorth = reader.GetDouble(5),
                 TotalShare = reader.GetDouble(6),
                 AvailableShare = reader.GetDouble(7),
-                BenefitRate = reader.GetDouble(8)
-
+                BenefitRate = reader.GetDouble(8),
+                TradeFee = reader.GetDouble(9)
             };
 
             return fundDetail;
@@ -364,18 +370,18 @@ namespace DataAccess
 
         public static void InsertFund(string fundName, double amount, double netWorth, string date)
         {
-            var strSql = "INSERT INTO Fund ( FundName, TotalAmount, TotalShare, CurrentNetWorth, TotalBenefit, WeightedBenefitRate, CurrentDate ) VALUES ( " +
+            var strSql = "INSERT INTO Fund ( FundName, TotalAmount, TotalShare, CurrentNetWorth, TotalBenefit, WeightedBenefitRate, CurrentDate, TotalTradeFee ) VALUES ( " +
                          "'" + fundName + "', " +
                          amount + ", " +
                          Math.Round(amount/netWorth, 2) + ", " +
-                         netWorth + ", 0, 0, DATEVALUE('" + date + "') )";
+                         netWorth + ", 0, 0, DATEVALUE('" + date + "'), 0 )";
             var comm = new OleDbCommand(strSql, DbManager.OleDbConn);
             comm.ExecuteNonQuery();
         }
 
         public static void InsertFundDetail(FundDetail fundDetail)
         {
-            var strSql = "INSERT INTO FundDetail ( FundID, OperationDate, Type, Amount, TotalShare, NetWorth, AvailableShare, BenefitRate ) VALUES ( " +
+            var strSql = "INSERT INTO FundDetail ( FundID, OperationDate, Type, Amount, TotalShare, NetWorth, AvailableShare, BenefitRate, TradeFee ) VALUES ( " +
                          fundDetail.FundId + ", " +
                          "DATEVALUE('" + fundDetail.OperationDate+ "'), " +
                          "'" + fundDetail.Type + "', " +
@@ -383,7 +389,8 @@ namespace DataAccess
                          Math.Round(fundDetail.TotalShare, 3) + ", " +
                          fundDetail.NetWorth + ", " +
                          Math.Round(fundDetail.AvailableShare, 3) + ", " +
-                         Math.Round(fundDetail.BenefitRate, 3) + " )";
+                         Math.Round(fundDetail.BenefitRate, 3) + ", " +
+                         Math.Round(fundDetail.TradeFee, 3) + " )";
             var comm = new OleDbCommand(strSql, DbManager.OleDbConn);
             comm.ExecuteNonQuery();
         }

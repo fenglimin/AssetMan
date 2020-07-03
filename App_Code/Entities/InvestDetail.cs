@@ -13,13 +13,13 @@
     {
         public string FundName, CurrentDate;
         public int FundId;
-        public double TotalAmount, TotalShare, CurrentNetWorth, TotalBenefit, WeightedBenefitRate;
+        public double TotalAmount, TotalShare, CurrentNetWorth, TotalBenefit, WeightedBenefitRate, TotalTradeFee;
     }
 
     public class FundDetail
     {
         public string Type, OperationDate;
         public int Id, FundId;
-        public double Amount, TotalShare, NetWorth, AvailableShare, BenefitRate;
+        public double Amount, TotalShare, NetWorth, AvailableShare, BenefitRate, TradeFee;
     }
 }

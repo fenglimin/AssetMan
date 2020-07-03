@@ -33,6 +33,7 @@ public partial class Form_FundForm : System.Web.UI.Page
                 ucBankCard.EnableInput = false;
                 ucAmount.EnableInput = false;
                 ucDesc.EnableInput = false;
+                ucTradeFee.EnableInput = false;
             }
             else if (opType == "Purchase")
             {
@@ -56,11 +57,16 @@ public partial class Form_FundForm : System.Web.UI.Page
 
             ucAmount.MinimumValue = "0";
             ucAmount.MaximunValue = "10000000";
+            ucAmount.InitAmount = "0";
 
             ucNetWorth.Title = "净值";
             ucNetWorth.MinimumValue = "0";
             ucNetWorth.MaximunValue = "10000000";
             ucNetWorth.InitAmount = fundInfo.CurrentNetWorth.ToString(CultureInfo.InvariantCulture);
+
+            ucTradeFee.Title = "费率";
+            ucTradeFee.MinimumValue = "0";
+            ucTradeFee.MaximunValue = "1.5";
 
             ucDesc.Type = "基金";
             ucDesc.Title = ucDesc.Type;
@@ -109,7 +115,7 @@ public partial class Form_FundForm : System.Web.UI.Page
             };
             AssetDetailManager.AddDayDetail(investCard.CardId, dayDetail2);
 
-            InvestDal.PurchaseFund(ucDesc.Text, Convert.ToDouble(ucAmount.Amount), Convert.ToDouble(ucNetWorth.Amount), ucDate.Date);
+            InvestDal.PurchaseFund(ucDesc.Text, Convert.ToDouble(ucAmount.Amount), Convert.ToDouble(ucNetWorth.Amount), Convert.ToDouble(ucTradeFee.Amount), ucDate.Date);
         }
         else if (lbTitle.Text == "基金赎回")
         {
@@ -117,7 +123,7 @@ public partial class Form_FundForm : System.Web.UI.Page
             double totalBenefit;// 赎回份额产生的收益
             double weightedBenefitRate; // 所有赎回本金产生的加权收益率
 
-            // 在赎回前，先更细赎回日的净值
+            // 在赎回前，先更新赎回日的净值
             InvestDal.CalculateFund(Convert.ToInt32(ViewState["FundIdChangeNetWorth"]), Convert.ToDouble(ucNetWorth.Amount), ucDate.Date);
             InvestDal.RedemptionFund(ucDesc.Text, Convert.ToDouble(ucAmount.Amount), Convert.ToDouble(ucNetWorth.Amount), ucDate.Date, out totalAmount, out totalBenefit, out weightedBenefitRate);
 

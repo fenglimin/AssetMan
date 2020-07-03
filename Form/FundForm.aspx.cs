@@ -67,6 +67,7 @@ public partial class Form_FundForm : System.Web.UI.Page
             ucTradeFee.Title = "费率";
             ucTradeFee.MinimumValue = "0";
             ucTradeFee.MaximunValue = "1.5";
+            ucTradeFee.InitAmount = "0";
 
             ucDesc.Type = "基金";
             ucDesc.Title = ucDesc.Type;

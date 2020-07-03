@@ -257,7 +257,7 @@ namespace DataAccess
                 totalAmount += detail.Amount;
                 totalShare += detail.AvailableShare;
                 totalTradeFee += detail.TradeFee;
-                var benefit = (netWorth - detail.NetWorth) * detail.AvailableShare;
+                var benefit = netWorth * detail.AvailableShare - detail.Amount;
                 totalBenefit += benefit;
                 DateTime dtPurchase;
                 DateTime.TryParse(detail.OperationDate, out dtPurchase);
@@ -277,7 +277,7 @@ namespace DataAccess
                 var days = (dtNetWorth - dtPurchase).Days;
                 if (days != 0 && detail.Amount > 0.01)
                 {
-                    var benefitRate = (netWorth - detail.NetWorth) * detail.AvailableShare * 365 / days / detail.Amount;
+                    var benefitRate = (netWorth * detail.AvailableShare - detail.Amount) * 365 / days / detail.Amount;
                     weightedBenefitRate += benefitRate * days * detail.Amount / weightedBase;
                 }
             }

@@ -148,7 +148,7 @@ namespace DataAccess
             CalculateFund(fundList[0].FundId, netWorth, operationDate);
         }
 
-        public static bool RedemptionFund(string fundName, double share, double netWorth, string operationDate, out double totalAmount, out double totalBenefit, out double weightedBenefitRate)
+        public static bool RedemptionFund(string fundName, double share, double netWorth, string operationDate, double tradeFeeRate, out double totalAmount, out double totalBenefit, out double weightedBenefitRate)
         {
             // 赎回份额对应的本金
             totalAmount = 0.00;
@@ -156,6 +156,9 @@ namespace DataAccess
             totalBenefit = 0.00;
             // 所有赎回本金产生的加权收益率
             weightedBenefitRate = 0.000;
+            // 所有手续费
+            var totalTradeFee = 0.00;
+
 
             var totalShare = share;
 
@@ -179,7 +182,8 @@ namespace DataAccess
                 DateTime dtPurchase;
                 DateTime.TryParse(detail.OperationDate, out dtPurchase);
                 var days = (dtNetWorth - dtPurchase).Days;
-                
+                double amount;
+                double tradeFee;
 
                 if (detail.AvailableShare > share)
                 {
@@ -188,15 +192,23 @@ namespace DataAccess
                     {
                         detail.AvailableShare = 0;
                     }
+
+                    amount = share * netWorth;
+                    tradeFee = amount * tradeFeeRate / 100;
                     totalAmount += share * detail.NetWorth;
-                    totalBenefit += share * (netWorth - detail.NetWorth);
+                    
+                    totalTradeFee += tradeFee;
+                    totalBenefit += share * (netWorth - detail.NetWorth) - tradeFee;
                     UpdateFundDetailAvailableShare(detail.Id, detail.AvailableShare, detail.AvailableShare * detail.NetWorth);
                     weightedBenefitData[days * share * detail.NetWorth] = detail.BenefitRate;
                     break;
                 }
 
+                amount = detail.AvailableShare * netWorth;
+                tradeFee = amount * tradeFeeRate / 100;
                 totalAmount += (int)(detail.AvailableShare * detail.NetWorth);
-                totalBenefit += detail.AvailableShare * (netWorth - detail.NetWorth);
+                totalBenefit += detail.AvailableShare * (netWorth - detail.NetWorth) - tradeFee;
+                totalTradeFee += tradeFee;
 
                 share -= detail.AvailableShare;
                 detail.AvailableShare = 0;
@@ -219,7 +231,8 @@ namespace DataAccess
                 NetWorth = netWorth,
                 TotalShare = totalShare,
                 AvailableShare = fundList[0].TotalShare - totalShare, //本次赎回后，剩余的总份额
-                BenefitRate = weightedBenefitRate
+                BenefitRate = weightedBenefitRate,
+                TradeFee = totalTradeFee
             };
 
             InsertFundDetail(fundDetailRedemption);

@@ -51,7 +51,6 @@ namespace Translation
                 {TableFieldName.NetWorth, "净值"},
                 {TableFieldName.Share, "份额"},
                 {TableFieldName.ShareAvailable, "可用份额"},
-                {TableFieldName.TradeFee, "手续费"},
                 {DropListItemName.ThisWeek, "本周"},
 				{DropListItemName.LastWeek, "最近一周"},
 				{DropListItemName.PrevWeek, "上一周"},
@@ -71,7 +70,7 @@ namespace Translation
 				{DropListItemName.MoneyOut, "支出"},
 				{DropListItemName.TransferIn, "转入"},
 				{DropListItemName.TransferOut, "转出"}
-            };
+			};
 		}
 
 		public static string Translate(string key)

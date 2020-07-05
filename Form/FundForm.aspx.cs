@@ -57,6 +57,7 @@ public partial class Form_FundForm : System.Web.UI.Page
 
             ucAmount.MinimumValue = "0";
             ucAmount.MaximunValue = "10000000";
+            ucAmount.InitAmount = "0";
 
             ucNetWorth.Title = "净值";
             ucNetWorth.MinimumValue = "0";
@@ -125,7 +126,7 @@ public partial class Form_FundForm : System.Web.UI.Page
 
             // 在赎回前，先更新赎回日的净值
             InvestDal.CalculateFund(Convert.ToInt32(ViewState["FundIdChangeNetWorth"]), Convert.ToDouble(ucNetWorth.Amount), ucDate.Date);
-            InvestDal.RedemptionFund(ucDesc.Text, Convert.ToDouble(ucAmount.Amount), Convert.ToDouble(ucNetWorth.Amount), ucDate.Date, Convert.ToDouble(ucTradeFee.Amount), out totalAmount, out totalBenefit, out weightedBenefitRate);
+            InvestDal.RedemptionFund(ucDesc.Text, Convert.ToDouble(ucAmount.Amount), Convert.ToDouble(ucNetWorth.Amount), ucDate.Date, out totalAmount, out totalBenefit, out weightedBenefitRate);
 
             var strAmount = Math.Round(totalAmount / 10) + "0";
             var dayDetail1 = new DayDetail()

@@ -99,7 +99,6 @@ namespace UserCtrl
             GridViewManager.AddBoundFieldColumn(gvFundDetail, TableFieldName.NetWorth, HorizontalAlign.Right);
             GridViewManager.AddBoundFieldColumn(gvFundDetail, TableFieldName.Share, HorizontalAlign.Right);
             GridViewManager.AddBoundFieldColumn(gvFundDetail, TableFieldName.ShareAvailable, HorizontalAlign.Right);
-            GridViewManager.AddBoundFieldColumn(gvFundDetail, TableFieldName.TradeFee, HorizontalAlign.Right);
             GridViewManager.AddBoundFieldColumn(gvFundDetail, TableFieldName.InvestBenifitRate, HorizontalAlign.Right);
         }
 

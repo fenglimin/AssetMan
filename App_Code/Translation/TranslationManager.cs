@@ -45,8 +45,6 @@ namespace Translation
                 {TableFieldName.FundTotalShare, "总份额"},
                 {TableFieldName.FundNetWorth, "当前净值"},
                 {TableFieldName.FundTotalBenefit, "总收益"},
-                {TableFieldName.FundTotalTradeFee, "总手续费"},
-                {TableFieldName.FundTotalMarketAmount, "总市值"},
                 {TableFieldName.WeightedBenefitRate, "加权收益率"},
                 {TableFieldName.NetWorth, "净值"},
                 {TableFieldName.Share, "份额"},

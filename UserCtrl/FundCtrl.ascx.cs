@@ -86,8 +86,6 @@ namespace UserCtrl
             GridViewManager.AddBoundFieldColumn(gvAllFunds, TableFieldName.FundTotalShare, HorizontalAlign.Right);
             GridViewManager.AddBoundFieldColumn(gvAllFunds, TableFieldName.FundNetWorth, HorizontalAlign.Right);
             GridViewManager.AddBoundFieldColumn(gvAllFunds, TableFieldName.WeightedBenefitRate, HorizontalAlign.Right);
-            GridViewManager.AddBoundFieldColumn(gvAllFunds, TableFieldName.FundTotalTradeFee, HorizontalAlign.Right);
-            GridViewManager.AddBoundFieldColumn(gvAllFunds, TableFieldName.FundTotalMarketAmount, HorizontalAlign.Right);
             GridViewManager.AddBoundFieldColumn(gvAllFunds, TableFieldName.FundTotalBenefit, HorizontalAlign.Right);
         }
 

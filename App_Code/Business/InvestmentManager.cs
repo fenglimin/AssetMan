@@ -65,25 +65,18 @@ namespace Business
             dt.Columns.Add(TableFieldName.Date);
             dt.Columns.Add(TableFieldName.FundNetWorth);
             dt.Columns.Add(TableFieldName.WeightedBenefitRate);
-            dt.Columns.Add(TableFieldName.FundTotalTradeFee);
-            dt.Columns.Add(TableFieldName.FundTotalMarketAmount);
             dt.Columns.Add(TableFieldName.FundTotalBenefit);
 
             double totalAmount = 0;
             double totalBenefit = 0;
-            double totalTradeFee = 0;
-            double totalMarketAmount = 0;
-
             var fundList = InvestDal.LoadFundList("");
             foreach (var fundInfo in fundList)
             {
                 totalAmount += fundInfo.TotalAmount;
                 totalBenefit += fundInfo.TotalBenefit;
-                totalTradeFee += fundInfo.TotalTradeFee;
-                totalMarketAmount += fundInfo.TotalAmount + fundInfo.TotalBenefit;
             }
 
-            GridViewManager.AddRow(dt, CreateStatisticRowDataFoFund(totalAmount, totalBenefit, totalTradeFee, totalMarketAmount));
+            GridViewManager.AddRow(dt, CreateStatisticRowDataFoFund(totalAmount, totalBenefit));
 
             foreach (var fundInfo in fundList)
             {
@@ -123,8 +116,6 @@ namespace Business
             rowData[TableFieldName.Date] = fundInfo.CurrentDate;
             rowData[TableFieldName.FundNetWorth] = fundInfo.CurrentNetWorth.ToString("f4");
             rowData[TableFieldName.FundTotalBenefit] = fundInfo.TotalBenefit.ToString("f0");
-            rowData[TableFieldName.FundTotalTradeFee] = fundInfo.TotalTradeFee.ToString("f2");
-            rowData[TableFieldName.FundTotalMarketAmount] = (fundInfo.TotalAmount+fundInfo.TotalBenefit).ToString("f0");
             rowData[TableFieldName.WeightedBenefitRate] = fundInfo.WeightedBenefitRate.ToString("f3") + "%";
 
             return rowData;
@@ -189,14 +180,12 @@ namespace Business
 			return string.Format("{0}.{1}", benifitRate/10, benifitRate%10);
 		}
 
-        private static Dictionary<string, string> CreateStatisticRowDataFoFund(double totalAmount, double totalBenefit, double totalTradeFee, double totalMarketAmount)
+        private static Dictionary<string, string> CreateStatisticRowDataFoFund(double totalAmount, double totalBenefit)
         {
             var rowData = new Dictionary<string, string>();
 
             rowData[TableFieldName.FundTotalAmount] = totalAmount.ToString("f0");
             rowData[TableFieldName.FundTotalBenefit] = totalBenefit.ToString("f0");
-            rowData[TableFieldName.FundTotalTradeFee] = totalTradeFee.ToString("f2");
-            rowData[TableFieldName.FundTotalMarketAmount] = totalMarketAmount.ToString("f0");
 
             return rowData;
         }

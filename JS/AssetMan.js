@@ -1,11 +1,11 @@
 ﻿function ShowDayDetail(linkCtrl) {
     if (linkCtrl.innerText == '显示资产详单') {
         linkCtrl.innerText = '隐藏资产详单';
-        self.parent.document.getElementById("DivCenter").style["width"] = "650px";
+        self.parent.document.getElementById("DivCenter").style["width"] = "850px";
         self.parent.document.getElementById("DivRight").style["width"] = "230px";
     } else {
         linkCtrl.innerText = '显示资产详单';
-        self.parent.document.getElementById("DivCenter").style["width"] = "880px";
+        self.parent.document.getElementById("DivCenter").style["width"] = "1080px";
         self.parent.document.getElementById("DivRight").style["width"] = "0px";
     }
 }

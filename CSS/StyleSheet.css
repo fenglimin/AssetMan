@@ -177,11 +177,10 @@
 
 .Button 
 {
+    width: 246px;
     text-align: center;
     cursor: pointer;
-    width: 246px;
     font-size: 15px;
-    height: 30px;
     font-weight: bold;
     background-color: #1c5e55;
     color: #fff;
@@ -196,6 +195,13 @@
     -webkit-border-radius: 0;
     -moz-border-radius: 0;
     border-radius: 0;*/
+}
+
+.RightButton 
+{
+    height: 26px;
+    width: 120px !important;
+    margin-left: 222px;
 }
 
 .SmallButton 

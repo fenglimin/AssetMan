@@ -64,7 +64,7 @@ public partial class Form_FundForm : System.Web.UI.Page
 
             ucDesc.Type = "基金";
             ucDesc.Title = ucDesc.Type;
-            ucDesc.Height = 750;
+            ucDesc.Height = 725;
             ucDesc.InstanceName = "ucDesc";
             ucDesc.Text = fundInfo.FundName;
 

@@ -74,5 +74,14 @@ namespace UserCtrl
 
 			SettingDal.AddSetting(ViewState["SelectEditType"].ToString(), Text);
 		}
-	}
+
+        protected void btDelete_Click(object sender, EventArgs e)
+        {
+            var type = ViewState["SelectEditType"].ToString();
+            if (SettingDal.DeleteSetting(type, Text))
+            {
+                LoadSetting(type);
+            }
+        }
+    }
 }

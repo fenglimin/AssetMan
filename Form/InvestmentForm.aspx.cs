@@ -26,7 +26,7 @@ namespace Form
 
 				ucName.Title = "名称";
 				ucName.Type = SettingDal.GetStringValues("默认投资类型")[0];
-				ucName.Height = 750;
+				ucName.Height = 725;
 				ucName.InstanceName = "ucName";
 
 				ucAmount.Title = "金额";

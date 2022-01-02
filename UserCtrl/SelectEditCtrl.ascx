@@ -4,6 +4,11 @@
     <title></title>
     <link href="../CSS/stylesheet.css" rel="stylesheet" type="text/css"/>
     <script src="../JS/AssetMan.js"></script>
+    <style type="text/css">
+        .auto-style1 {
+            height: 26px;
+        }
+    </style>
 </head>
 
 <div style="font-size: 13px">
@@ -21,8 +26,9 @@
             <td><asp:ListBox ID="lbSelect" runat="server" CssClass="DataSelect_LB"></asp:ListBox></td>
         </tr>
         <tr>
-            <td></td>
-            <td><asp:CheckBox ID="cbSave" runat="server" Text="保存到模板" Enabled="False" /></td>
+            <td class="auto-style1"></td>
+            <td class="auto-style1"><asp:CheckBox ID="cbSave" runat="server" Text="保存到模板" Enabled="False" />
+                <asp:Button ID="btDelete" runat="server" Text="从模板中删除" OnClick="btDelete_Click" CssClass="Button RightButton"/></td>
         </tr>
     </table>
 </div>

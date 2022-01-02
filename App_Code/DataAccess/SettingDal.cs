@@ -66,5 +66,17 @@ namespace DataAccess
 			var comm = new OleDbCommand(strSql, DbManager.OleDbConn);
 			return comm.ExecuteNonQuery() == 1;
 		}
-	}
+
+        public static bool DeleteSetting(string itemType, string itemValue)
+        {
+            if (!ExistValue(itemType, itemValue))
+            {
+                return false;
+            }
+
+            var strSql = string.Format("DELETE FROM Setting WHERE ItemType = '{0}' AND ItemValue = '{1}'", itemType, itemValue);
+            var comm = new OleDbCommand(strSql, DbManager.OleDbConn);
+            return comm.ExecuteNonQuery() == 1;
+        }
+    }
 }

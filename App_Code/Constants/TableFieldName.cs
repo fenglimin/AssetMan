@@ -43,8 +43,10 @@
         public const string FundTotalAmount = "FundTotalAmount";
         public const string FundTotalShare = "FundTotalShare";
         public const string FundNetWorth = "FundNetWorth";
+        public const string NetWorthDelta = "NetWorthDelta";
         public const string FundTotalBenefit = "FundTotalBenefit";
         public const string WeightedBenefitRate = "WeightedBenefitRate";
+        public const string FundTotalBonus = "FundTotalBonus";
 
         public const string NetWorth = "NetWorth";
         public const string Share = "Share";

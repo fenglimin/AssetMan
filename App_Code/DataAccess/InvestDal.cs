@@ -337,7 +337,10 @@ namespace DataAccess
                 CurrentNetWorth = reader.GetDouble(4),
                 TotalBenefit = reader.GetDouble(5),
                 WeightedBenefitRate = reader.GetDouble(6),
-                CurrentDate = Common.GetSafeDateTime(reader, 7)
+                CurrentDate = Common.GetSafeDateTime(reader, 7),
+                TotalBonus = reader.GetDouble(8),
+                NetWorthDelta = reader.GetDouble(9),
+                FundCode = Common.GetSafeString(reader, 10)
             };
 
             return fundInfo;

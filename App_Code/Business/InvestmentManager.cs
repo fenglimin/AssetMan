@@ -51,7 +51,7 @@ namespace Business
 			rowData[TableFieldName.InvestBenifit] = investDetail.InvestBenifit.ToString(CultureInfo.InvariantCulture);
 			rowData[TableFieldName.InvestBenifitRate] = investDetail.InvestBenifitRate;
 			rowData[TableFieldName.InvestAvailDate] = investDetail.InvestAvailDate;
-
+			
 			return rowData;
 		}
 
@@ -64,7 +64,9 @@ namespace Business
             dt.Columns.Add(TableFieldName.FundTotalShare);
             dt.Columns.Add(TableFieldName.Date);
             dt.Columns.Add(TableFieldName.FundNetWorth);
+            dt.Columns.Add(TableFieldName.NetWorthDelta);
             dt.Columns.Add(TableFieldName.WeightedBenefitRate);
+            dt.Columns.Add(TableFieldName.FundTotalBonus);
             dt.Columns.Add(TableFieldName.FundTotalBenefit);
 
             double totalAmount = 0;
@@ -115,7 +117,9 @@ namespace Business
             rowData[TableFieldName.FundTotalShare] = fundInfo.TotalShare.ToString("f2");
             rowData[TableFieldName.Date] = fundInfo.CurrentDate;
             rowData[TableFieldName.FundNetWorth] = fundInfo.CurrentNetWorth.ToString("f4");
+            rowData[TableFieldName.NetWorthDelta] = fundInfo.NetWorthDelta.ToString("f4");
             rowData[TableFieldName.FundTotalBenefit] = fundInfo.TotalBenefit.ToString("f0");
+            rowData[TableFieldName.FundTotalBonus] = fundInfo.TotalBonus.ToString("f0");
             rowData[TableFieldName.WeightedBenefitRate] = fundInfo.WeightedBenefitRate.ToString("f3") + "%";
 
             return rowData;

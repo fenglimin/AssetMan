@@ -74,6 +74,7 @@ namespace UserCtrl
             if (!ForTodoList)
             {
                 GridViewManager.AddHyperLinkFieldColumn(gvAllFunds, string.Empty, HorizontalAlign.Left);
+                GridViewManager.AddHyperLinkFieldColumn(gvAllFunds, string.Empty, HorizontalAlign.Left);
                 GridViewManager.AddHyperLinkFieldColumn(gvAllFunds, TableFieldName.FundName, HorizontalAlign.Left);
             }
             else
@@ -85,7 +86,9 @@ namespace UserCtrl
             GridViewManager.AddBoundFieldColumn(gvAllFunds, TableFieldName.FundTotalAmount, HorizontalAlign.Right);
             GridViewManager.AddBoundFieldColumn(gvAllFunds, TableFieldName.FundTotalShare, HorizontalAlign.Right);
             GridViewManager.AddBoundFieldColumn(gvAllFunds, TableFieldName.FundNetWorth, HorizontalAlign.Right);
+            GridViewManager.AddBoundFieldColumn(gvAllFunds, TableFieldName.NetWorthDelta, HorizontalAlign.Right);
             GridViewManager.AddBoundFieldColumn(gvAllFunds, TableFieldName.WeightedBenefitRate, HorizontalAlign.Right);
+            GridViewManager.AddBoundFieldColumn(gvAllFunds, TableFieldName.FundTotalBonus, HorizontalAlign.Right);
             GridViewManager.AddBoundFieldColumn(gvAllFunds, TableFieldName.FundTotalBenefit, HorizontalAlign.Right);
         }
 
@@ -136,6 +139,10 @@ namespace UserCtrl
                     hyperLink.NavigateUrl = "~/Form/FundForm.aspx?OpType=Redemption&FundId=" + fundId;
 
                     hyperLink = e.Row.Cells[2].Controls[0] as HyperLink;
+                    hyperLink.Text = "分红";
+                    hyperLink.NavigateUrl = "~/Form/FundForm.aspx?OpType=Redemption&FundId=" + fundId;
+
+                    hyperLink = e.Row.Cells[3].Controls[0] as HyperLink;
                     hyperLink.NavigateUrl = string.Format("~/Form/AllInvestmentsForm.aspx?FundId={0}&FundName={1}", fundId, fundName);
                 }
             }

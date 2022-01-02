@@ -65,9 +65,9 @@
             <td>
                 <table >
                     <tr>
-                        <td><input type="text" class="datepicker" ID="startDate" runat="server" readonly="readonly" style="height:17px;width:102px" /></td>
+                        <td><input type="text" class="datepicker" ID="startDate" runat="server" readonly="readonly" style="height:17px;width:107px" /></td>
                         <td>-</td>
-                        <td><input type="text" class="datepicker" ID="endDate" runat="server" readonly="readonly" style="height:17px;width:102px" /></td>
+                        <td><input type="text" class="datepicker" ID="endDate" runat="server" readonly="readonly" style="height:17px;width:107px" /></td>
                     </tr>
                 </table>
             </td>

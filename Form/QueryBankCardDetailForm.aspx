@@ -25,17 +25,17 @@
             <table>
                 <tr>
                     <td><uc1:SelectBankCardCtrl runat="server" ID="ucBankCard" /></td>
-                    <td style="vertical-align: top"><uc1:SelectTwoDatesWithFormatCtrl runat="server" ID="ucQueryPeriod" /></td>
+                    <td style="vertical-align: top; padding-left: 34px"><uc1:SelectTwoDatesWithFormatCtrl runat="server" ID="ucQueryPeriod" /></td>
                 </tr>
                 <tr>
                     <td><uc1:CheckBoxListCtrl runat="server" ID="ucType" /></td>
-                    <td><uc1:InputTextCtrl runat="server" ID="ucDesc" /></td>
+                    <td style="padding-left: 34px"><uc1:InputTextCtrl runat="server" ID="ucDesc" /></td>
                 </tr>
             </table>
             <table>
                 <tr>
                     <td><uc1:RadioButtonListCtrl runat="server" ID="ucMinAmount" /></td>
-                    <td><asp:Button ID="btQuery" runat="server" Text="查询" CssClass="Button" Width="100px" OnClick="btQuery_Click" /></td>
+                    <td><asp:Button ID="btQuery" runat="server" Text="查询" CssClass="Button" Width="190px" OnClick="btQuery_Click" /></td>
                 </tr>
             </table>
         </div>

@@ -24,7 +24,7 @@
                         <uc1:CheckBoxListCtrl runat="server" ID="ucType" />
                         <uc1:InputTextCtrl runat="server" ID="ucDesc" />
                     </td>
-                    <td>
+                    <td style="padding-left: 34px">
                         <uc1:SelectTwoDatesWithFormatCtrl runat="server" ID="ucQueryPeriod" />
                     </td>
                 </tr>
@@ -32,7 +32,7 @@
             <table>
                 <tr>
                     <td><uc1:RadioButtonListCtrl runat="server" ID="ucMinAmount" /></td>
-                    <td><asp:Button ID="btQuery" runat="server" Text="查询" CssClass="Button" Width="70px" OnClick="btQuery_Click" /></td>
+                    <td><asp:Button ID="btQuery" runat="server" Text="查询" CssClass="Button" Width="190px" OnClick="btQuery_Click" /></td>
                 </tr>
             </table>
         </div>

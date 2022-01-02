@@ -16,7 +16,7 @@
         </tr>
         <tr>
             <td>
-                <div style="width:215px;display:block;float:left">
+                <div style="width:280px;display:block;float:left">
                     <asp:GridView ID="gvResult" runat="server" AutoGenerateColumns="False" HorizontalAlign = "Center" BorderStyle="Solid" BorderWidth="1px" CellPadding="3" ForeColor="#333333" GridLines="Vertical" ShowHeaderWhenEmpty="True" Font-Size="9pt" Width="98%" RowStyle-Wrap="False" OnRowDataBound="gvResult_RowDataBound">
                     <AlternatingRowStyle BackColor="White" />
                     <EditRowStyle BackColor="#7C6F57" />
@@ -33,8 +33,8 @@
                 </div>              
             </td>
             <td>
-                 <div style="width:400px;display: block;float:right">
-                    <asp:Chart ID="Chart1" runat="server" BackColor="Transparent" Width="400px">
+                 <div style="width:550px;display: block;float:right">
+                    <asp:Chart ID="Chart1" runat="server" BackColor="Transparent" Width="550px" Height="350px">
                         <Series>
                             <asp:Series Name="Series1" YValuesPerPoint="6"></asp:Series>
                         </Series>

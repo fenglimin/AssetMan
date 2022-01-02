@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using DataAccess;
 
 namespace UserCtrl
@@ -20,7 +21,7 @@ namespace UserCtrl
 			{
 				lbTitle.Text = Title + "：";
 
-				rblOptions.DataSource = SettingDal.GetStringValues(Type);
+				rblOptions.DataSource = SettingDal.GetStringValues(Type).OrderBy(x => Convert.ToUInt32(x.TrimStart('>', '=')));
 				rblOptions.DataBind();
 
 				if (rblOptions.Items.Count > 0)

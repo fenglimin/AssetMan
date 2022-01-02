@@ -22,7 +22,7 @@
                     <td style="vertical-align: top">
                         <div><uc1:SelectEditCtrl runat="server" ID="ucDesc" /></div>
                     </td>
-                    <td style="vertical-align: top">
+                    <td style="vertical-align: top; padding-left: 20px">
                         <div><uc1:SelectBankCardCtrl runat="server" ID="ucBankCard" /></div>
                         <div><uc1:SelectDateCtrl runat="server" ID="ucDate" /></div>    
                         <div><uc1:InputAmountCtrl runat="server" ID="ucAmount" /></div>  

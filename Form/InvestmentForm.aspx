@@ -27,12 +27,12 @@
         <table>
             <tr>
                 <td style="vertical-align: top">
-                    <div><uc1:SelectCtrl runat="server" ID="ucType" /></div>
                     <div><uc1:SelectEditCtrl runat="server" ID="ucName" /></div>
-                    <div><uc1:InputAmountCtrl runat="server" ID="ucAmount" /></div>                    
                 </td>
-                <td style="vertical-align: top">
+                <td style="vertical-align: top; padding-left: 20px">
+                    <div><uc1:SelectCtrl runat="server" ID="ucType" /></div>
                     <div><uc1:SelectTwoDatesCtrl runat="server" ID="ucInvestPeriod" /></div>
+                    <div><uc1:InputAmountCtrl runat="server" ID="ucAmount" /></div>                    
                     <div><uc1:SelectCtrl runat="server" ID="ucMoneyInDelay" /></div>
                     <div><uc1:InputAmountCtrl runat="server" ID="ucBenifit" /></div>
                     <div><uc1:InputAmountCtrl runat="server" ID="ucBenifitRate" /></div>

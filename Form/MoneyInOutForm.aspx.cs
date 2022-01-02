@@ -25,7 +25,7 @@ namespace Form
 
 				ucDesc.Type = lbTitle.Text;
 				ucDesc.Title = "描述";
-				ucDesc.Height = 500;
+				ucDesc.Height = 750;
 				ucDesc.InstanceName = "ucDesc";
 			}
 		}

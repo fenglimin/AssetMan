@@ -10,7 +10,7 @@
     <table>
         <tr>
             <td><asp:Label ID="lbTitle" runat="server" Text="Label" Font-Bold="True"></asp:Label></td>
-            <td><asp:TextBox ID="tbEdit" runat="server" CssClass="DataInput_TB"></asp:TextBox></td>
+            <td><asp:TextBox ID="tbEdit" runat="server" CssClass="DataInput_TB_BIG"></asp:TextBox></td>
         </tr>
         <tr>
             <td></td>

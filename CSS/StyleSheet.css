@@ -140,19 +140,31 @@
 
 .DataInput_DDL 
 {
-    width: 230px;
+    width: 246px;
+    height: 22px;    
+}
+
+.DataInput_DDL_BIG
+{
+    width: 422px;
     height: 22px;    
 }
 
 .DataInput_TB
 {
-    width: 226px;
+    width: 238px;
+    height: 17px;    
+}
+
+.DataInput_TB_BIG
+{
+    width: 422px;
     height: 17px;    
 }
 
 .DataSelect_LB
 {
-    width: 230px;
+    width: 430px;
     height: 200px;    
 }
 
@@ -167,7 +179,7 @@
 {
     text-align: center;
     cursor: pointer;
-    width: 230px;
+    width: 246px;
     font-size: 15px;
     height: 30px;
     font-weight: bold;

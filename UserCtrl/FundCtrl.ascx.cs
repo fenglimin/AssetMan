@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Data;
 using System.Drawing;
+using System.IO;
+using System.Linq;
 using System.Web.UI.WebControls;
 using Business;
 using Constants;
@@ -25,6 +27,7 @@ namespace UserCtrl
         {
             if (!Page.IsPostBack)
             {
+                ViewState["ForTodoList"] = ForTodoList;
                 HideEndedFund = true;
                 lbTitle.Text = Title;
                 CreateGridViewColumn();
@@ -46,7 +49,6 @@ namespace UserCtrl
 
                     RefreshFundDetail(dtFund);
                 }
-                
             }
         }
 
@@ -106,6 +108,7 @@ namespace UserCtrl
 
         protected void gvAllFunds_RowDataBound(object sender, GridViewRowEventArgs e)
         {
+            var forTodoList = (bool)ViewState["ForTodoList"];
             if (e.Row.RowIndex == 0)
             {
                 var hyperLink = e.Row.Cells[0].Controls[0] as HyperLink;
@@ -121,7 +124,7 @@ namespace UserCtrl
                 var fundName = dataTable.Rows[e.Row.RowIndex][TableFieldName.FundName].ToString();
 
                 var hyperLink = e.Row.Cells[0].Controls[0] as HyperLink;
-                if (ForTodoList)
+                if (forTodoList)
                 {
                     hyperLink.Text = "更改净值";
                     hyperLink.NavigateUrl = "~/Form/FundForm.aspx?OpType=ChangeNetWorth&FundId=" + fundId;
@@ -133,7 +136,7 @@ namespace UserCtrl
                 }
                 GridViewManager.SetRowStyle(e.Row, Color.Black, true);
 
-                if (!ForTodoList)
+                if (!forTodoList)
                 {
                     hyperLink = e.Row.Cells[1].Controls[0] as HyperLink;
                     hyperLink.Text = "赎回";
@@ -192,7 +195,32 @@ namespace UserCtrl
 
         protected void btRefresh_Click(object sender, EventArgs e)
         {
+            var fundList = InvestDal.LoadFundList("WHERE TotalAmount <> 0");
 
+            var netWorthLines = File.ReadAllLines(@"C:\Users\10021986_local\Documents\GitHub\AssetMan\PY\中信代销净值.txt");
+            var anetWorthLines = netWorthLines.Concat(File.ReadAllLines(@"C:\Users\10021986_local\Documents\GitHub\AssetMan\PY\中信自营净值.txt"));
+            foreach (var fund in fundList)
+            {
+                foreach (var line in anetWorthLines)
+                {
+                    var split = line.Split(' ');
+                    if (split.Length == 2 && split[1] == fund.FundCode)
+                    {
+                        var newNetWorth = Convert.ToDouble(split[0]);
+                        if (Math.Abs(fund.CurrentNetWorth - newNetWorth) > 0.00001)
+                        {
+                            InvestDal.CalculateFund(fund.FundId, newNetWorth, newNetWorth-fund.CurrentNetWorth, DateTime.Now.ToString("yyyy-MM-dd"));
+                        }
+                    }
+                }
+
+            }
+
+            ViewState["ForTodoList"] = true;
+            var dtFund = InvestmentManager.CreateDateTableFromAllFunds();
+            dtFund = AdjustFund(dtFund, true);
+            gvAllFunds.DataSource = dtFund;
+            gvAllFunds.DataBind();
         }
     }
 }

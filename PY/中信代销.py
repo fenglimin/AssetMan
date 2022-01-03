@@ -18,13 +18,20 @@ selectFundName = Select(driver.find_element_by_class_name('cms_proxy_vague_srh_t
 # select by visible text
 selectFundName.select_by_visible_text('产品代码')
 
-driver.find_element_by_class_name('cms_proxy_vague_srh_input').send_keys('9N213010')
-driver.find_element_by_class_name('cms_proxy_srh_btn').click()
-time.sleep(3)
+inputCtrl = driver.find_element_by_class_name('cms_proxy_vague_srh_input')
+actionCtrl = driver.find_element_by_class_name('cms_proxy_srh_btn')
+resultFile = open('中信代销净值.txt', 'w')
 
-result = driver.find_elements_by_xpath("//td")
+with open('中信代销产品.txt', 'r') as fundFile:
+    fundList = fundFile.readlines()
+    for fund in fundList:
+        inputCtrl.clear()
+        inputCtrl.send_keys(fund)
+        actionCtrl.click()
+        time.sleep(3)
+        result = driver.find_elements_by_xpath("//td")
+        resultFile.write(result[9].text)
+        resultFile.write(' ')
+        resultFile.write(fund)        
 
-with open('readme.txt', 'w') as f:
-    f.write(result[2].text)
-    f.write(' ')
-    f.write(result[9].text)
+resultFile.close()

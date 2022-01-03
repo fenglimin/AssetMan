@@ -23,7 +23,8 @@ public partial class Form_FundForm : System.Web.UI.Page
             FundId = Request.QueryString["fundId"];
             ViewState["FundIdChangeNetWorth"] = FundId;
 
-            var fundInfo = string.IsNullOrEmpty(FundId)? new FundInfo() : InvestDal.LoadFundList(string.Format("WHERE FundId = {0}", FundId))[0];
+            var emptyFund = string.IsNullOrEmpty(FundId);
+            var fundInfo = emptyFund ? new FundInfo() : InvestDal.LoadFundList(string.Format("WHERE FundId = {0}", FundId))[0];
 
             if (opType == "ChangeNetWorth")
             {
@@ -38,8 +39,8 @@ public partial class Form_FundForm : System.Web.UI.Page
             {
                 lbTitle.Text = "基金申购";
                 ucAmount.Title = "金额";
-                ucBankCard.EnableInput = string.IsNullOrEmpty(FundId);
-                ucDesc.EnableInput = string.IsNullOrEmpty(FundId);
+                ucBankCard.EnableInput = emptyFund;
+                ucDesc.EnableInput = emptyFund;
             }
             else if (opType == "Redemption")
             {
@@ -52,7 +53,12 @@ public partial class Form_FundForm : System.Web.UI.Page
 
             ucFundType.Title = "类型";
             ucFundType.Type = "净值型产品";
-
+            ucFundType.EnableInput = emptyFund;
+            if (!emptyFund)
+            {
+                ucFundType.Text = fundInfo.FundType;
+            }
+            
             ucBankCard.CardUsage = "收入";
             ucBankCard.InitCardId = SettingDal.GetIntValues("默认基金卡")[0];
             ucBankCard.HideTitle = true;

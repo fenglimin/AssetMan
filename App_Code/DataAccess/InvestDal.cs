@@ -347,7 +347,8 @@ namespace DataAccess
                 CurrentDate = Common.GetSafeDateTime(reader, 7),
                 TotalBonus = reader.GetDouble(8),
                 NetWorthDelta = reader.GetDouble(9),
-                FundCode = Common.GetSafeString(reader, 10)
+                FundCode = Common.GetSafeString(reader, 10),
+                FundType = Common.GetSafeString(reader, 11)
             };
 
             return fundInfo;

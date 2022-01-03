@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.IO;
@@ -196,12 +197,22 @@ namespace UserCtrl
         protected void btRefresh_Click(object sender, EventArgs e)
         {
             var fundList = InvestDal.LoadFundList("WHERE TotalAmount <> 0");
+            var fundTypeList = SettingDal.GetStringValues("净值型产品");
+            var workDir = AppDomain.CurrentDomain.BaseDirectory;
 
-            var netWorthLines = File.ReadAllLines(@"C:\Users\10021986_local\Documents\GitHub\AssetMan\PY\中信代销净值.txt");
-            var anetWorthLines = netWorthLines.Concat(File.ReadAllLines(@"C:\Users\10021986_local\Documents\GitHub\AssetMan\PY\中信自营净值.txt"));
+            var netWorthLines = new List<string>();
+            foreach (var fundType in fundTypeList)
+            {
+                var fileName = Path.Combine(workDir, "PY", fundType) + "净值.txt";
+                if (File.Exists(fileName))
+                {
+                    netWorthLines = netWorthLines.Concat(File.ReadAllLines(fileName)).ToList();
+                }
+            }
+
             foreach (var fund in fundList)
             {
-                foreach (var line in anetWorthLines)
+                foreach (var line in netWorthLines)
                 {
                     var split = line.Split(' ');
                     if (split.Length == 2 && split[1] == fund.FundCode)

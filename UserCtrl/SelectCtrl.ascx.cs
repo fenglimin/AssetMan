@@ -8,8 +8,9 @@ namespace UserCtrl
 		public string Title { get; set; }
 		public string Type { get; set; }
 		public bool AutoPostBack { get; set; }
+        public bool EnableInput { get; set; }
 
-		public string Text
+        public string Text
 		{
 			get { return ddlSelect.SelectedItem.Text; }
 			set { ddlSelect.Text = value; }
@@ -24,7 +25,9 @@ namespace UserCtrl
 
 				ddlSelect.DataSource = SettingDal.GetStringValues(Type);
 				ddlSelect.DataBind();
-			}
+
+                ddlSelect.Enabled = EnableInput;
+            }
 		}
 	}
 }

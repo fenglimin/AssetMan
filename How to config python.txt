@@ -1,0 +1,4 @@
+1. Install or copy python39
+2. Go to python39\scripts
+3. Run "pip install selenium"
+4. Run "pip install webdriver_manager"

@@ -69,6 +69,8 @@ public partial class Form_FundForm : System.Web.UI.Page
             ucDesc.Text = fundInfo.FundName;
 
             ucDate.Date = DateTime.Now.AddDays(-2).ToString("yyyy-MM-dd");
+
+            ViewState["InitAmount"] = ucNetWorth.InitAmount;
         }
     }
 
@@ -79,6 +81,10 @@ public partial class Form_FundForm : System.Web.UI.Page
 
         var defaultInvestCardId = SettingDal.GetIntValues("默认投资账户")[0];
         var investCard = BankCardDal.GetAllAvailableCards()[defaultInvestCardId] as BankCard;
+
+        var currentNetWorth = Convert.ToDouble(ucNetWorth.Amount);
+        var initNetWorth = Convert.ToDouble(ViewState["InitAmount"]);
+        var netWorthDelta = (currentNetWorth * 10000 - initNetWorth * 10000) / 10000;
 
         if (lbTitle.Text == "基金申购")
         {
@@ -118,8 +124,8 @@ public partial class Form_FundForm : System.Web.UI.Page
             double weightedBenefitRate; // 所有赎回本金产生的加权收益率
 
             // 在赎回前，先更细赎回日的净值
-            InvestDal.CalculateFund(Convert.ToInt32(ViewState["FundIdChangeNetWorth"]), Convert.ToDouble(ucNetWorth.Amount), ucDate.Date);
-            InvestDal.RedemptionFund(ucDesc.Text, Convert.ToDouble(ucAmount.Amount), Convert.ToDouble(ucNetWorth.Amount), ucDate.Date, out totalAmount, out totalBenefit, out weightedBenefitRate);
+            InvestDal.CalculateFund(Convert.ToInt32(ViewState["FundIdChangeNetWorth"]), currentNetWorth, netWorthDelta, ucDate.Date);
+            InvestDal.RedemptionFund(ucDesc.Text, Convert.ToDouble(ucAmount.Amount), currentNetWorth, ucDate.Date, out totalAmount, out totalBenefit, out weightedBenefitRate);
 
             var strAmount = Math.Round(totalAmount / 10) + "0";
             var dayDetail1 = new DayDetail()
@@ -155,7 +161,7 @@ public partial class Form_FundForm : System.Web.UI.Page
         }
         else if (lbTitle.Text == "更改基金净值")
         {
-            InvestDal.CalculateFund(Convert.ToInt32(ViewState["FundIdChangeNetWorth"]), Convert.ToDouble(ucNetWorth.Amount), ucDate.Date);
+            InvestDal.CalculateFund(Convert.ToInt32(ViewState["FundIdChangeNetWorth"]), currentNetWorth, netWorthDelta, ucDate.Date);
         }
 
         ucDesc.AddToSetting();

@@ -142,7 +142,7 @@ namespace DataAccess
             };
 
             InsertFundDetail(fundDetail);
-            CalculateFund(fundList[0].FundId, netWorth, operationDate);
+            CalculateFund(fundList[0].FundId, netWorth, 0, operationDate);
         }
 
         public static bool RedemptionFund(string fundName, double share, double netWorth, string operationDate, out double totalAmount, out double totalBenefit, out double weightedBenefitRate)
@@ -220,7 +220,7 @@ namespace DataAccess
             };
 
             InsertFundDetail(fundDetailRedemption);
-            CalculateFund(fundList[0].FundId, netWorth, operationDate);
+            CalculateFund(fundList[0].FundId, netWorth, 0, operationDate);
 
             return true;
         }
@@ -232,7 +232,7 @@ namespace DataAccess
             comm.ExecuteNonQuery();
         }
 
-        public static void CalculateFund(int fundId, double netWorth, string date)
+        public static void CalculateFund(int fundId, double netWorth, double netWorthDelta, string date)
         {
             var strWhere = string.Format("WHERE FundID = {0} AND Type = '申购' AND Amount <> 0", fundId);
             var fundDetailList = LoadFundDetailList(strWhere);
@@ -277,10 +277,17 @@ namespace DataAccess
                 }
             }
 
-            var strSql = string.Format("UPDATE Fund SET TotalAmount ={0}, TotalShare = {1}, CurrentNetWorth = {2}, TotalBenefit = {3}, WeightedBenefitRate = {4}, CurrentDate = DATEVALUE('{5}') WHERE FundID = {6}",
+            var strSql = string.Format("UPDATE Fund SET TotalAmount = {0}, TotalShare = {1}, CurrentNetWorth = {2}, TotalBenefit = {3}, WeightedBenefitRate = {4}, CurrentDate = DATEVALUE('{5}') WHERE FundID = {6}",
                 Math.Round(totalAmount), Math.Round(totalShare,2), netWorth, Math.Round(totalBenefit,2), Math.Round(weightedBenefitRate, 5) * 100, date, fundId);
             var comm = new OleDbCommand(strSql, DbManager.OleDbConn);
             comm.ExecuteNonQuery();
+
+            if (Math.Abs(netWorthDelta) >= 0.0001)
+            {
+                strSql = string.Format("UPDATE Fund SET NetWorthDelta = {0} WHERE FundID = {1}",netWorthDelta, fundId);
+                comm = new OleDbCommand(strSql, DbManager.OleDbConn);
+                comm.ExecuteNonQuery();
+            }
         }
 
         private static void UpdateFundDetail(int detailId, double benefitRate)

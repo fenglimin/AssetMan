@@ -11,6 +11,7 @@
             <tr>
                 <td><asp:Label ID="lbTitle" runat="server" Text="基金" Font-Bold="True" CssClass="SubTitle"></asp:Label></td>
                 <td><asp:CheckBox ID="cbShowHistory" runat="server" Text="显示历史纪录" AutoPostBack="True" CssClass="SubTitle" OnCheckedChanged="cbShowHistory_CheckedChanged"/></td>
+                <td><asp:Button ID="btRefresh" runat="server" Text="刷新净值" CssClass="Button" OnClick="btRefresh_Click" Width="128px"/></td>
             </tr>
             <tr>
                 <asp:GridView ID="gvAllFunds" runat="server" AutoGenerateColumns="False" HorizontalAlign = "Center" BorderStyle="Solid" BorderWidth="1px" CellPadding="3" ForeColor="#333333" GridLines="Vertical" ShowHeaderWhenEmpty="True" Font-Size="9pt" Width="98%" RowStyle-Wrap="False" OnRowDataBound="gvAllFunds_RowDataBound">
@@ -28,7 +29,7 @@
                 </asp:GridView>
             </tr>
             <tr><br /></tr>
-            <tr><asp:Label ID="lbFundDetail" runat="server" Text="" Font-Bold="True" CssClass="SubTitle"></asp:Label></tr>
+            <asp:Label ID="lbFundDetail" runat="server" Text="" Font-Bold="True" CssClass="SubTitle"></asp:Label>
             <tr>
                 <asp:GridView ID="gvFundDetail" runat="server" AutoGenerateColumns="False" HorizontalAlign = "Center" BorderStyle="Solid" BorderWidth="1px" CellPadding="3" ForeColor="#333333" GridLines="Vertical" ShowHeaderWhenEmpty="True" Font-Size="9pt" Width="98%" RowStyle-Wrap="False">
                     <AlternatingRowStyle BackColor="White" />

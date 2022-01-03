@@ -32,6 +32,7 @@ namespace UserCtrl
                 lbFundDetail.Visible = !ForTodoList;
                 gvFundDetail.Visible = !ForTodoList;
                 cbShowHistory.Visible = !ForTodoList;
+                btRefresh.Visible = ForTodoList;
 
                 var dtFund = InvestmentManager.CreateDateTableFromAllFunds();
                 dtFund = AdjustFund(dtFund, HideEndedFund);
@@ -145,6 +146,15 @@ namespace UserCtrl
                     hyperLink = e.Row.Cells[3].Controls[0] as HyperLink;
                     hyperLink.NavigateUrl = string.Format("~/Form/AllInvestmentsForm.aspx?FundId={0}&FundName={1}", fundId, fundName);
                 }
+                else
+                {
+                    if (e.Row.Cells[6].Text != "0.0000")
+                    {
+                        var key = Convert.ToDouble(e.Row.Cells[6].Text);
+                        e.Row.Cells[6].ForeColor = key < 0 ? Color.Green : Color.Red;
+                    }
+                }
+                
             }
         }
 
@@ -178,6 +188,11 @@ namespace UserCtrl
             var dtFundDetail = InvestmentManager.CreateDateTableFromFund(condition);
             gvFundDetail.DataSource = dtFundDetail;
             gvFundDetail.DataBind();
+        }
+
+        protected void btRefresh_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

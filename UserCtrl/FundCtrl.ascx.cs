@@ -152,13 +152,12 @@ namespace UserCtrl
                 }
                 else
                 {
-                    if (e.Row.Cells[6].Text != "0.0000")
+                    if (e.Row.Cells[6].Text != "0.0000" && e.Row.Cells[2].Text == DateTime.Now.ToString("yyyy-MM-dd"))
                     {
                         var key = Convert.ToDouble(e.Row.Cells[6].Text);
                         e.Row.Cells[6].ForeColor = key < 0 ? Color.Green : Color.Red;
                     }
                 }
-                
             }
         }
 

@@ -69,16 +69,20 @@ namespace Business
             dt.Columns.Add(TableFieldName.FundTotalBonus);
             dt.Columns.Add(TableFieldName.FundTotalBenefit);
 
+            double rateSummary = 0;
             double totalAmount = 0;
             double totalBenefit = 0;
+            double totalBonus = 0;
             var fundList = InvestDal.LoadFundList("");
             foreach (var fundInfo in fundList)
             {
                 totalAmount += fundInfo.TotalAmount;
                 totalBenefit += fundInfo.TotalBenefit;
+                totalBonus += fundInfo.TotalBonus;
+                rateSummary += fundInfo.TotalAmount * fundInfo.WeightedBenefitRate;
             }
 
-            GridViewManager.AddRow(dt, CreateStatisticRowDataFoFund(totalAmount, totalBenefit));
+            GridViewManager.AddRow(dt, CreateStatisticRowDataFoFund(totalAmount, totalBenefit, rateSummary/totalAmount, totalBonus));
 
             foreach (var fundInfo in fundList)
             {
@@ -184,12 +188,14 @@ namespace Business
 			return string.Format("{0}.{1}", benifitRate/10, benifitRate%10);
 		}
 
-        private static Dictionary<string, string> CreateStatisticRowDataFoFund(double totalAmount, double totalBenefit)
+        private static Dictionary<string, string> CreateStatisticRowDataFoFund(double totalAmount, double totalBenefit, double balanceRate, double totalBonus)
         {
             var rowData = new Dictionary<string, string>();
 
             rowData[TableFieldName.FundTotalAmount] = totalAmount.ToString("f0");
             rowData[TableFieldName.FundTotalBenefit] = totalBenefit.ToString("f0");
+            rowData[TableFieldName.FundTotalBonus] = totalBonus.ToString("f0");
+            rowData[TableFieldName.WeightedBenefitRate] = balanceRate.ToString("f1") + "%";
 
             return rowData;
         }

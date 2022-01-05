@@ -149,6 +149,12 @@ namespace UserCtrl
 
                     hyperLink = e.Row.Cells[3].Controls[0] as HyperLink;
                     hyperLink.NavigateUrl = string.Format("~/Form/AllInvestmentsForm.aspx?FundId={0}&FundName={1}", fundId, fundName);
+
+                    if (e.Row.Cells[8].Text != "0.0000" && e.Row.Cells[4].Text == DateTime.Now.ToString("yyyy-MM-dd"))
+                    {
+                        var key = Convert.ToDouble(e.Row.Cells[8].Text);
+                        e.Row.Cells[8].ForeColor = key < 0 ? Color.Green : Color.Red;
+                    }
                 }
                 else
                 {

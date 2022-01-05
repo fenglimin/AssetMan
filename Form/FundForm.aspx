@@ -14,7 +14,7 @@
     <script src="../JS/AssetMan.js"></script>
 </head>
 <body>
-    <form id="form1" runat="server">
+    <form id="form1" runat="server" DefaultButton="btOk">
         <div id="DivTitle"><asp:Label ID="lbTitle" runat="server" Text=""></asp:Label></div>
         <div class="DivSeperate"></div>
         <div class="DivInput">

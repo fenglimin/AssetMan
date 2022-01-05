@@ -55,7 +55,7 @@ namespace Business
 			return rowData;
 		}
 
-        public static DataTable CreateDateTableFromAllFunds()
+        public static DataTable CreateDateTableFromAllFunds(string condition)
         {
             var dt = new DataTable();
             dt.Columns.Add(TableFieldName.FundID);
@@ -73,7 +73,7 @@ namespace Business
             double totalAmount = 0;
             double totalBenefit = 0;
             double totalBonus = 0;
-            var fundList = InvestDal.LoadFundList("");
+            var fundList = InvestDal.LoadFundList(condition);
             foreach (var fundInfo in fundList)
             {
                 totalAmount += fundInfo.TotalAmount;

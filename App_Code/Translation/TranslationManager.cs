@@ -75,7 +75,7 @@ namespace Translation
 
 		public static string Translate(string key)
 		{
-			return TranDic.ContainsKey(key) ? TranDic[key] : string.Empty;
+			return TranDic.ContainsKey(key) ? TranDic[key] : key;
 		}
 	}
 }

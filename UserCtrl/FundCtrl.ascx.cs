@@ -37,8 +37,15 @@ namespace UserCtrl
                 gvFundDetail.Visible = !ForTodoList;
                 cbShowHistory.Visible = !ForTodoList;
                 btRefresh.Visible = ForTodoList;
+                btQuery.Visible = ForTodoList;
+                cblFundType.Visible = ForTodoList;
 
-                var dtFund = InvestmentManager.CreateDateTableFromAllFunds();
+                cblFundType.Title = "类型";
+                cblFundType.Type = "净值型产品";
+                cblFundType.MustSelect = true;
+                cblFundType.InstanceName = "ucFund_cblFundType";
+
+                var dtFund = InvestmentManager.CreateDateTableFromAllFunds(string.Empty);
                 dtFund = AdjustFund(dtFund, HideEndedFund);
 
                 gvAllFunds.DataSource = dtFund;
@@ -110,17 +117,18 @@ namespace UserCtrl
         protected void gvAllFunds_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             var forTodoList = (bool)ViewState["ForTodoList"];
+            var dataTable = gvAllFunds.DataSource as DataTable;
+
             if (e.Row.RowIndex == 0)
             {
                 var hyperLink = e.Row.Cells[0].Controls[0] as HyperLink;
-                hyperLink.Text = "汇总";
+                hyperLink.Text = (dataTable.Rows.Count-1) + "条记录";
                 GridViewManager.SetRowStyle(e.Row, Color.Red, true);
                 return;
             }
 
             if (e.Row.RowIndex > 0)
             {
-                var dataTable = gvAllFunds.DataSource as DataTable;
                 var fundId = dataTable.Rows[e.Row.RowIndex][TableFieldName.FundID].ToString();
                 var fundName = dataTable.Rows[e.Row.RowIndex][TableFieldName.FundName].ToString();
 
@@ -171,7 +179,7 @@ namespace UserCtrl
         {
             HideEndedFund = !cbShowHistory.Checked;
 
-            var dtFund = InvestmentManager.CreateDateTableFromAllFunds();
+            var dtFund = InvestmentManager.CreateDateTableFromAllFunds(string.Empty);
             dtFund = AdjustFund(dtFund, HideEndedFund);
             gvAllFunds.DataSource = dtFund;
             gvAllFunds.DataBind();
@@ -232,8 +240,20 @@ namespace UserCtrl
 
             }
 
+            DoQuery();
+        }
+
+        protected void btQuery_Click(object sender, EventArgs e)
+        {
+            DoQuery();
+        }
+
+        private void DoQuery()
+        {
+            var joinedNames = cblFundType.SelectedOptions.Aggregate((a, b) => a + "', '" + b);
+            var condition = "WHERE FundType IN ('" + joinedNames + "')";
             ViewState["ForTodoList"] = true;
-            var dtFund = InvestmentManager.CreateDateTableFromAllFunds();
+            var dtFund = InvestmentManager.CreateDateTableFromAllFunds(condition);
             dtFund = AdjustFund(dtFund, true);
             gvAllFunds.DataSource = dtFund;
             gvAllFunds.DataBind();

@@ -27,7 +27,9 @@ namespace Form
 				ucDesc.Title = "描述";
 				ucDesc.Height = 725;
 				ucDesc.InstanceName = "ucDesc";
-			}
+
+                btOk.Focus();
+            }
 		}
 
 		protected void btOk_Click(object sender, EventArgs e)

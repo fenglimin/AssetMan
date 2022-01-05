@@ -55,7 +55,7 @@ namespace UserCtrl
 				}
 			}
 
-			if (!string.IsNullOrEmpty(InitText))
+            if (!string.IsNullOrEmpty(InitText))
 				tbEdit.Text = InitText;
 		}
 

@@ -50,6 +50,14 @@ public partial class Form_FundForm : System.Web.UI.Page
                 ucBankCard.EnableInput = false;
                 ucDesc.EnableInput = false;
             }
+            else if (opType == "Bonus")
+            {
+                lbTitle.Text = "基金分红";
+                ucAmount.Title = "金额";
+                ucBankCard.EnableInput = false;
+                ucDesc.EnableInput = false;
+                ucNetWorth.EnableInput = false;
+            }
 
             ucFundType.Title = "类型";
             ucFundType.Type = "净值型产品";
@@ -171,6 +179,24 @@ public partial class Form_FundForm : System.Web.UI.Page
         else if (lbTitle.Text == "更改基金净值")
         {
             InvestDal.CalculateFund(Convert.ToInt32(ViewState["FundIdChangeNetWorth"]), currentNetWorth, netWorthDelta, ucDate.Date);
+        }
+        else if (lbTitle.Text == "基金分红")
+        {
+            var amount = Convert.ToInt32(ucAmount.Amount) / 10;
+            InvestDal.AddFundBonus(Convert.ToInt32(ViewState["FundIdChangeNetWorth"]), amount * 10, ucDate.Date);
+
+            var dayDetail = new DayDetail()
+            {
+                OperationDate = timeStamp,
+                BankName = investCard.BankName,
+                CardName = investCard.CardName,
+                ActionType = "收入",
+                Account = amount.ToString() + "0",
+                AvailDate = ucDate.Date,
+                Avail = "Yes",
+                Desc = "理财分红 - " + ucDesc.Text
+            };
+            AssetDetailManager.AddDayDetail(investCard.CardId, dayDetail);
         }
 
         ucDesc.AddToSetting();

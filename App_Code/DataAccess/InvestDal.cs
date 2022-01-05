@@ -288,6 +288,23 @@ namespace DataAccess
                 comm = new OleDbCommand(strSql, DbManager.OleDbConn);
                 comm.ExecuteNonQuery();
             }
+
+            CheckUpdateBenefitRate(fundId);
+        }
+
+        public static bool CheckUpdateBenefitRate(int fundId)
+        {
+            var fundList = LoadFundList("WHERE FundID = " + fundId);
+            if (fundList.Count != 1)
+            {
+                return false;
+            }
+
+            var benefitRate = fundList[0].WeightedBenefitRate / 100 + fundList[0].TotalBonus / fundList[0].TotalAmount;
+            benefitRate = Math.Round(benefitRate, 5) * 100;
+            var strSql = string.Format("UPDATE Fund SET WeightedBenefitRate = {0} WHERE FundID = {1}",benefitRate, fundId);
+            var comm = new OleDbCommand(strSql, DbManager.OleDbConn);
+            return comm.ExecuteNonQuery() == 1;
         }
 
         private static void UpdateFundDetail(int detailId, double benefitRate)
@@ -397,6 +414,23 @@ namespace DataAccess
                          Math.Round(fundDetail.BenefitRate, 3) + " )";
             var comm = new OleDbCommand(strSql, DbManager.OleDbConn);
             comm.ExecuteNonQuery();
+        }
+
+        public static bool AddFundBonus(int fundId, int bonus, string date)
+        {
+            var fundList = LoadFundList("WHERE FundID = " + fundId);
+            if (fundList.Count != 1)
+            {
+                return false;
+            }
+
+            var newTotalBonus = fundList[0].TotalBonus + bonus;
+            var benefitRate = fundList[0].WeightedBenefitRate / 100 + newTotalBonus / fundList[0].TotalAmount;
+            benefitRate = Math.Round(benefitRate, 5) * 100;
+
+            var strSql = string.Format("UPDATE Fund SET TotalBonus = {0}, WeightedBenefitRate = {1} WHERE FundID = {2}", newTotalBonus, benefitRate, fundId);
+            var comm = new OleDbCommand(strSql, DbManager.OleDbConn);
+            return comm.ExecuteNonQuery() == 1;
         }
     }
 }

@@ -145,7 +145,7 @@ namespace UserCtrl
 
                     hyperLink = e.Row.Cells[2].Controls[0] as HyperLink;
                     hyperLink.Text = "分红";
-                    hyperLink.NavigateUrl = "~/Form/FundForm.aspx?OpType=Redemption&FundId=" + fundId;
+                    hyperLink.NavigateUrl = "~/Form/FundForm.aspx?OpType=Bonus&FundId=" + fundId;
 
                     hyperLink = e.Row.Cells[3].Controls[0] as HyperLink;
                     hyperLink.NavigateUrl = string.Format("~/Form/AllInvestmentsForm.aspx?FundId={0}&FundName={1}", fundId, fundName);

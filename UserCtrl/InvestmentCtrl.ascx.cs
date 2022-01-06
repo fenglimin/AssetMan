@@ -26,29 +26,9 @@ namespace UserCtrl
                     cbShowHistory.Visible = false;
                 }
 
-				var dtInvest = InvestmentManager.CreateDateTableFromAllInvestments();
-				gvAllInvestment.DataSource = AdjustInvestment(dtInvest, HideEndedInvest, EndDayPeriod);
-				gvAllInvestment.DataBind();
+				gvAllInvestment.DataSource = InvestmentManager.CreateDateTableFromAllInvestments(HideEndedInvest, EndDayPeriod);
+                gvAllInvestment.DataBind();
 			}
-		}
-
-		private DataTable AdjustInvestment(DataTable dtInvest, bool hideEndedInvest, int endDayPeriod)
-		{
-			var count = dtInvest.Rows.Count;
-			var today = DateTime.Today;
-			for (var i = 0; i < count; i++)
-			{
-				DateTime endDay;
-				DateTime.TryParse(dtInvest.Rows[i][TableFieldName.InvestAvailDate].ToString(), out endDay);
-				if ((endDayPeriod > 0 && today.AddDays(endDayPeriod) < endDay) || (hideEndedInvest && dtInvest.Rows[i][TableFieldName.InvestBenifit].ToString() != "0"))
-				{
-					dtInvest.Rows.RemoveAt(i);
-					count = dtInvest.Rows.Count;
-					i--;
-				}
-			}
-
-			return dtInvest;
 		}
 
 		private void CreateGridViewColumn()
@@ -66,7 +46,17 @@ namespace UserCtrl
 
 		protected void gvAllInvestment_RowDataBound(object sender, GridViewRowEventArgs e)
 		{
-			if (e.Row.RowIndex >= 0)
+            var dataTable = gvAllInvestment.DataSource as DataTable;
+
+            if (e.Row.RowIndex == 0)
+            {
+                var hyperLink = e.Row.Cells[0].Controls[0] as HyperLink;
+                hyperLink.Text = (dataTable.Rows.Count - 1) + " 条记录";
+                GridViewManager.SetRowStyle(e.Row, Color.Red, true);
+                return;
+            }
+
+            if (e.Row.RowIndex >= 0)
 			{
 				if (e.Row.Cells[6].Text != "0")
 				{
@@ -84,7 +74,7 @@ namespace UserCtrl
 				DateTime moneyInDate;
 				DateTime.TryParse(e.Row.Cells[8].Text, out moneyInDate);
 
-				var dataTable = gvAllInvestment.DataSource as DataTable;
+				
 				var investId = dataTable.Rows[e.Row.RowIndex][TableFieldName.Id].ToString();
 
 				var hyperLink = e.Row.Cells[0].Controls[0] as HyperLink;
@@ -110,8 +100,7 @@ namespace UserCtrl
         protected void cbShowHistory_CheckedChanged(object sender, EventArgs e)
         {
             HideEndedInvest = !cbShowHistory.Checked;
-            var dtInvest = InvestmentManager.CreateDateTableFromAllInvestments();
-            gvAllInvestment.DataSource = AdjustInvestment(dtInvest, HideEndedInvest, EndDayPeriod);
+            gvAllInvestment.DataSource = InvestmentManager.CreateDateTableFromAllInvestments(HideEndedInvest, EndDayPeriod);
             gvAllInvestment.DataBind();
         }
     }

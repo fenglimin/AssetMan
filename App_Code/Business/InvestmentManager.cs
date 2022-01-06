@@ -16,7 +16,7 @@ namespace Business
 	/// </summary>
 	public static class InvestmentManager
 	{
-		public static DataTable CreateDateTableFromAllInvestments()
+		public static DataTable CreateDateTableFromAllInvestments(bool hideEndedInvest, int endDayPeriod)
 		{
 			var dt = new DataTable();
 			dt.Columns.Add(TableFieldName.Id);
@@ -29,8 +29,27 @@ namespace Business
 			dt.Columns.Add(TableFieldName.InvestBenifitRate);
 			dt.Columns.Add(TableFieldName.InvestAvailDate);
 
+            var investmentList = InvestDal.LoadAllInvestments();
+            investmentList = AdjustInvestment(investmentList, hideEndedInvest, endDayPeriod);
 
-			foreach (var investDetail in InvestDal.LoadAllInvestments())
+            double rateSummary = 0;
+            double totalAmount = 0;
+            double totalBenefit = 0;
+            foreach (var investmentInfo in investmentList)
+            {
+                totalAmount += investmentInfo.InvestAmount;
+                totalBenefit += investmentInfo.InvestBenifit;
+                var rate = investmentInfo.InvestBenifitRate.TrimEnd('%');
+                rateSummary += investmentInfo.InvestAmount * Convert.ToDouble(rate);
+            }
+
+            if (investmentList.Count > 0)
+            {
+                GridViewManager.AddRow(dt, CreateStatisticRowDataForInvestment(totalAmount, totalBenefit, rateSummary / totalAmount));
+            }
+            
+
+            foreach (var investDetail in investmentList)
 			{
 				GridViewManager.AddRow(dt, CreateRowDataForInvestment(investDetail));
 			}
@@ -38,7 +57,37 @@ namespace Business
 			return dt;
 		}
 
-		private static Dictionary<string, string> CreateRowDataForInvestment(InvestDetail investDetail)
+        private static IList<InvestDetail> AdjustInvestment(IList<InvestDetail> investmentList, bool hideEndedInvest, int endDayPeriod)
+        {
+            var count = investmentList.Count;
+            var today = DateTime.Today;
+            for (var i = 0; i < count; i++)
+            {
+                DateTime endDay;
+                DateTime.TryParse(investmentList[i].InvestAvailDate, out endDay);
+                if ((endDayPeriod > 0 && today.AddDays(endDayPeriod) < endDay) || (hideEndedInvest && endDay < today))
+                {
+                    investmentList.RemoveAt(i);
+                    count = investmentList.Count;
+                    i--;
+                }
+            }
+
+            return investmentList;
+        }
+
+        private static Dictionary<string, string> CreateStatisticRowDataForInvestment(double totalAmount, double totalBenefit, double benefitRate)
+        {
+            var rowData = new Dictionary<string, string>();
+
+            rowData[TableFieldName.InvestAmount] = totalAmount.ToString(CultureInfo.InvariantCulture);
+            rowData[TableFieldName.InvestBenifit] = totalBenefit.ToString(CultureInfo.InvariantCulture);
+            rowData[TableFieldName.InvestBenifitRate] = benefitRate.ToString(CultureInfo.InvariantCulture);
+            
+            return rowData;
+        }
+
+        private static Dictionary<string, string> CreateRowDataForInvestment(InvestDetail investDetail)
 		{
 			var rowData = new Dictionary<string, string>();
 

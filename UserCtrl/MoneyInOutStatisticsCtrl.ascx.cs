@@ -50,13 +50,15 @@ namespace UserCtrl
 		{
 			if (e.Row.RowType != DataControlRowType.DataRow) return;
 
-			var key = Convert.ToInt32(e.Row.Cells[3].Text);
+            var dataTable = gvResult.DataSource as DataTable;
+
+            var key = Convert.ToInt32(e.Row.Cells[3].Text);
 			var color = key < 0 ? Color.Green : Color.Red;
 
 			if (e.Row.RowIndex == 0)
 			{
-				e.Row.Cells[0].Text = "汇总";
-				e.Row.BackColor = color;
+				e.Row.Cells[0].Text = (dataTable.Rows.Count - 1) + " 条记录";
+                e.Row.BackColor = color;
 				GridViewManager.SetRowStyle(e.Row, Color.White, true);
 				return;
 			}

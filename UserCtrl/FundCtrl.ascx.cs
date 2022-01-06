@@ -122,7 +122,7 @@ namespace UserCtrl
             if (e.Row.RowIndex == 0)
             {
                 var hyperLink = e.Row.Cells[0].Controls[0] as HyperLink;
-                hyperLink.Text = (dataTable.Rows.Count-1) + "条记录";
+                hyperLink.Text = (dataTable.Rows.Count-1) + " 条记录";
                 GridViewManager.SetRowStyle(e.Row, Color.Red, true);
                 return;
             }

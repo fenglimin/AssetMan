@@ -164,7 +164,7 @@ namespace Business
 			condition += CreateAmountConditionString(minAmount);
             var dayDetails = DayDetailDal.QueryDayDetail(condition, out totalIn, out totalOut);
 
-            var queryStatistic = CreateStatisticRowDataForMoneyInOutDetail(totalIn, totalOut);
+            var queryStatistic = CreateStatisticRowDataForMoneyInOutDetail(dayDetails.Count, totalIn, totalOut);
             GridViewManager.AddRow(dt, queryStatistic);
 
             foreach (var dayDetail in dayDetails)
@@ -194,7 +194,7 @@ namespace Business
 			condition += CreateDescConditionString(keyword);
 			condition += CreateAmountConditionString(minAmount);
 			var dayDetails = DayDetailDal.QueryDayDetail(condition, out totalIn, out totalOut);
-			var queryStatistic = CreateStatisticRowDataForBankCardDetail(totalIn, totalOut);
+			var queryStatistic = CreateStatisticRowDataForBankCardDetail(dayDetails.Count, totalIn, totalOut);
 			GridViewManager.AddRow(dt, queryStatistic);
 
 			foreach (var dayDetail in dayDetails)
@@ -247,7 +247,7 @@ namespace Business
 
 			if (createStatistic)
 			{
-				var monthStatistic = CreateStatisticRowDataForMoneyInOutDetail(totalIncome, totalOutcome);
+				var monthStatistic = CreateStatisticRowDataForMoneyInOutDetail(dayDetails.Count, totalIncome, totalOutcome);
 				GridViewManager.AddRow(dt, monthStatistic);
 			}
 
@@ -304,11 +304,11 @@ namespace Business
 			return rowData;
 		}
 
-		private static Dictionary<string, string> CreateStatisticRowDataForMoneyInOutDetail(int totalIncome, int totalOutcome)
+		private static Dictionary<string, string> CreateStatisticRowDataForMoneyInOutDetail(int rowCount, int totalIncome, int totalOutcome)
 		{
 			var rowData = new Dictionary<string, string>();
 
-			rowData[TableFieldName.Date] = "收支汇总";
+			rowData[TableFieldName.Date] = rowCount + " 条记录";
 			//rowData[TableFieldName.BankName] = string.Empty;
 			//rowData[TableFieldName.CardName] = string.Empty;
 			rowData[TableFieldName.BankName] = totalIncome.ToString(CultureInfo.InvariantCulture);
@@ -320,12 +320,12 @@ namespace Business
 			return rowData;
 		}
 
-		private static Dictionary<string, string> CreateStatisticRowDataForBankCardDetail(int totalIncome, int totalOutcome)
+		private static Dictionary<string, string> CreateStatisticRowDataForBankCardDetail(int rowCount, int totalIncome, int totalOutcome)
 		{
 			var rowData = new Dictionary<string, string>();
 
-			rowData[TableFieldName.Date] = "汇总";
-			rowData[TableFieldName.Type] = string.Empty;
+			rowData[TableFieldName.Date] = rowCount + " 条记录";
+            rowData[TableFieldName.Type] = string.Empty;
 			rowData[TableFieldName.Balance] = string.Format("{0}", totalIncome + totalOutcome);
 			rowData[TableFieldName.Description] = string.Format("总入账：{0}, 总出账：{1}", totalIncome, totalOutcome);
 			return rowData;

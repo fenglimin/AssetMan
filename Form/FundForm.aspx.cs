@@ -28,7 +28,7 @@ public partial class Form_FundForm : System.Web.UI.Page
 
             if (opType == "ChangeNetWorth")
             {
-                lbTitle.Text = "更改基金净值";
+                lbTitle.Text = "净值型产品 - 更改净值";
                 ucAmount.Title = "份额";
                 ucAmount.InitAmount = fundInfo.TotalAmount.ToString(CultureInfo.InvariantCulture);
                 ucBankCard.EnableInput = false;
@@ -37,14 +37,14 @@ public partial class Form_FundForm : System.Web.UI.Page
             }
             else if (opType == "Purchase")
             {
-                lbTitle.Text = "基金申购";
+                lbTitle.Text = "净值型产品 - 申购";
                 ucAmount.Title = "金额";
                 ucBankCard.EnableInput = emptyFund;
                 ucDesc.EnableInput = emptyFund;
             }
             else if (opType == "Redemption")
             {
-                lbTitle.Text = "基金赎回";
+                lbTitle.Text = "净值型产品 - 赎回";
                 ucAmount.Title = "份额";
                 ucAmount.InitAmount = fundInfo.TotalShare.ToString(CultureInfo.InvariantCulture);
                 ucBankCard.EnableInput = false;
@@ -52,7 +52,7 @@ public partial class Form_FundForm : System.Web.UI.Page
             }
             else if (opType == "Bonus")
             {
-                lbTitle.Text = "基金分红";
+                lbTitle.Text = "净值型产品 - 分红";
                 ucAmount.Title = "金额";
                 ucBankCard.EnableInput = false;
                 ucDesc.EnableInput = false;

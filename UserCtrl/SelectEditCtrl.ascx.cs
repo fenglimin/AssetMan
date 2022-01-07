@@ -38,7 +38,10 @@ namespace UserCtrl
 				cbSave.Text = "保存到模板";
 
 				lbSelect.Height = Height;
-				lbSelect.Attributes.Add("onchange", "OnSelectEditChanged('" + InstanceName + "', this.options[this.selectedIndex].value)");
+                if (EnableInput)
+                {
+                    lbSelect.Attributes.Add("onchange", "OnSelectEditChanged('" + InstanceName + "', this.options[this.selectedIndex].value)");
+                }
 
 				tbEdit.Attributes.Add("oninput", "OnInput('" + InstanceName + "', this.value)");
 				LoadSetting(Type);

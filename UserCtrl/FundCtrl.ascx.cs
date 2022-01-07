@@ -121,6 +121,13 @@ namespace UserCtrl
 
             if (e.Row.RowIndex == 0)
             {
+                if (!forTodoList)
+                {
+                    e.Row.Cells[0].ColumnSpan = 3;
+                    e.Row.Cells.RemoveAt(1);
+                    e.Row.Cells.RemoveAt(1);
+                }
+
                 var hyperLink = e.Row.Cells[0].Controls[0] as HyperLink;
                 hyperLink.Text = (dataTable.Rows.Count-1) + " 条记录";
                 GridViewManager.SetRowStyle(e.Row, Color.Red, true);

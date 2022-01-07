@@ -70,3 +70,5 @@ TinyDB/RunCmd.exe
 *.mdb
 *.ldb
 *.mdb
+PY/中信代销净值.txt
+PY/中信自营净值.txt

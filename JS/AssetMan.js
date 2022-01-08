@@ -47,22 +47,30 @@ function OnSelectEditChanged(ucName, value) {
     var checkSave = document.getElementById(ucName + '_cbSave');
     checkSave.checked = false;
     checkSave.disabled = true;
+
+    var btDelete = document.getElementById(ucName + '_btDelete');
+    btDelete.disable = false;
 }
 
 function OnInput(ucName, value) {
     var ctrl = document.getElementById(ucName + '_lbSelect');
     var checkSave = document.getElementById(ucName + '_cbSave');
+    var btDelete = document.getElementById(ucName + '_btDelete');
     for (var i = 0; i < ctrl.options.length; i++) {
         if (ctrl.options[i].value == value) {
             checkSave.checked = false;
             checkSave.disabled = true;
             checkSave.parentNode.class = "disabled";
+            btDelete.disable = false;
+            btDelete.parentNode.class = "enabled";
             return;
         }
     }
 
     checkSave.disabled = false;
     checkSave.parentNode.class = "enabled";
+    btDelete.disable = true;
+    btDelete.parentNode.class = "disabled";
 }
 
 //function OnSelectEditChanged(ucName, value) {

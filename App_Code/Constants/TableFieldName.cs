@@ -41,6 +41,7 @@
 
         public const string FundID = "FundID";
         public const string FundName = "FundName";
+        public const string FundType = "FundType";
         public const string FundTotalAmount = "FundTotalAmount";
         public const string FundTotalShare = "FundTotalShare";
         public const string FundNetWorth = "FundNetWorth";

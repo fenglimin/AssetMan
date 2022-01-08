@@ -109,6 +109,7 @@ namespace Business
             var dt = new DataTable();
             dt.Columns.Add(TableFieldName.FundID);
             dt.Columns.Add(TableFieldName.FundName);
+            dt.Columns.Add(TableFieldName.FundType);
             dt.Columns.Add(TableFieldName.FundTotalAmount);
             dt.Columns.Add(TableFieldName.FundTotalShare);
             dt.Columns.Add(TableFieldName.NetWorthDate);
@@ -166,6 +167,7 @@ namespace Business
 
             rowData[TableFieldName.FundID] = fundInfo.FundId.ToString(CultureInfo.InvariantCulture);
             rowData[TableFieldName.FundName] = fundInfo.FundName;
+            rowData[TableFieldName.FundType] = fundInfo.FundType;
             rowData[TableFieldName.FundTotalAmount] = fundInfo.TotalAmount.ToString("f0");
             rowData[TableFieldName.FundTotalShare] = fundInfo.TotalShare.ToString("f2");
             rowData[TableFieldName.NetWorthDate] = fundInfo.CurrentDate;

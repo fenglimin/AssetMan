@@ -66,7 +66,12 @@ public partial class Form_FundForm : System.Web.UI.Page
             {
                 ucFundType.Text = fundInfo.FundType;
             }
-            
+
+            ucFundCode.Title = "代码";
+            ucFundCode.InitText = emptyFund ? "自动获取" : fundInfo.FundCode;
+            ucFundCode.EnableInput = emptyFund;
+            ucFundCode.EnableValidate = true;
+
             ucBankCard.CardUsage = "收入";
             ucBankCard.InitCardId = SettingDal.GetIntValues("默认基金卡")[0];
             ucBankCard.HideTitle = true;

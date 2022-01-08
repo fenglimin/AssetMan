@@ -66,6 +66,10 @@ public partial class Form_FundForm : System.Web.UI.Page
             {
                 ucFundType.Text = fundInfo.FundType;
             }
+            else
+            {
+                ucFundType.FixedOption = "自动获取";
+            }
 
             ucFundCode.Title = "代码";
             ucFundCode.InitText = emptyFund ? "自动获取" : fundInfo.FundCode;

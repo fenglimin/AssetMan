@@ -12,6 +12,7 @@
 		public const string BankName = "BankName";
 		public const string CardName = "CardName";
 		public const string Date = "Date";
+		public const string NetWorthDate = "NetWorthDate";
 		public const string Income = "Income";
 		public const string Outcome = "Outcome";
 		public const string Description = "Description";

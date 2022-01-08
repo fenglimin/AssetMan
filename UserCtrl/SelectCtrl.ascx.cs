@@ -9,6 +9,7 @@ namespace UserCtrl
 		public string Type { get; set; }
 		public bool AutoPostBack { get; set; }
         public bool EnableInput { get; set; }
+        public string FixedOption { get; set; }
 
         public string Text
 		{
@@ -23,7 +24,13 @@ namespace UserCtrl
 				lbTitle.Text = Title + "：";
 				ddlSelect.AutoPostBack = AutoPostBack;
 
-				ddlSelect.DataSource = SettingDal.GetStringValues(Type);
+                var dataSource = SettingDal.GetStringValues(Type);
+                if (!string.IsNullOrEmpty(FixedOption))
+                {
+                    dataSource.Insert(0, FixedOption);
+                }
+
+                ddlSelect.DataSource = dataSource;
 				ddlSelect.DataBind();
 
                 ddlSelect.Enabled = EnableInput;

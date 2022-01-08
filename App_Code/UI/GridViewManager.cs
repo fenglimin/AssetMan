@@ -13,12 +13,12 @@ namespace UI
 	{
 		public static void AddBoundFieldColumn(GridView gv, string dataField, HorizontalAlign align)
 		{
-			var bf = new BoundField { HeaderText = TranslationManager.Translate(dataField), DataField = dataField };
+			var bf = new BoundField { HeaderText = TranslationManager.Translate(dataField), DataField = dataField, SortExpression = dataField};
 			bf.HeaderStyle.Height = 20;
 			bf.HeaderStyle.HorizontalAlign = align;
 			bf.ItemStyle.HorizontalAlign = align;
 
-			gv.Columns.Add(bf);
+            gv.Columns.Add(bf);
 		}
 
 		public static void AddHyperLinkFieldColumn(GridView gv, string dataField, HorizontalAlign align)

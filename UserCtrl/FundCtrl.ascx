@@ -17,7 +17,7 @@
                 <td><asp:Button ID="btQuery" runat="server" Text="查询" CssClass="Button" Width="128px" OnClick="btQuery_Click"/>
             </tr>
             <tr>
-                <asp:GridView ID="gvAllFunds" runat="server" AutoGenerateColumns="False" HorizontalAlign = "Center" BorderStyle="Solid" BorderWidth="1px" CellPadding="3" ForeColor="#333333" GridLines="Vertical" ShowHeaderWhenEmpty="True" Font-Size="9pt" Width="98%" RowStyle-Wrap="False" OnRowDataBound="gvAllFunds_RowDataBound">
+                <asp:GridView ID="gvAllFunds" runat="server" OnSorting="gridView_Sorting" AllowSorting="True" AutoGenerateColumns="False" HorizontalAlign = "Center" BorderStyle="Solid" BorderWidth="1px" CellPadding="3" ForeColor="#333333" GridLines="Vertical" ShowHeaderWhenEmpty="True" Font-Size="9pt" Width="98%" RowStyle-Wrap="False" OnRowDataBound="gvAllFunds_RowDataBound">
                     <AlternatingRowStyle BackColor="White" />
                     <EditRowStyle BackColor="#7C6F57" />
                     <FooterStyle BackColor="#1C5E55" Font-Bold="True" ForeColor="White" />

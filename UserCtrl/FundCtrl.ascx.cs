@@ -8,6 +8,7 @@ using System.Web.UI.WebControls;
 using Business;
 using Constants;
 using DataAccess;
+using Entities;
 using UI;
 
 namespace UserCtrl
@@ -46,10 +47,7 @@ namespace UserCtrl
                 cblFundType.InstanceName = "ucFund_cblFundType";
 
                 var dtFund = InvestmentManager.CreateDateTableFromAllFunds(string.Empty);
-                dtFund = AdjustFund(dtFund, HideEndedFund);
-
-                gvAllFunds.DataSource = dtFund;
-                gvAllFunds.DataBind();
+                SetAllFundDataSource(dtFund);
 
                 if (!ForTodoList)
                 {
@@ -119,7 +117,7 @@ namespace UserCtrl
         protected void gvAllFunds_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             var forTodoList = (bool)ViewState["ForTodoList"];
-            var dataTable = gvAllFunds.DataSource as DataTable;
+            var dataTable = ViewState["DataTable_AllFund"] as DataTable;
 
             if (e.Row.RowIndex == 0)
             {
@@ -189,9 +187,7 @@ namespace UserCtrl
             HideEndedFund = !cbShowHistory.Checked;
 
             var dtFund = InvestmentManager.CreateDateTableFromAllFunds(string.Empty);
-            dtFund = AdjustFund(dtFund, HideEndedFund);
-            gvAllFunds.DataSource = dtFund;
-            gvAllFunds.DataBind();
+            SetAllFundDataSource(dtFund);
 
             RefreshFundDetail(dtFund);
         }
@@ -254,6 +250,7 @@ namespace UserCtrl
 
         protected void btQuery_Click(object sender, EventArgs e)
         {
+            ViewState["ForTodoList"] = true;
             DoQuery();
         }
 
@@ -261,9 +258,57 @@ namespace UserCtrl
         {
             var joinedNames = cblFundType.SelectedOptions.Aggregate((a, b) => a + "', '" + b);
             var condition = "WHERE FundType IN ('" + joinedNames + "')";
-            ViewState["ForTodoList"] = true;
             var dtFund = InvestmentManager.CreateDateTableFromAllFunds(condition);
+            SetAllFundDataSource(dtFund);
+        }
+
+        protected void gridView_Sorting(object sender, GridViewSortEventArgs e)
+        {
+            var order = ViewState["LastOrder"] as string;
+            if (string.IsNullOrEmpty(order) || order == "DESC")
+            {
+                order = "ASC";
+            }
+            else
+            {
+                order = "DESC";
+            }
+
+            var dataTable = ViewState["DataTable_AllFund"] as DataTable;
+            if (dataTable != null)
+            {
+                var sortedDataTable = dataTable.Clone();
+                //if (e.SortExpression == TableFieldName.FundTotalAmount ||
+                //                          e.SortExpression == TableFieldName.FundNetWorth ||
+                //                          e.SortExpression == TableFieldName.FundTotalBenefit ||
+                //                          e.SortExpression == TableFieldName.NetWorthDelta ||
+                //                          e.SortExpression == TableFieldName.FundTotalBonus)
+                //{
+                //    sortedDataTable.Columns[e.SortExpression].DataType = Type.GetType("System.Double");
+                //}
+                
+                sortedDataTable.ImportRow(dataTable.Rows[0]);
+                
+                dataTable.Rows.RemoveAt(0);
+                var dataView = new DataView(dataTable);
+                dataView.Sort = e.SortExpression + " " + order;
+
+                foreach (DataRow dataRow in dataView.ToTable().Rows)
+                {
+                    sortedDataTable.ImportRow(dataRow);
+                }
+                
+                ViewState["DataTable_AllFund"] = sortedDataTable;
+                ViewState["LastOrder"] = order;
+                gvAllFunds.DataSource = sortedDataTable;
+                gvAllFunds.DataBind();
+            }
+        }
+
+        private void SetAllFundDataSource(DataTable dtFund)
+        {
             dtFund = AdjustFund(dtFund, true);
+            ViewState["DataTable_AllFund"] = dtFund;
             gvAllFunds.DataSource = dtFund;
             gvAllFunds.DataBind();
         }

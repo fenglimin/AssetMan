@@ -329,7 +329,7 @@ namespace DataAccess
             }
             reader.Close();
 
-            return list.OrderBy(x => x.FundName).ToList();
+            return list;
         }
 
         public static IList<FundDetail> LoadFundDetailList(string condition)

@@ -115,14 +115,14 @@ namespace Business
             dt.Columns.Add(TableFieldName.FundID);
             dt.Columns.Add(TableFieldName.FundName);
             dt.Columns.Add(TableFieldName.FundType);
-            dt.Columns.Add(TableFieldName.FundTotalAmount);
+            dt.Columns.Add(TableFieldName.FundTotalAmount, typeof(double));
             //dt.Columns.Add(TableFieldName.FundTotalShare);
             dt.Columns.Add(TableFieldName.NetWorthDate);
-            dt.Columns.Add(TableFieldName.FundNetWorth);
-            dt.Columns.Add(TableFieldName.NetWorthDelta);
+            dt.Columns.Add(TableFieldName.FundNetWorth, typeof(double));
+            dt.Columns.Add(TableFieldName.NetWorthDelta, typeof(double));
             dt.Columns.Add(TableFieldName.WeightedBenefitRate);
-            dt.Columns.Add(TableFieldName.FundTotalBonus);
-            dt.Columns.Add(TableFieldName.FundTotalBenefit);
+            dt.Columns.Add(TableFieldName.FundTotalBonus, typeof(double));
+            dt.Columns.Add(TableFieldName.FundTotalBenefit, typeof(double));
             dt.Columns.Add(TableFieldName.NextOpenDate);
 
             double rateSummary = 0;

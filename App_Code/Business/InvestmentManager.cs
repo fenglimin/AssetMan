@@ -116,13 +116,14 @@ namespace Business
             dt.Columns.Add(TableFieldName.FundName);
             dt.Columns.Add(TableFieldName.FundType);
             dt.Columns.Add(TableFieldName.FundTotalAmount);
-            dt.Columns.Add(TableFieldName.FundTotalShare);
+            //dt.Columns.Add(TableFieldName.FundTotalShare);
             dt.Columns.Add(TableFieldName.NetWorthDate);
             dt.Columns.Add(TableFieldName.FundNetWorth);
             dt.Columns.Add(TableFieldName.NetWorthDelta);
             dt.Columns.Add(TableFieldName.WeightedBenefitRate);
             dt.Columns.Add(TableFieldName.FundTotalBonus);
             dt.Columns.Add(TableFieldName.FundTotalBenefit);
+            dt.Columns.Add(TableFieldName.NextOpenDate);
 
             double rateSummary = 0;
             double totalAmount = 0;
@@ -174,13 +175,14 @@ namespace Business
             rowData[TableFieldName.FundName] = fundInfo.FundName;
             rowData[TableFieldName.FundType] = fundInfo.FundType;
             rowData[TableFieldName.FundTotalAmount] = fundInfo.TotalAmount.ToString("f0");
-            rowData[TableFieldName.FundTotalShare] = fundInfo.TotalShare.ToString("f2");
+            //rowData[TableFieldName.FundTotalShare] = fundInfo.TotalShare.ToString("f2");
             rowData[TableFieldName.NetWorthDate] = fundInfo.CurrentDate;
             rowData[TableFieldName.FundNetWorth] = fundInfo.CurrentNetWorth.ToString("f4");
             rowData[TableFieldName.NetWorthDelta] = fundInfo.NetWorthDelta.ToString("f4");
             rowData[TableFieldName.FundTotalBenefit] = fundInfo.TotalBenefit.ToString("f0");
             rowData[TableFieldName.FundTotalBonus] = fundInfo.TotalBonus.ToString("f0");
             rowData[TableFieldName.WeightedBenefitRate] = fundInfo.WeightedBenefitRate.ToString("f2") + "%";
+            rowData[TableFieldName.NextOpenDate] = fundInfo.NextOpenDate;
 
             return rowData;
         }

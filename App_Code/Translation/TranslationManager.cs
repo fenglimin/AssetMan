@@ -48,6 +48,7 @@ namespace Translation
                 {TableFieldName.FundNetWorth, "净值"},
                 {TableFieldName.FundTotalBenefit, "总收益"},
                 {TableFieldName.FundTotalBonus, "已分红"},
+                {TableFieldName.NextOpenDate, "开放日"},
                 {TableFieldName.WeightedBenefitRate, "收益率"},
                 {TableFieldName.NetWorth, "净值"},
                 {TableFieldName.NetWorthDelta, "变动"},

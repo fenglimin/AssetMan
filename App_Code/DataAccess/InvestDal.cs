@@ -365,9 +365,24 @@ namespace DataAccess
                 TotalBonus = reader.GetDouble(8),
                 NetWorthDelta = reader.GetDouble(9),
                 FundCode = Common.GetSafeString(reader, 10),
-                FundType = Common.GetSafeString(reader, 11)
+                FundType = Common.GetSafeString(reader, 11),
+                NextOpenDate = Common.GetSafeDateTime(reader, 12)
             };
 
+            if (string.IsNullOrEmpty(fundInfo.NextOpenDate))
+            {
+                var nextOpenDate = DateTime.Now;
+                if (nextOpenDate.DayOfWeek == DayOfWeek.Saturday)
+                {
+                    nextOpenDate = nextOpenDate.AddDays(2);
+                }
+                else if (nextOpenDate.DayOfWeek == DayOfWeek.Sunday)
+                {
+                    nextOpenDate = nextOpenDate.AddDays(1);
+                }
+
+                fundInfo.NextOpenDate = nextOpenDate.ToString("yyyy-MM-dd");
+            }
             return fundInfo;
         }
 

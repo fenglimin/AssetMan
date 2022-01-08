@@ -49,6 +49,7 @@
         public const string FundTotalBenefit = "FundTotalBenefit";
         public const string WeightedBenefitRate = "WeightedBenefitRate";
         public const string FundTotalBonus = "FundTotalBonus";
+        public const string NextOpenDate = "NextOpenDate";
 
         public const string NetWorth = "NetWorth";
         public const string Share = "Share";

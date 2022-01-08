@@ -96,6 +96,10 @@ public partial class Form_FundForm : System.Web.UI.Page
 
             ucDate.Date = DateTime.Now.AddDays(-2).ToString("yyyy-MM-dd");
 
+            ucNextDate.Title = "开放";
+            ucNextDate.Date = DateTime.Now.AddYears(1).ToString("yyyy-MM-dd");
+            ucNextDate.DisableInput = !emptyFund && opType != "ChangeNetWorth";
+
             ViewState["InitAmount"] = ucNetWorth.InitAmount;
         }
     }

@@ -10,7 +10,8 @@ namespace UserCtrl
 			set { inputDate.Value = value; }
 		}
 
-		public string Title { get; set; }
+        public bool DisableInput { get; set; }
+        public string Title { get; set; }
 		public bool HideTitle { get; set; }
 		public string Width { get; set; }
 
@@ -28,7 +29,9 @@ namespace UserCtrl
 					Date = DateTime.Today.ToString("yyyy-MM-dd");
 				}
 
-				if (!string.IsNullOrEmpty(Width))
+                inputDate.Disabled = DisableInput;
+
+                if (!string.IsNullOrEmpty(Width))
 					inputDate.Style["width"] = Width;
 			}
 		}

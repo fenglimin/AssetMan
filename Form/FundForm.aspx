@@ -29,6 +29,7 @@
                         <div><uc1:InputTextCtrl runat="server" ID="ucFundCode" /></div>
                         <div><uc1:SelectBankCardCtrl runat="server" ID="ucBankCard" /></div>
                         <div><uc1:SelectDateCtrl runat="server" ID="ucDate" /></div>    
+                        <div><uc1:SelectDateCtrl runat="server" ID="ucNextDate" /></div>    
                         <div><uc1:InputAmountCtrl runat="server" ID="ucAmount" /></div>  
                         <div><uc1:InputAmountCtrl runat="server" ID="ucNetWorth" /></div>
                         <div id="DivCommandButton">

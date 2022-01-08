@@ -56,20 +56,13 @@ namespace UserCtrl
                 return;
             }
 
-            if (e.Row.RowIndex >= 0)
+            if (e.Row.RowIndex > 0)
 			{
-				if (e.Row.Cells[6].Text != "0")
-				{
-					e.Row.Cells[0].Text = String.Empty;
-					return;
-				}
-
-				var amount = Convert.ToInt32(e.Row.Cells[3].Text);
-				var rate = Convert.ToDouble(e.Row.Cells[7].Text.TrimEnd('%'));
-				var period = Convert.ToInt32(e.Row.Cells[5].Text);
-				var benifit = (int)(amount * rate / 365 * period / 100);
-				e.Row.Cells[6].Text = "~" + benifit / 10 * 10;
-
+				//if (e.Row.Cells[6].Text != "0")
+				//{
+				//	e.Row.Cells[0].Text = String.Empty;
+				//	return;
+				//}
 
 				DateTime moneyInDate;
 				DateTime.TryParse(e.Row.Cells[8].Text, out moneyInDate);

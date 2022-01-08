@@ -38,9 +38,14 @@ namespace Business
             foreach (var investmentInfo in investmentList)
             {
                 totalAmount += investmentInfo.InvestAmount;
+
+                var rate = Convert.ToDouble(investmentInfo.InvestBenifitRate.TrimEnd('%'));
+                investmentInfo.InvestBenifitRate = rate.ToString("f2") + "%";
+                var period = GetDaySpan(investmentInfo.InvestAvailDate, investmentInfo.InvestStartDate);
+                investmentInfo.InvestBenifit = (int)(investmentInfo.InvestAmount * rate / 365 * period / 100);
+                
                 totalBenefit += investmentInfo.InvestBenifit;
-                var rate = investmentInfo.InvestBenifitRate.TrimEnd('%');
-                rateSummary += investmentInfo.InvestAmount * Convert.ToDouble(rate);
+                rateSummary += investmentInfo.InvestAmount * rate;
             }
 
             if (investmentList.Count > 0)
@@ -82,7 +87,7 @@ namespace Business
 
             rowData[TableFieldName.InvestAmount] = totalAmount.ToString(CultureInfo.InvariantCulture);
             rowData[TableFieldName.InvestBenifit] = totalBenefit.ToString(CultureInfo.InvariantCulture);
-            rowData[TableFieldName.InvestBenifitRate] = benefitRate.ToString(CultureInfo.InvariantCulture);
+            rowData[TableFieldName.InvestBenifitRate] = benefitRate.ToString("f2") + "%";
             
             return rowData;
         }
@@ -175,7 +180,7 @@ namespace Business
             rowData[TableFieldName.NetWorthDelta] = fundInfo.NetWorthDelta.ToString("f4");
             rowData[TableFieldName.FundTotalBenefit] = fundInfo.TotalBenefit.ToString("f0");
             rowData[TableFieldName.FundTotalBonus] = fundInfo.TotalBonus.ToString("f0");
-            rowData[TableFieldName.WeightedBenefitRate] = fundInfo.WeightedBenefitRate.ToString("f3") + "%";
+            rowData[TableFieldName.WeightedBenefitRate] = fundInfo.WeightedBenefitRate.ToString("f2") + "%";
 
             return rowData;
         }
@@ -246,7 +251,7 @@ namespace Business
             rowData[TableFieldName.FundTotalAmount] = totalAmount.ToString("f0");
             rowData[TableFieldName.FundTotalBenefit] = totalBenefit.ToString("f0");
             rowData[TableFieldName.FundTotalBonus] = totalBonus.ToString("f0");
-            rowData[TableFieldName.WeightedBenefitRate] = balanceRate.ToString("f1") + "%";
+            rowData[TableFieldName.WeightedBenefitRate] = balanceRate.ToString("f2") + "%";
 
             return rowData;
         }

@@ -80,7 +80,7 @@ public partial class Form_FundForm : System.Web.UI.Page
             ucNetWorth.InitAmount = fundInfo.CurrentNetWorth.ToString(CultureInfo.InvariantCulture);
 
             ucDesc.Type = "基金";
-            ucDesc.Title = ucDesc.Type;
+            ucDesc.Title = "名称";
             ucDesc.Height = 725;
             ucDesc.InstanceName = "ucDesc";
             ucDesc.Text = fundInfo.FundName;
@@ -103,7 +103,7 @@ public partial class Form_FundForm : System.Web.UI.Page
         var initNetWorth = Convert.ToDouble(ViewState["InitAmount"]);
         var netWorthDelta = (currentNetWorth * 10000 - initNetWorth * 10000) / 10000;
 
-        if (lbTitle.Text == "基金申购")
+        if (lbTitle.Text == "净值型产品 - 申购")
         {
             var dayDetail1 = new DayDetail()
             {
@@ -134,7 +134,7 @@ public partial class Form_FundForm : System.Web.UI.Page
 
             InvestDal.PurchaseFund(ucDesc.Text, Convert.ToDouble(ucAmount.Amount), Convert.ToDouble(ucNetWorth.Amount), ucDate.Date);
         }
-        else if (lbTitle.Text == "基金赎回")
+        else if (lbTitle.Text == "净值型产品 - 赎回")
         {
             double totalAmount;// 赎回份额对应的本金
             double totalBenefit;// 赎回份额产生的收益
@@ -176,11 +176,11 @@ public partial class Form_FundForm : System.Web.UI.Page
             dayDetail1.Desc = string.Format("理财：{0} {1}份，收益率{2}%", desc, ucAmount.Amount,weightedBenefitRate.ToString("f2"));
             AssetDetailManager.AddDayDetail(ucBankCard.CardId, dayDetail1);
         }
-        else if (lbTitle.Text == "更改基金净值")
+        else if (lbTitle.Text == "净值型产品 - 更改净值")
         {
             InvestDal.CalculateFund(Convert.ToInt32(ViewState["FundIdChangeNetWorth"]), currentNetWorth, netWorthDelta, ucDate.Date);
         }
-        else if (lbTitle.Text == "基金分红")
+        else if (lbTitle.Text == "净值型产品 - 分红")
         {
             var amount = Convert.ToInt32(ucAmount.Amount) / 10;
             InvestDal.AddFundBonus(Convert.ToInt32(ViewState["FundIdChangeNetWorth"]), amount * 10, ucDate.Date);

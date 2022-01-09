@@ -279,6 +279,8 @@ namespace UserCtrl
 
             }
 
+            ViewState["LastOrder"] = "DESC";
+            ViewState["LastSortColumn"] = TableFieldName.NetWorthDate;
             DoQuery();
         }
 

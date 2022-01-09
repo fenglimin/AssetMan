@@ -316,7 +316,7 @@ namespace DataAccess
 
         public static IList<FundInfo> LoadFundList(string condition)
         {
-            var strSql = string.Format("SELECT * from Fund {0} ORDER BY NextOpenDate", condition);
+            var strSql = string.Format("SELECT * from Fund {0}", condition);
             var comm = new OleDbCommand(strSql, DbManager.OleDbConn);
             var reader = comm.ExecuteReader();
             if (reader == null)
@@ -369,7 +369,7 @@ namespace DataAccess
                 NextOpenDate = Common.GetSafeDateTime(reader, 12)
             };
 
-            if (string.IsNullOrEmpty(fundInfo.NextOpenDate))
+            if (string.IsNullOrEmpty(fundInfo.NextOpenDate) && fundInfo.TotalAmount != 0)
             {
                 var nextOpenDate = DateTime.Now;
                 if (nextOpenDate.DayOfWeek == DayOfWeek.Saturday)

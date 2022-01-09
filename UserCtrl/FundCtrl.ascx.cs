@@ -47,7 +47,8 @@ namespace UserCtrl
                 cblFundType.InstanceName = "ucFund_cblFundType";
 
                 var dtFund = InvestmentManager.CreateDateTableFromAllFunds(string.Empty);
-                SetAllFundDataSource(dtFund);
+                dtFund = AdjustFund(dtFund, true);
+                DoSort(dtFund, "NextOpenDate", "ASC");
 
                 if (!ForTodoList)
                 {
@@ -123,12 +124,16 @@ namespace UserCtrl
             var netWorthColumnId = 5;
             var netWorthDeltaColumnId = 6;
             var benefitRateColumnId = 7;
+            var nextOpenDateColumnId = 10;
+            var fundTypeColumnId = 2;
 
             if (!forTodoList)
             {
                 netWorthColumnId += 2;
                 netWorthDeltaColumnId += 2;
                 benefitRateColumnId += 2;
+                nextOpenDateColumnId += 2;
+                fundTypeColumnId += 2;
             }
 
             e.Row.Cells[benefitRateColumnId].Text = FormatCellValue(e.Row.Cells[benefitRateColumnId].Text, 2, "%");
@@ -166,7 +171,16 @@ namespace UserCtrl
                 hyperLink.Text = "申购";
                 hyperLink.NavigateUrl = "~/Form/FundForm.aspx?OpType=Purchase&FundId=" + fundId;
             }
-            GridViewManager.SetRowStyle(e.Row, Color.Black, true);
+
+            if (e.Row.Cells[fundTypeColumnId].Text == "中信代销" || e.Row.Cells[fundTypeColumnId].Text == "中信自营")
+            {
+                DateTime nextOPenDate;
+                DateTime.TryParse(e.Row.Cells[nextOpenDateColumnId].Text, out nextOPenDate);
+                if (DateTime.Now.AddDays(30) > nextOPenDate)
+                {
+                    GridViewManager.SetRowStyle(e.Row, Color.Black, true);
+                }
+            }
 
             if (!forTodoList)
             {
@@ -199,9 +213,11 @@ namespace UserCtrl
         protected void cbShowHistory_CheckedChanged(object sender, EventArgs e)
         {
             HideEndedFund = !cbShowHistory.Checked;
-
             var dtFund = InvestmentManager.CreateDateTableFromAllFunds(string.Empty);
-            SetAllFundDataSource(dtFund);
+
+            var order = ViewState["LastOrder"] as string;
+            var sortColumn = ViewState["LastSortColumn"] as string;
+            DoSort(dtFund, sortColumn, order);
 
             RefreshFundDetail(dtFund);
         }
@@ -273,7 +289,11 @@ namespace UserCtrl
             var joinedNames = cblFundType.SelectedOptions.Aggregate((a, b) => a + "', '" + b);
             var condition = "WHERE FundType IN ('" + joinedNames + "')";
             var dtFund = InvestmentManager.CreateDateTableFromAllFunds(condition);
-            SetAllFundDataSource(dtFund);
+            dtFund = AdjustFund(dtFund, true);
+
+            var order = ViewState["LastOrder"] as string;
+            var sortColumn = ViewState["LastSortColumn"] as string;
+            DoSort(dtFund, sortColumn, order);
         }
 
         protected void gridView_Sorting(object sender, GridViewSortEventArgs e)
@@ -289,33 +309,31 @@ namespace UserCtrl
             }
 
             var dataTable = ViewState["DataTable_AllFund"] as DataTable;
+            DoSort(dataTable, e.SortExpression, order);
+        }
+
+        private void DoSort(DataTable dataTable, string sortColumn, string order)
+        {
             if (dataTable != null)
             {
                 var sortedDataTable = dataTable.Clone();
                 sortedDataTable.ImportRow(dataTable.Rows[0]);
-                
+
                 dataTable.Rows.RemoveAt(0);
                 var dataView = new DataView(dataTable);
-                dataView.Sort = e.SortExpression + " " + order;
+                dataView.Sort = sortColumn + " " + order;
 
                 foreach (DataRow dataRow in dataView.ToTable().Rows)
                 {
                     sortedDataTable.ImportRow(dataRow);
                 }
-                
+
                 ViewState["DataTable_AllFund"] = sortedDataTable;
                 ViewState["LastOrder"] = order;
+                ViewState["LastSortColumn"] = sortColumn;
                 gvAllFunds.DataSource = sortedDataTable;
                 gvAllFunds.DataBind();
             }
-        }
-
-        private void SetAllFundDataSource(DataTable dtFund)
-        {
-            dtFund = AdjustFund(dtFund, true);
-            ViewState["DataTable_AllFund"] = dtFund;
-            gvAllFunds.DataSource = dtFund;
-            gvAllFunds.DataBind();
         }
     }
 }

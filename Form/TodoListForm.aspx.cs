@@ -24,7 +24,7 @@ namespace Form
 				var endInvestDayPeriod = SettingDal.GetIntValues("到期投资检查期限")[0];
 				ucInvestment.EndDayPeriod = endInvestDayPeriod;
 				ucInvestment.HideEndedInvest = true;
-				ucInvestment.Title = string.Format("{0}天内到期的投资产品", endInvestDayPeriod);
+				ucInvestment.Title = string.Format("{0}天内到期的固定收益类理财产品", endInvestDayPeriod);
 
                 ucFund.Title = "今日净值";
                 ucFund.ForTodoList = true;

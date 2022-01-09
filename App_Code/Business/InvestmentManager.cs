@@ -120,7 +120,7 @@ namespace Business
             dt.Columns.Add(TableFieldName.NetWorthDate);
             dt.Columns.Add(TableFieldName.FundNetWorth, typeof(double));
             dt.Columns.Add(TableFieldName.NetWorthDelta, typeof(double));
-            dt.Columns.Add(TableFieldName.WeightedBenefitRate);
+            dt.Columns.Add(TableFieldName.WeightedBenefitRate, typeof(double));
             dt.Columns.Add(TableFieldName.FundTotalBonus, typeof(double));
             dt.Columns.Add(TableFieldName.FundTotalBenefit, typeof(double));
             dt.Columns.Add(TableFieldName.NextOpenDate);
@@ -181,7 +181,7 @@ namespace Business
             rowData[TableFieldName.NetWorthDelta] = fundInfo.NetWorthDelta.ToString("f4");
             rowData[TableFieldName.FundTotalBenefit] = fundInfo.TotalBenefit.ToString("f0");
             rowData[TableFieldName.FundTotalBonus] = fundInfo.TotalBonus.ToString("f0");
-            rowData[TableFieldName.WeightedBenefitRate] = fundInfo.WeightedBenefitRate.ToString("f2") + "%";
+            rowData[TableFieldName.WeightedBenefitRate] = fundInfo.WeightedBenefitRate.ToString("f2");
             rowData[TableFieldName.NextOpenDate] = fundInfo.NextOpenDate;
 
             return rowData;
@@ -253,7 +253,7 @@ namespace Business
             rowData[TableFieldName.FundTotalAmount] = totalAmount.ToString("f0");
             rowData[TableFieldName.FundTotalBenefit] = totalBenefit.ToString("f0");
             rowData[TableFieldName.FundTotalBonus] = totalBonus.ToString("f0");
-            rowData[TableFieldName.WeightedBenefitRate] = balanceRate.ToString("f2") + "%";
+            rowData[TableFieldName.WeightedBenefitRate] = balanceRate.ToString("f2");
 
             return rowData;
         }

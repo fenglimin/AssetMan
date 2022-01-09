@@ -116,8 +116,22 @@ namespace UserCtrl
 
         protected void gvAllFunds_RowDataBound(object sender, GridViewRowEventArgs e)
         {
+            if (e.Row.RowIndex < 0) return;
+
             var forTodoList = (bool)ViewState["ForTodoList"];
             var dataTable = ViewState["DataTable_AllFund"] as DataTable;
+            var netWorthColumnId = 5;
+            var netWorthDeltaColumnId = 6;
+            var benefitRateColumnId = 7;
+
+            if (!forTodoList)
+            {
+                netWorthColumnId += 2;
+                netWorthDeltaColumnId += 2;
+                benefitRateColumnId += 2;
+            }
+
+            e.Row.Cells[benefitRateColumnId].Text = FormatCellValue(e.Row.Cells[benefitRateColumnId].Text, 2, "%");
 
             if (e.Row.RowIndex == 0)
             {
@@ -128,58 +142,58 @@ namespace UserCtrl
                     e.Row.Cells.RemoveAt(1);
                 }
 
-                var hyperLink = e.Row.Cells[0].Controls[0] as HyperLink;
-                hyperLink.Text = (dataTable.Rows.Count-1) + " 条记录";
+                var hyperLinkFirst = e.Row.Cells[0].Controls[0] as HyperLink;
+                hyperLinkFirst.Text = (dataTable.Rows.Count-1) + " 条记录";
                 GridViewManager.SetRowStyle(e.Row, Color.Red, true);
+
                 return;
             }
 
-            if (e.Row.RowIndex > 0)
+            e.Row.Cells[netWorthColumnId].Text = FormatCellValue(e.Row.Cells[netWorthColumnId].Text, 4, "");
+            e.Row.Cells[netWorthDeltaColumnId].Text = FormatCellValue(e.Row.Cells[netWorthDeltaColumnId].Text, 4, "");
+
+            var fundId = dataTable.Rows[e.Row.RowIndex][TableFieldName.FundID].ToString();
+            var fundName = dataTable.Rows[e.Row.RowIndex][TableFieldName.FundName].ToString();
+
+            var hyperLink = e.Row.Cells[0].Controls[0] as HyperLink;
+            if (forTodoList)
             {
-                var fundId = dataTable.Rows[e.Row.RowIndex][TableFieldName.FundID].ToString();
-                var fundName = dataTable.Rows[e.Row.RowIndex][TableFieldName.FundName].ToString();
-
-                var hyperLink = e.Row.Cells[0].Controls[0] as HyperLink;
-                if (forTodoList)
-                {
-                    hyperLink.Text = "更改净值";
-                    hyperLink.NavigateUrl = "~/Form/FundForm.aspx?OpType=ChangeNetWorth&FundId=" + fundId;
-                }
-                else
-                {
-                    hyperLink.Text = "申购";
-                    hyperLink.NavigateUrl = "~/Form/FundForm.aspx?OpType=Purchase&FundId=" + fundId;
-                }
-                GridViewManager.SetRowStyle(e.Row, Color.Black, true);
-
-                if (!forTodoList)
-                {
-                    hyperLink = e.Row.Cells[1].Controls[0] as HyperLink;
-                    hyperLink.Text = "赎回";
-                    hyperLink.NavigateUrl = "~/Form/FundForm.aspx?OpType=Redemption&FundId=" + fundId;
-
-                    hyperLink = e.Row.Cells[2].Controls[0] as HyperLink;
-                    hyperLink.Text = "分红";
-                    hyperLink.NavigateUrl = "~/Form/FundForm.aspx?OpType=Bonus&FundId=" + fundId;
-
-                    hyperLink = e.Row.Cells[3].Controls[0] as HyperLink;
-                    hyperLink.NavigateUrl = string.Format("~/Form/AllInvestmentsForm.aspx?FundId={0}&FundName={1}", fundId, fundName);
-
-                    if (e.Row.Cells[9].Text != "0.0000" && e.Row.Cells[7].Text == DateTime.Now.ToString("yyyy-MM-dd"))
-                    {
-                        var key = Convert.ToDouble(e.Row.Cells[9].Text);
-                        e.Row.Cells[9].ForeColor = key < 0 ? Color.Green : Color.Red;
-                    }
-                }
-                else
-                {
-                    if (e.Row.Cells[7].Text != "0.0000" && e.Row.Cells[5].Text == DateTime.Now.ToString("yyyy-MM-dd"))
-                    {
-                        var key = Convert.ToDouble(e.Row.Cells[7].Text);
-                        e.Row.Cells[7].ForeColor = key < 0 ? Color.Green : Color.Red;
-                    }
-                }
+                hyperLink.Text = "更改净值";
+                hyperLink.NavigateUrl = "~/Form/FundForm.aspx?OpType=ChangeNetWorth&FundId=" + fundId;
             }
+            else
+            {
+                hyperLink.Text = "申购";
+                hyperLink.NavigateUrl = "~/Form/FundForm.aspx?OpType=Purchase&FundId=" + fundId;
+            }
+            GridViewManager.SetRowStyle(e.Row, Color.Black, true);
+
+            if (!forTodoList)
+            {
+                hyperLink = e.Row.Cells[1].Controls[0] as HyperLink;
+                hyperLink.Text = "赎回";
+                hyperLink.NavigateUrl = "~/Form/FundForm.aspx?OpType=Redemption&FundId=" + fundId;
+
+                hyperLink = e.Row.Cells[2].Controls[0] as HyperLink;
+                hyperLink.Text = "分红";
+                hyperLink.NavigateUrl = "~/Form/FundForm.aspx?OpType=Bonus&FundId=" + fundId;
+
+                hyperLink = e.Row.Cells[3].Controls[0] as HyperLink;
+                hyperLink.NavigateUrl = string.Format("~/Form/AllInvestmentsForm.aspx?FundId={0}&FundName={1}", fundId, fundName);
+            }
+
+            if (e.Row.Cells[netWorthDeltaColumnId].Text != "0.0000" && e.Row.Cells[netWorthDeltaColumnId-2].Text == DateTime.Now.ToString("yyyy-MM-dd"))
+            {
+                var key = Convert.ToDouble(e.Row.Cells[netWorthDeltaColumnId].Text);
+                e.Row.Cells[netWorthDeltaColumnId].ForeColor = key < 0 ? Color.Green : Color.Red;
+            }
+        }
+
+
+        private string FormatCellValue(string oldValue, int keepNumber, string suffix)
+        {
+            var newValue = Convert.ToDouble(oldValue).ToString("f" + keepNumber);
+            return newValue + suffix;
         }
 
         protected void cbShowHistory_CheckedChanged(object sender, EventArgs e)
@@ -278,15 +292,6 @@ namespace UserCtrl
             if (dataTable != null)
             {
                 var sortedDataTable = dataTable.Clone();
-                //if (e.SortExpression == TableFieldName.FundTotalAmount ||
-                //                          e.SortExpression == TableFieldName.FundNetWorth ||
-                //                          e.SortExpression == TableFieldName.FundTotalBenefit ||
-                //                          e.SortExpression == TableFieldName.NetWorthDelta ||
-                //                          e.SortExpression == TableFieldName.FundTotalBonus)
-                //{
-                //    sortedDataTable.Columns[e.SortExpression].DataType = Type.GetType("System.Double");
-                //}
-                
                 sortedDataTable.ImportRow(dataTable.Rows[0]);
                 
                 dataTable.Rows.RemoveAt(0);

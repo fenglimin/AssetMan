@@ -14,7 +14,7 @@ namespace ScheduleTask
 {
     public partial class Form1 : Form
     {
-        private System.Timers.Timer workTimer = new System.Timers.Timer(72000000);
+        private System.Timers.Timer workTimer = new System.Timers.Timer(2*60*60*1000);
         public Form1()
         {
             InitializeComponent();
@@ -30,6 +30,12 @@ namespace ScheduleTask
 
         private void OnTimedEvent(Object source, ElapsedEventArgs e)
         {
+            var week = DateTime.Now.DayOfWeek;
+            if (week == DayOfWeek.Saturday || week == DayOfWeek.Sunday) return;
+
+            var hour = DateTime.Now.Hour;
+            if (hour < 9 || hour > 22) return;
+
             DoCheck(@"GetNetWorth.bat", "");
         }
 
@@ -37,6 +43,7 @@ namespace ScheduleTask
         {
             try
             {
+                label1.Text = "最后一次运行 " + DateTime.Now;
                 var processStartInfo = new ProcessStartInfo(exeFile) { UseShellExecute = false };
                 if (workingDir != "")
                 {

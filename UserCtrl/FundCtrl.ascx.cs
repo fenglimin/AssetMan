@@ -163,7 +163,7 @@ namespace UserCtrl
             var hyperLink = e.Row.Cells[0].Controls[0] as HyperLink;
             if (forTodoList)
             {
-                hyperLink.Text = "更改净值";
+                hyperLink.Text = "更改净值及开放日";
                 hyperLink.NavigateUrl = "~/Form/FundForm.aspx?OpType=ChangeNetWorth&FundId=" + fundId;
             }
             else

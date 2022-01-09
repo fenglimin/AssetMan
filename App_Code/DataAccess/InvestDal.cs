@@ -320,6 +320,13 @@ namespace DataAccess
             CheckUpdateBenefitRate(fundId);
         }
 
+        public static void UpdateFundNextOpenDate(int fundId, string date)
+        {
+            var strSql = string.Format("UPDATE Fund SET NextOpenDate = DATEVALUE('{0}') WHERE FundID = {1}", date, fundId);
+            var comm = new OleDbCommand(strSql, DbManager.OleDbConn);
+            comm.ExecuteNonQuery();
+        }
+
         public static bool CheckUpdateBenefitRate(int fundId)
         {
             var fundList = LoadFundList("WHERE FundID = " + fundId);

@@ -28,7 +28,7 @@ public partial class Form_FundForm : System.Web.UI.Page
 
             if (opType == "ChangeNetWorth")
             {
-                lbTitle.Text = "净值型产品 - 更改净值";
+                lbTitle.Text = "净值型产品 - 更改净值及开放日";
                 ucAmount.Title = "份额";
                 ucAmount.InitAmount = fundInfo.TotalAmount.ToString(CultureInfo.InvariantCulture);
                 ucBankCard.EnableInput = false;
@@ -97,7 +97,7 @@ public partial class Form_FundForm : System.Web.UI.Page
             ucDate.Date = DateTime.Now.AddDays(-2).ToString("yyyy-MM-dd");
 
             ucNextDate.Title = "开放";
-            ucNextDate.Date = DateTime.Now.AddYears(1).ToString("yyyy-MM-dd");
+            ucNextDate.Date = emptyFund ? DateTime.Now.AddYears(1).ToString("yyyy-MM-dd") : fundInfo.NextOpenDate;
             ucNextDate.DisableInput = !emptyFund && opType != "ChangeNetWorth";
 
             ViewState["InitAmount"] = ucNetWorth.InitAmount;
@@ -194,9 +194,10 @@ public partial class Form_FundForm : System.Web.UI.Page
             dayDetail1.Desc = string.Format("理财：{0} {1}份，收益率{2}%", desc, ucAmount.Amount,weightedBenefitRate.ToString("f2"));
             AssetDetailManager.AddDayDetail(ucBankCard.CardId, dayDetail1);
         }
-        else if (lbTitle.Text == "净值型产品 - 更改净值")
+        else if (lbTitle.Text == "净值型产品 - 更改净值及开放日")
         {
             InvestDal.CalculateFund(Convert.ToInt32(ViewState["FundIdChangeNetWorth"]), currentNetWorth, netWorthDelta, ucDate.Date);
+            InvestDal.UpdateFundNextOpenDate(Convert.ToInt32(ViewState["FundIdChangeNetWorth"]), ucNextDate.Date);
         }
         else if (lbTitle.Text == "净值型产品 - 分红")
         {

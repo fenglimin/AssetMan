@@ -323,17 +323,20 @@ namespace UserCtrl
             if (dataTable != null)
             {
                 var sortedDataTable = dataTable.Clone();
-                sortedDataTable.ImportRow(dataTable.Rows[0]);
-
-                dataTable.Rows.RemoveAt(0);
-                var dataView = new DataView(dataTable);
-                dataView.Sort = sortColumn + " " + order;
-
-                foreach (DataRow dataRow in dataView.ToTable().Rows)
+                if (dataTable.Rows.Count > 0)
                 {
-                    sortedDataTable.ImportRow(dataRow);
-                }
+                    sortedDataTable.ImportRow(dataTable.Rows[0]);
 
+                    dataTable.Rows.RemoveAt(0);
+                    var dataView = new DataView(dataTable);
+                    dataView.Sort = sortColumn + " " + order;
+
+                    foreach (DataRow dataRow in dataView.ToTable().Rows)
+                    {
+                        sortedDataTable.ImportRow(dataRow);
+                    }
+                }
+                
                 ViewState["DataTable_AllFund"] = sortedDataTable;
                 ViewState["LastOrder"] = order;
                 ViewState["LastSortColumn"] = sortColumn;

@@ -134,14 +134,14 @@ namespace DataAccess
             }
         }
 
-        public static bool PurchaseFund(string fundName, string fundType, string fundCode, double amount, double netWorth, string operationDate)
+        public static FundInfo PurchaseFund(string fundName, string fundType, string fundCode, double amount, double netWorth, string operationDate)
         {
             var fundList = LoadFundList("where FundName ='" + fundName + "'");
             if (fundList.Count == 0)
             {
                 if (fundType == "自动获取" || fundCode == "自动获取")
                 {
-                    return false;
+                    return null;
                 }
                 InsertFund(fundName, fundType, fundCode, amount, netWorth, operationDate);
                 fundList = LoadFundList("where FundName ='" + fundName + "'");
@@ -162,7 +162,7 @@ namespace DataAccess
             InsertFundDetail(fundDetail);
             CalculateFund(fundList[0].FundId, netWorth, 0, operationDate);
             RefreshFundFile();
-            return true;
+            return fundList[0];
         }
 
         public static bool RedemptionFund(string fundName, double share, double netWorth, string operationDate, out double totalAmount, out double totalBenefit, out double weightedBenefitRate)

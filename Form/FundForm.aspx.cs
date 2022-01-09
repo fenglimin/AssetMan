@@ -98,7 +98,7 @@ public partial class Form_FundForm : System.Web.UI.Page
 
             ucNextDate.Title = "开放";
             ucNextDate.Date = emptyFund ? DateTime.Now.AddYears(1).ToString("yyyy-MM-dd") : fundInfo.NextOpenDate;
-            ucNextDate.DisableInput = !emptyFund && opType != "ChangeNetWorth";
+            ucNextDate.DisableInput = (!emptyFund && opType != "ChangeNetWorth") || fundInfo.FundType == "股票" || fundInfo.FundType == "基金";
 
             ViewState["InitAmount"] = ucNetWorth.InitAmount;
         }
@@ -119,10 +119,15 @@ public partial class Form_FundForm : System.Web.UI.Page
         if (lbTitle.Text == "净值型产品 - 申购")
         {
             var ret = InvestDal.PurchaseFund(ucDesc.Text, ucFundType.Text, ucFundCode.Text, Convert.ToDouble(ucAmount.Amount), Convert.ToDouble(ucNetWorth.Amount), ucDate.Date);
-            if (!ret)
+            if (ret == null)
             {
                 lbReslt.Text = "无法自动获取类型或代码！";
                 return;
+            }
+
+            if (ret.FundType != "股票" && ret.FundType != "基金")
+            {
+                InvestDal.UpdateFundNextOpenDate(ret.FundId, ucNextDate.Date);
             }
 
             var dayDetail1 = new DayDetail()

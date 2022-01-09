@@ -172,13 +172,17 @@ namespace UserCtrl
                 hyperLink.NavigateUrl = "~/Form/FundForm.aspx?OpType=Purchase&FundId=" + fundId;
             }
 
+            GridViewManager.SetRowStyle(e.Row, Color.Black, true);
             if (e.Row.Cells[fundTypeColumnId].Text == "中信代销" || e.Row.Cells[fundTypeColumnId].Text == "中信自营")
             {
                 DateTime nextOPenDate;
                 DateTime.TryParse(e.Row.Cells[nextOpenDateColumnId].Text, out nextOPenDate);
                 if (DateTime.Now.AddDays(30) > nextOPenDate)
                 {
-                    GridViewManager.SetRowStyle(e.Row, Color.Black, true);
+                    for (var i = 0; i < e.Row.Cells.Count; i++)
+                    {
+                        e.Row.Cells[i].BackColor = Color.DodgerBlue;
+                    }
                 }
             }
 

@@ -181,7 +181,7 @@ namespace UserCtrl
                 {
                     for (var i = 0; i < e.Row.Cells.Count; i++)
                     {
-                        e.Row.Cells[i].BackColor = Color.DodgerBlue;
+                        e.Row.Cells[i].BackColor = Color.Thistle;
                     }
                 }
             }

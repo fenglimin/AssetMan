@@ -53,8 +53,8 @@ namespace UserCtrl
                 if (!ForTodoList)
                 {
                     CreateDetailGridViewColumn();
-
-                    RefreshFundDetail(dtFund);
+                    var dataTable = ViewState["DataTable_AllFund"] as DataTable;
+                    RefreshFundDetail(dataTable);
                 }
             }
         }

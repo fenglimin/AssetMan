@@ -23,7 +23,7 @@ namespace UI
 
 		public static void AddHyperLinkFieldColumn(GridView gv, string dataField, HorizontalAlign align)
 		{
-			var hlf = new HyperLinkField { HeaderText = TranslationManager.Translate(dataField), DataTextField = dataField};
+			var hlf = new HyperLinkField { HeaderText = TranslationManager.Translate(dataField), DataTextField = dataField, SortExpression = dataField};
 			hlf.HeaderStyle.Height = 20;
 			hlf.HeaderStyle.HorizontalAlign = align;
 			hlf.ItemStyle.HorizontalAlign = align;

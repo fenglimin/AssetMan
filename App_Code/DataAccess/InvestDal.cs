@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using Entities;
 
@@ -120,6 +121,19 @@ namespace DataAccess
             return (int)Math.Round(totalAmount);
         }
 
+        public static void RefreshFundFile()
+        {
+            var workDir = AppDomain.CurrentDomain.BaseDirectory;
+            var fundTypeList = SettingDal.GetStringValues("净值型产品");
+            foreach (var fundType in fundTypeList)
+            {
+                var fileName = Path.Combine(workDir, "PY", fundType) + ".txt";
+                var fundList = LoadFundList("WHERE TotalAmount <> 0 AND FundType = '" + fundType + "'");
+                var funcCodeList = fundList.Select(fundInfo => fundInfo.FundCode).ToList();
+                File.WriteAllLines(fileName, funcCodeList);
+            }
+        }
+
         public static bool PurchaseFund(string fundName, string fundType, string fundCode, double amount, double netWorth, string operationDate)
         {
             var fundList = LoadFundList("where FundName ='" + fundName + "'");
@@ -147,7 +161,7 @@ namespace DataAccess
 
             InsertFundDetail(fundDetail);
             CalculateFund(fundList[0].FundId, netWorth, 0, operationDate);
-
+            RefreshFundFile();
             return true;
         }
 
@@ -208,10 +222,18 @@ namespace DataAccess
             }
 
             var weightedBase = weightedBenefitData.Sum(data => data.Key);
-            foreach (var data in weightedBenefitData)
+            if (weightedBase < 0.001)
             {
-                weightedBenefitRate += data.Value * data.Key / weightedBase;
+                weightedBenefitRate = 0;
             }
+            else
+            {
+                foreach (var data in weightedBenefitData)
+                {
+                    weightedBenefitRate += data.Value * data.Key / weightedBase;
+                }
+            }
+            
 
             var fundDetailRedemption = new FundDetail
             {
@@ -227,7 +249,7 @@ namespace DataAccess
 
             InsertFundDetail(fundDetailRedemption);
             CalculateFund(fundList[0].FundId, netWorth, 0, operationDate);
-
+            RefreshFundFile();
             return true;
         }
 

@@ -127,7 +127,7 @@ namespace DataAccess
             var fundTypeList = SettingDal.GetStringValues("净值型产品");
             foreach (var fundType in fundTypeList)
             {
-                var fileName = Path.Combine(workDir, "PY", fundType) + ".txt";
+                var fileName = Path.Combine(workDir, "PY", fundType) + "产品.txt";
                 var fundList = LoadFundList("WHERE TotalAmount <> 0 AND FundType = '" + fundType + "'");
                 var funcCodeList = fundList.Select(fundInfo => fundInfo.FundCode).ToList();
                 File.WriteAllLines(fileName, funcCodeList);

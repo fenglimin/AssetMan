@@ -80,11 +80,11 @@ public partial class Form_FundForm : System.Web.UI.Page
             ucBankCard.InitCardId = SettingDal.GetIntValues("默认基金卡")[0];
             ucBankCard.HideTitle = true;
 
-            ucAmount.MinimumValue = "0";
+            ucAmount.MinimumValue = "1";
             ucAmount.MaximunValue = "10000000";
 
             ucNetWorth.Title = "净值";
-            ucNetWorth.MinimumValue = "0";
+            ucNetWorth.MinimumValue = "0.0001";
             ucNetWorth.MaximunValue = "10000000";
             ucNetWorth.InitAmount = fundInfo.CurrentNetWorth.ToString(CultureInfo.InvariantCulture);
 
@@ -118,6 +118,13 @@ public partial class Form_FundForm : System.Web.UI.Page
 
         if (lbTitle.Text == "净值型产品 - 申购")
         {
+            var ret = InvestDal.PurchaseFund(ucDesc.Text, ucFundType.Text, ucFundCode.Text, Convert.ToDouble(ucAmount.Amount), Convert.ToDouble(ucNetWorth.Amount), ucDate.Date);
+            if (!ret)
+            {
+                lbReslt.Text = "无法自动获取类型或代码！";
+                return;
+            }
+
             var dayDetail1 = new DayDetail()
             {
                 OperationDate = timeStamp,
@@ -144,8 +151,6 @@ public partial class Form_FundForm : System.Web.UI.Page
                 Desc = desc
             };
             AssetDetailManager.AddDayDetail(investCard.CardId, dayDetail2);
-
-            InvestDal.PurchaseFund(ucDesc.Text, Convert.ToDouble(ucAmount.Amount), Convert.ToDouble(ucNetWorth.Amount), ucDate.Date);
         }
         else if (lbTitle.Text == "净值型产品 - 赎回")
         {

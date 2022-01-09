@@ -120,12 +120,16 @@ namespace DataAccess
             return (int)Math.Round(totalAmount);
         }
 
-        public static void PurchaseFund(string fundName, double amount, double netWorth, string operationDate)
+        public static bool PurchaseFund(string fundName, string fundType, string fundCode, double amount, double netWorth, string operationDate)
         {
             var fundList = LoadFundList("where FundName ='" + fundName + "'");
             if (fundList.Count == 0)
             {
-                InsertFund(fundName, amount, netWorth, operationDate);
+                if (fundType == "自动获取" || fundCode == "自动获取")
+                {
+                    return false;
+                }
+                InsertFund(fundName, fundType, fundCode, amount, netWorth, operationDate);
                 fundList = LoadFundList("where FundName ='" + fundName + "'");
             }
 
@@ -143,6 +147,8 @@ namespace DataAccess
 
             InsertFundDetail(fundDetail);
             CalculateFund(fundList[0].FundId, netWorth, 0, operationDate);
+
+            return true;
         }
 
         public static bool RedemptionFund(string fundName, double share, double netWorth, string operationDate, out double totalAmount, out double totalBenefit, out double weightedBenefitRate)
@@ -300,6 +306,11 @@ namespace DataAccess
                 return false;
             }
 
+            if (fundList[0].TotalAmount < 0.01)
+            {
+                return false;
+            }
+
             var benefitRate = fundList[0].WeightedBenefitRate / 100 + fundList[0].TotalBonus / fundList[0].TotalAmount;
             benefitRate = Math.Round(benefitRate, 5) * 100;
             var strSql = string.Format("UPDATE Fund SET WeightedBenefitRate = {0} WHERE FundID = {1}",benefitRate, fundId);
@@ -405,10 +416,10 @@ namespace DataAccess
             return fundDetail;
         }
 
-        public static void InsertFund(string fundName, double amount, double netWorth, string date)
+        public static void InsertFund(string fundName, string fundType, string fundCode, double amount, double netWorth, string date)
         {
-            var strSql = "INSERT INTO Fund ( FundName, TotalAmount, TotalShare, CurrentNetWorth, TotalBenefit, WeightedBenefitRate, CurrentDate ) VALUES ( " +
-                         "'" + fundName + "', " +
+            var strSql = "INSERT INTO Fund ( FundName, FundType, FundCode, TotalAmount, TotalShare, CurrentNetWorth, TotalBenefit, WeightedBenefitRate, CurrentDate ) VALUES ( " +
+                         "'" + fundName + "', " + "'" + fundType + "', " + "'" + fundCode + "', " +
                          amount + ", " +
                          Math.Round(amount/netWorth, 2) + ", " +
                          netWorth + ", 0, 0, DATEVALUE('" + date + "') )";

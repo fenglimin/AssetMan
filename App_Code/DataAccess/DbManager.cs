@@ -67,18 +67,35 @@ namespace DataAccess
 			return ret;
 		}
 
-		public static void BackupDb(string reason)
+        public static string ReplaceIllegalCharacter(string input)
+        {
+            input = input.Replace('/', '_');
+            input = input.Replace('\\', '_');
+            input = input.Replace(':', '_');
+            input = input.Replace('*', '_');
+            input = input.Replace('?', '_');
+            input = input.Replace('\"', '_');
+            input = input.Replace('<', '_');
+            input = input.Replace('>', '_');
+            input = input.Replace('|', '_');
+
+            return input;
+        }
+
+        public static void BackupDb(string reason)
 		{
 			if (string.IsNullOrEmpty(OleDbConn.DataSource))
 				return;
-			var today = DateTime.Now;
 
-			string fileName;
-			if (reason == "当日首次刷新")
+			var today = DateTime.Now;
+            string fileName;
+            reason = ReplaceIllegalCharacter(reason);
+
+            if (reason == "当日首次刷新")
 			{
 				DeleteOldDbFile();
 
-				fileName = string.Format("{0}\\{1} {2} -- {3}{4}", Path.GetDirectoryName(OleDbConn.DataSource), Path.GetFileNameWithoutExtension(OleDbConn.DataSource),
+				fileName = string.Format("{0} {1} -- {2}{3}", Path.GetFileNameWithoutExtension(OleDbConn.DataSource),
 					today.ToString("yyyy-MM-dd"), reason, Path.GetExtension(OleDbConn.DataSource));
 
 				if (File.Exists(fileName))
@@ -86,12 +103,24 @@ namespace DataAccess
 			}
 			else
 			{
-				fileName = string.Format("{0}\\{1} {2} {3} -- {4}{5}", Path.GetDirectoryName(OleDbConn.DataSource), Path.GetFileNameWithoutExtension(OleDbConn.DataSource),
+				fileName = string.Format("{0} {1} {2} -- {3}{4}", Path.GetFileNameWithoutExtension(OleDbConn.DataSource),
 					today.ToString("yyyy-MM-dd"), today.ToString("HH-mm-ss"), reason, Path.GetExtension(OleDbConn.DataSource));
 			}
-			
-			File.Copy(OleDbConn.DataSource, fileName);
-		}
+
+
+            var copyFile = Path.Combine(Path.GetDirectoryName(OleDbConn.DataSource), fileName);
+            File.Copy(OleDbConn.DataSource, copyFile, true);
+
+            var backupDirList = SettingDal.GetStringValues("备份目录");
+            if (backupDirList.Count > 0)
+            {
+                if (Directory.Exists(backupDirList[0]))
+                {
+                    var backupFile = Path.Combine(backupDirList[0], fileName);
+                    File.Copy(copyFile, backupFile, true);
+                }
+            }
+        }
 
 		public static void DeleteOldDbFile()
 		{

@@ -54,6 +54,7 @@ namespace Form
 				var desc = Request.QueryString["Desc"];
 				if (!string.IsNullOrEmpty(desc))
 					ucDesc.InitText = desc;
+                ucDesc.EnableInput = true;
 
 				CreateGridViewColumn();
 			}

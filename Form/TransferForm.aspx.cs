@@ -22,6 +22,8 @@ namespace Form
 				ucAmount.MinimumValue = "0";
 				ucAmount.MaximunValue = "1000000";
                 ucAmount.InitAmount = Request.QueryString["Amount"];
+
+                ucDesc.EnableInput = true;
             }
 		}
 

@@ -25,6 +25,8 @@ namespace Form
                 ucType.InstanceName = "ucType";
 	            ucType.MustSelect = true;
 
+                ucDesc.EnableInput = true;
+
                 CreateGridViewColumn();
             }
         }

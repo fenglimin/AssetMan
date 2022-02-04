@@ -66,6 +66,7 @@ namespace Form
 				lbTitle.Text = "新增投资";
 				ucBenifit.EnableInput = false;
 				ucBenifit.EnableValidate = false;
+                ucType.EnableInput = true;
 
 				ucAmount.MaximunValue = investBalance.ToString(CultureInfo.InvariantCulture);
 				btOk.Text = "增加";
